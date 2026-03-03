@@ -1,7 +1,6 @@
-package controllers
+package handlers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,7 @@ import (
 // GetBucketById returns a Gin handler that fetches a bucket by ID.
 func GetBucketById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		ctx := c.Request.Context()
 		id := c.Param("id")
 
 		bucket, err := gorm.G[models.Bucket](db).Where("id = ?", id).First(ctx)
@@ -27,20 +26,20 @@ func GetBucketById(db *gorm.DB) gin.HandlerFunc {
 
 func GetBuckets(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		ctx := c.Request.Context()
 
-		bucket, err := gorm.G[models.Bucket](db).Find(ctx)
+		buckets, err := gorm.G[models.Bucket](db).Find(ctx)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, bucket)
+		c.IndentedJSON(http.StatusOK, buckets)
 	}
 }
 
 func CreateBucket(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		ctx := c.Request.Context()
 
 		var bucket models.Bucket
 
@@ -73,9 +72,51 @@ func CreateBucket(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+func PatchBucket(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var request struct {
+			Title string
+		}
+
+		ctx := c.Request.Context()
+		id := c.Param("id")
+
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+
+		if request.Title == "" {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Title cannot be blank"})
+			return
+		}
+
+		rows, err := gorm.G[models.Bucket](db).
+			Where("id = ?", id).
+			Update(ctx, "title", request.Title)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if rows == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "bucket not found"})
+			return
+		}
+
+		updated, err := gorm.G[models.Bucket](db).Where("id = ?", id).First(ctx)
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.IndentedJSON(http.StatusOK, updated)
+	}
+}
+
 func DeleteBucketById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		ctx := c.Request.Context()
 
 		id := c.Param("id")
 

@@ -1,12 +1,12 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
+import "time"
 
 type Bucket struct {
-	gorm.Model
+	ID uint
 	Title string `gorm:"uniqueIndex;not null"`
 	Balance float64 `gorm:"not null"`
 	Transactions []Transaction
+	CreatedAt    time.Time
+  UpdatedAt    time.Time
 }

@@ -1,2 +1,3 @@
 *dockerfile
 *.tool-versions
+go.work*
