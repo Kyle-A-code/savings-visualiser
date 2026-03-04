@@ -5,7 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 var router = gin.Default()
 
 func Run(db *gorm.DB) {

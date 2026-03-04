@@ -85,7 +85,6 @@ func PatchBucket(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-
 		if request.Title == "" {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Title cannot be blank"})
 			return
