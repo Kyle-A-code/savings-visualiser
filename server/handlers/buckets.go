@@ -9,7 +9,6 @@ import (
 	"github.com/Kyle-A-code/savings-visualiser/models"
 )
 
-// GetBucketById returns a Gin handler that fetches a bucket by ID.
 func GetBucketById(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
