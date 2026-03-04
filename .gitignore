@@ -1,0 +1,5 @@
+*dockerfile
+*.tool-versions
+go.work*
+
+.vscode
