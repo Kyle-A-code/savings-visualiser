@@ -1,33 +1,43 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"github.com/Kyle-A-code/savings-visualiser/models"
+	"github.com/Kyle-A-code/savings-visualiser/repositories"
 )
 
-func GetBucketById(db *gorm.DB) gin.HandlerFunc {
+func GetBucketById(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
-		id := c.Param("id")
-
-		bucket, err := gorm.G[models.Bucket](db).Where("id = ?", id).First(ctx)
+		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			return
+		}
+
+		bucket, err := repo.GetById(ctx, id)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				return
+			}
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		c.IndentedJSON(http.StatusOK, bucket)
 	}
 }
 
-func GetBuckets(db *gorm.DB) gin.HandlerFunc {
+func GetBuckets(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
-		buckets, err := gorm.G[models.Bucket](db).Find(ctx)
+		buckets, err := repo.GetAll(ctx)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -36,7 +46,7 @@ func GetBuckets(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func CreateBucket(db *gorm.DB) gin.HandlerFunc {
+func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -52,7 +62,7 @@ func CreateBucket(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		existing, err := gorm.G[models.Bucket](db).Where("title = ?", bucket.Title).First(ctx)
+		existing, err := repo.GetByTitle(ctx, bucket.Title)
 		if err == nil {
 			c.IndentedJSON(http.StatusConflict, gin.H{"error": "a bucket with this title already exists", "existing_id": existing.ID})
 			return
@@ -62,7 +72,7 @@ func CreateBucket(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if err := gorm.G[models.Bucket](db).Create(ctx, &bucket); err != nil {
+		if err := repo.Create(ctx, &bucket); err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -71,14 +81,18 @@ func CreateBucket(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func PatchBucket(db *gorm.DB) gin.HandlerFunc {
+func PatchBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var request struct {
 			Title string
 		}
 
 		ctx := c.Request.Context()
-		id := c.Param("id")
+		id, err := parseIDParam(c)
+		if err != nil {
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			return
+		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -90,9 +104,7 @@ func PatchBucket(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		rows, err := gorm.G[models.Bucket](db).
-			Where("id = ?", id).
-			Update(ctx, "title", request.Title)
+		rows, err := repo.UpdateTitle(ctx, id, request.Title)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -102,8 +114,12 @@ func PatchBucket(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		updated, err := gorm.G[models.Bucket](db).Where("id = ?", id).First(ctx)
+		updated, err := repo.GetById(ctx, id)
 		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				return
+			}
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -112,13 +128,17 @@ func PatchBucket(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func DeleteBucketById(db *gorm.DB) gin.HandlerFunc {
+func DeleteBucketById(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
-		id := c.Param("id")
+		id, err := parseIDParam(c)
+		if err != nil {
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			return
+		}
 
-		_, err := gorm.G[models.Bucket](db).Where("id = ?", id).Delete(ctx)
+		_, err = repo.Delete(ctx, id)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
