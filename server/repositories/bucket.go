@@ -46,3 +46,23 @@ func (repo *BucketRepository) Delete(ctx context.Context, id int) (int, error) {
 	rowsAffected, err := gorm.G[models.Bucket](repo.db).Where("id = ?", id).Delete(ctx)
 	return rowsAffected, err
 }
+
+func (repo *BucketRepository) GetBalanceForId(ctx context.Context, id int) (float64, error) {
+	bucket, err := gorm.G[models.Bucket](repo.db).
+		Where("id = ?", id).
+		Preload("Transactions", func(db gorm.PreloadBuilder) error { return nil }).
+		First(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	return calculateBalance(bucket.Transactions), nil
+}
+
+func calculateBalance(transactions []models.Transaction) float64 {
+	total := 0.0
+	for _, transaction := range transactions {
+		total += transaction.Amount
+	}
+	return total
+}

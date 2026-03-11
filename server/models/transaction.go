@@ -6,6 +6,7 @@ import (
 
 type Transaction struct {
 	ID        uint
+	Title     string    `gorm:"not null"`
 	Amount    float64   `gorm:"not null"`
 	Date      time.Time `gorm:"not null"`
 	BucketId  int
