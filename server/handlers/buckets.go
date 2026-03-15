@@ -50,17 +50,26 @@ func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
-		var bucket models.Bucket
+		var request struct {
+			Title  string  `json:"title"`
+			Amount float64 `json:"amount"`
+		}
 
-		if err := c.ShouldBindJSON(&bucket); err != nil {
+		if err := c.ShouldBindJSON(&request); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		if bucket.Balance <= 0 {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "balance must be positive"})
+		if request.Title == "" {
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "title cannot be blank"})
 			return
 		}
+		if request.Amount <= 0 {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "initialBalance must be positive"})
+			return
+		}
+
+		bucket := models.Bucket{Title: request.Title}
 
 		existing, err := repo.GetByTitle(ctx, bucket.Title)
 		if err == nil {
@@ -72,7 +81,7 @@ func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 			return
 		}
 
-		if err := repo.Create(ctx, &bucket); err != nil {
+		if err := repo.Create(ctx, &bucket, request.Amount); err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}

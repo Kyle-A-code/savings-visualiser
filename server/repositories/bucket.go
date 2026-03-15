@@ -17,11 +17,33 @@ func NewBucketRepository(db *gorm.DB) *BucketRepository {
 
 func (repo *BucketRepository) GetAll(ctx context.Context) ([]models.Bucket, error) {
 	buckets, err := gorm.G[models.Bucket](repo.db).Find(ctx)
+	if err != nil {
+		return buckets, err
+	}
+
+	for i := range buckets {
+		balance, err := repo.GetBalanceForId(ctx, int(buckets[i].ID))
+		if err != nil {
+			return buckets, err
+		}
+		buckets[i].Balance = balance
+	}
 	return buckets, err
 }
 
 func (repo *BucketRepository) GetById(ctx context.Context, id int) (models.Bucket, error) {
-	bucket, err := gorm.G[models.Bucket](repo.db).Where("id = ?", id).First(ctx)
+	bucket, err := gorm.G[models.Bucket](repo.db).
+		Where("id = ?", id).
+		First(ctx)
+	if err != nil {
+		return bucket, err
+	}
+
+	balance, err := repo.GetBalanceForId(ctx, id)
+	if err != nil {
+		return bucket, err
+	}
+	bucket.Balance = balance
 	return bucket, err
 }
 
@@ -30,9 +52,24 @@ func (repo *BucketRepository) GetByTitle(ctx context.Context, title string) (mod
 	return bucket, err
 }
 
-func (repo *BucketRepository) Create(ctx context.Context, bucket *models.Bucket) error {
-	err := gorm.G[models.Bucket](repo.db).Create(ctx, bucket)
-	return err
+func (repo *BucketRepository) Create(ctx context.Context, bucket *models.Bucket, amount float64) error {
+	return repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := gorm.G[models.Bucket](tx).Create(ctx, bucket); err != nil {
+			return err
+		}
+
+		transaction := models.Transaction{
+			Title:    "Initial balance",
+			Amount:   amount,
+			BucketId: int(bucket.ID),
+		}
+
+		if err := gorm.G[models.Transaction](tx).Create(ctx, &transaction); err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 func (repo *BucketRepository) UpdateTitle(ctx context.Context, id int, title string) (int, error) {

@@ -14,6 +14,11 @@ type TransactionRepository struct {
 	bucketRepo *BucketRepository
 }
 
+type UpdateParams struct {
+	Title  *string
+	Amount *float64
+}
+
 func NewTransactionRepository(db *gorm.DB) *TransactionRepository {
 	return &TransactionRepository{db: db, bucketRepo: NewBucketRepository(db)}
 }
@@ -21,6 +26,11 @@ func NewTransactionRepository(db *gorm.DB) *TransactionRepository {
 func (repo *TransactionRepository) GetAll(ctx context.Context) ([]models.Transaction, error) {
 	transactions, err := gorm.G[models.Transaction](repo.db).Find(ctx)
 	return transactions, err
+}
+
+func (repo *TransactionRepository) GetById(ctx context.Context, id int) (models.Transaction, error) {
+	transaction, err := gorm.G[models.Transaction](repo.db).Where("id = ?", id).First(ctx)
+	return transaction, err
 }
 
 func (repo *TransactionRepository) GetForBucket(ctx context.Context, bucketId int) ([]models.Transaction, error) {
@@ -47,6 +57,37 @@ func (repo *TransactionRepository) Create(ctx context.Context, transaction *mode
 	return err
 }
 
+func (repo *TransactionRepository) Update(ctx context.Context, id int, params UpdateParams) (models.Transaction, error) {
+	transaction, err := repo.GetById(ctx, id)
+	if err != nil {
+		return transaction, err
+	}
+
+	if params.Title == nil && params.Amount == nil {
+		return transaction, nil
+	}
+
+	updates := models.Transaction{}
+	if params.Title != nil {
+		updates.Title = *params.Title
+	}
+
+	if params.Amount != nil {
+		updates.Amount = *params.Amount
+	}
+
+	_, err = gorm.G[models.Transaction](repo.db).Where("id = ?", transaction.ID).Updates(ctx, updates)
+	if err != nil {
+		return transaction, err
+	}
+
+	updated, err := repo.GetById(ctx, id)
+	if err != nil {
+		return updated, err
+	}
+	return updated, nil
+}
+
 func (repo *TransactionRepository) Transfer(ctx context.Context, fromBucketId int, toBucketId int, amount float64) error {
 	if amount <= 0.0 {
 		return errors.New("amount must be positive")
@@ -66,7 +107,6 @@ func (repo *TransactionRepository) Transfer(ctx context.Context, fromBucketId in
 	}
 
 	return repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		// IMPORTANT: use tx-backed repo so Create/validation reads same transaction state
 		txRepo := NewTransactionRepository(tx)
 		debit := &models.Transaction{
 			Title:    "Transfer to " + toBucket.Title,
