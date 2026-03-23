@@ -1,32 +1,26 @@
-import { useEffect, useState } from "react";
 import { Switch, SwitchThumb } from "@radix-ui/react-switch";
 import "./themeSwitch.css";
-
-type Theme = "light" | "dark";
+import { useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
 
 const ThemeSwitch = () => {
-  const getCurrentTheme = (): Theme => {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme !== "light" && storedTheme !== "dark") {
-      return systemTheme;
-    }
-    return storedTheme;
-  };
-  const [theme, setTheme] = useState<Theme>(getCurrentTheme);
+  const themeContext = useContext(ThemeContext);
+  if (!themeContext) {
+    throw new Error("ThemeContext not found");
+  }
+  const { theme, setTheme } = themeContext;
 
   const onThemeChange = (checked: boolean) => {
-    const newTheme: Theme = checked ? "dark" : "light";
-    localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
+    setTheme(checked ? "dark" : "light");
   };
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
   return (
-    <Switch aria-label="Toggle theme" className="SwitchRoot" checked={theme === "dark"} onCheckedChange={onThemeChange}>
+    <Switch
+      aria-label="Toggle theme"
+      className="SwitchRoot"
+      checked={theme === "dark"}
+      onCheckedChange={onThemeChange}
+    >
       <SwitchThumb className="SwitchThumb" />
     </Switch>
   );
