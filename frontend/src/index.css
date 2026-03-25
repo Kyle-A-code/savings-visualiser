@@ -35,6 +35,28 @@ html {
   --dark-social-icon-filter: invert(1) brightness(2);
   --dark-elevation-sm:
     rgba(0, 0, 0, 0.45) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
+
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --z-index-base: 0;
+  --z-index-raised: 1;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1100;
+  --z-index-overlay: 1200;
+  --z-index-modal: 1300;
+  --z-index-toast: 1400;
+  --z-index-tooltip: 1500;
 }
 
 :root {

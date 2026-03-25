@@ -7,12 +7,13 @@ button {
 	width: 42px;
 	height: 25px;
 	background-color: var(--color-surface-alt);
-	border-radius: 9999px;
+	border-radius: var(--border-radius-lg);
 	position: relative;
-	box-shadow: 0 2px 10px var(--color-border);
+	box-shadow: var(--elevation-sm);
+	z-index: var(--z-index-raised);
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	&:focus {
-		box-shadow: 0 0 0 2px var(--color-primary);
+		box-shadow: 0 0 0 2px var(--color-focus-ring);
 	}
 	&[data-state="checked"] {
 		background-color: var(--color-primary);
@@ -23,12 +24,13 @@ button {
 	display: block;
 	width: 21px;
 	height: 21px;
-	background-color: white;
-	border-radius: 9999px;
-	box-shadow: 0 2px 2px var(--color-border);
+	background-color: var(--color-surface);
+	border-radius: var(--border-radius-lg);
+	box-shadow: var(--elevation-sm);
 	transition: transform 100ms;
 	transform: translateX(2px);
 	will-change: transform;
+	z-index: var(--z-index-raised);
 	&[data-state="checked"] {
 		transform: translateX(19px);
 	}
@@ -36,7 +38,8 @@ button {
 
 .Label {
 	color: var(--color-text-primary);
-	font-size: 15px;
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-medium);
 	line-height: 1;
 	user-select: none;
 }
