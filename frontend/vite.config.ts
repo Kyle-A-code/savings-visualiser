@@ -18,5 +18,13 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
+    // Temporary proxy to avoid CORS issues until the server implements CORS middleware
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
 });
