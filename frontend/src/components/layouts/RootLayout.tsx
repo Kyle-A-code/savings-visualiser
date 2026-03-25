@@ -1,6 +1,6 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import ThemeSwitch from "../../components/themeSwitch/ThemeSwitch";
+import ThemeSwitch from "../themeSwitch/ThemeSwitch";
 
 const RootLayout = () => (
   <>

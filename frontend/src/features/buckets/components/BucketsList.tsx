@@ -1,4 +1,4 @@
-const HomePage = () => {
+const BucketsList = () => {
   return (
     <div>
       <h3>Welcome Home!</h3>
@@ -6,4 +6,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default BucketsList;

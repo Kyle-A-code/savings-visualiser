@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import HomePage from "../app/routes/HomePage";
+import { BucketsList } from "../../features/buckets";
 
 export const Route = createFileRoute("/")({
-  component: HomePage,
+  component: BucketsList,
 });
