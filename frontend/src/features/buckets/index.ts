@@ -1,1 +1,1 @@
-export { default as BucketsList } from "./components/BucketsList";
+export { default as List } from "./components/List";

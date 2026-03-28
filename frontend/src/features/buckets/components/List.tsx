@@ -1,8 +1,9 @@
 import { useBuckets } from "../api/getBuckets";
 import Empty from "./Empty";
-import BucketCard from "./BucketCard";
+import Card from "./card/Card";
+import CreateDialog from "./createButton/CreateDialog";
 
-const BucketsList = () => {
+const List = () => {
   const { data, isError, isLoading } = useBuckets();
 
   if (isLoading) return <div>Loading...</div>;
@@ -12,11 +13,12 @@ const BucketsList = () => {
 
   return (
     <div>
+      <CreateDialog />
       {data?.map((bucket) => (
-          <BucketCard key={bucket.id} bucket={bucket}/>
+          <Card key={bucket.id} bucket={bucket}/>
       ))}
     </div>
   );
 };
 
-export default BucketsList;
+export default List;

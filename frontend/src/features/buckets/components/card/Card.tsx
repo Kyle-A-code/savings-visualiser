@@ -1,11 +1,11 @@
-import type { Bucket } from "../types";
-import "./bucketCard.css";
+import type { Bucket } from "../../types";
+import "./card.css";
 
-interface BucketCardProps {
+interface CardProps {
   bucket: Bucket;
 }
 
-const BucketCard = ({ bucket }: BucketCardProps) => {
+const Card = ({ bucket }: CardProps) => {
   const { title, balance, updatedAt } = bucket;
 
   const formattedBalance = `$${balance.toFixed(2)}`;
@@ -27,4 +27,4 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
   );
 };
 
-export default BucketCard;
+export default Card;
