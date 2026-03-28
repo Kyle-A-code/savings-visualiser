@@ -13,3 +13,8 @@ export interface BucketData {
   CreatedAt: Date;
   UpdatedAt: Date;
 }
+
+export interface CreateBucketRequest {
+  title: string;
+  amount: number;
+}
