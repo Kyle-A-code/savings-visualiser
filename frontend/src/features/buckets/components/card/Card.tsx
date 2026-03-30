@@ -1,7 +1,8 @@
 import type { Bucket } from "../../types";
 import "./card.css";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
-import { TransferIcon } from "../../../../components/icons";
+import { ArrowRightIcon, TransferIcon } from "../../../../components/icons";
+import { Link } from "@tanstack/react-router";
 
 interface CardProps {
   bucket: Bucket;
@@ -19,7 +20,7 @@ const Card = ({ bucket }: CardProps) => {
   });
 
   return (
-    <article className={`card`}>
+    <div className={`card`}>
       <header className="card-header">
         <h3>{title}</h3>
       </header>
@@ -29,13 +30,27 @@ const Card = ({ bucket }: CardProps) => {
           <p className="card-meta">Updated {formattedUpdatedAt}</p>
         </div>
         <div className="card-actions">
-          <button className="transfer-button" aria-label="Transfer to another bucket">
+          <button
+            className="transfer-button"
+            aria-label="Transfer to another bucket"
+          >
             <TransferIcon width={24} height={24} />
           </button>
           <DeleteDialog id={id} />
         </div>
       </div>
-    </article>
+      <Link
+        to="/buckets/$bucketId"
+        params={{ bucketId: id }}
+        className="card-details-link"
+      >
+        View Transactions
+        <ArrowRightIcon
+          width={18}
+          height={18}
+        />
+      </Link>
+    </div>
   );
 };
 
