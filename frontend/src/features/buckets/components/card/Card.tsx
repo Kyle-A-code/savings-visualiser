@@ -1,12 +1,14 @@
 import type { Bucket } from "../../types";
 import "./card.css";
+import DeleteDialog from "../deleteDialog/DeleteDialog";
+import { TransferIcon } from "../../../../components/icons";
 
 interface CardProps {
   bucket: Bucket;
 }
 
 const Card = ({ bucket }: CardProps) => {
-  const { title, balance, updatedAt } = bucket;
+  const { id, title, balance, updatedAt } = bucket;
 
   const formattedBalance = `$${balance.toFixed(2)}`;
 
@@ -17,12 +19,22 @@ const Card = ({ bucket }: CardProps) => {
   });
 
   return (
-    <article className={`bucket-card`}>
-      <header className="bucket-card-header">
+    <article className={`card`}>
+      <header className="card-header">
         <h3>{title}</h3>
       </header>
-      <p className="bucket-card-balance">{formattedBalance}</p>
-      <p className="bucket-card-meta">Updated {formattedUpdatedAt}</p>
+      <div className="card-content">
+        <div className="card-details">
+          <p className="card-balance">{formattedBalance}</p>
+          <p className="card-meta">Updated {formattedUpdatedAt}</p>
+        </div>
+        <div className="card-actions">
+          <button className="transfer-button" aria-label="Transfer to another bucket">
+            <TransferIcon width={24} height={24} />
+          </button>
+          <DeleteDialog id={id} />
+        </div>
+      </div>
     </article>
   );
 };

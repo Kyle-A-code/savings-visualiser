@@ -1,7 +1,7 @@
 import { useBuckets } from "../api/getBuckets";
 import Empty from "./Empty";
 import Card from "./card/Card";
-import CreateDialog from "./createButton/CreateDialog";
+import CreateDialog from "./createDialog/CreateDialog";
 
 const List = () => {
   const { data, isError, isLoading } = useBuckets();

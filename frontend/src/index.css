@@ -10,8 +10,11 @@ html {
   --light-color-primary-soft: rgba(37, 99, 235, 0.12);
   --light-color-primary-border: rgba(37, 99, 235, 0.35);
   --light-color-success: #16a34a;
+  --light-color-success-hover: #15803d;
   --light-color-warning: #d97706;
+  --light-color-warning-hover: #b45309;
   --light-color-danger: #dc2626;
+  --light-color-danger-hover: #b91c1c;
   --light-color-focus-ring: #60a5fa;
   --light-social-icon-filter: none;
   --light-elevation-sm:
@@ -29,8 +32,11 @@ html {
   --dark-color-primary-soft: rgba(96, 165, 250, 0.18);
   --dark-color-primary-border: rgba(96, 165, 250, 0.45);
   --dark-color-success: #22c55e;
+  --dark-color-success-hover: #16a34a;
   --dark-color-warning: #f59e0b;
+  --dark-color-warning-hover: #d97706;
   --dark-color-danger: #f87171;
+  --dark-color-danger-hover: #ef4444;
   --dark-color-focus-ring: #93c5fd;
   --dark-social-icon-filter: invert(1) brightness(2);
   --dark-elevation-sm:
@@ -102,13 +108,25 @@ html {
     var(--light-color-success),
     var(--dark-color-success)
   );
+  --color-success-hover: light-dark(
+    var(--light-color-success-hover),
+    var(--dark-color-success-hover)
+  );
   --color-warning: light-dark(
     var(--light-color-warning),
     var(--dark-color-warning)
   );
+  --color-warning-hover: light-dark(
+    var(--light-color-warning-hover),
+    var(--dark-color-warning-hover)
+  );
   --color-danger: light-dark(
     var(--light-color-danger),
     var(--dark-color-danger)
+  );
+  --color-danger-hover: light-dark(
+    var(--light-color-danger-hover),
+    var(--dark-color-danger-hover)
   );
   --color-focus-ring: light-dark(
     var(--light-color-focus-ring),

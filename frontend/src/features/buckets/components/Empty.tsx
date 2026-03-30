@@ -1,4 +1,4 @@
-import CreateDialog from "./createButton/CreateDialog";
+import CreateDialog from "./createDialog/CreateDialog";
 
 const Empty = () => {
   return <div>

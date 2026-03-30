@@ -1,0 +1,111 @@
+.delete-button {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  display: inline-grid;
+  place-items: center;
+  line-height: 0;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+  &:hover {
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger);
+    color: light-dark(var(--color-surface), var(--color-text-primary));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.delete-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: var(--z-index-overlay);
+}
+
+.delete-dialog-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(28rem, calc(100vw - 2rem));
+  border: 2px solid var(--color-danger);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  box-shadow: var(--elevation-sm);
+  padding: 1rem;
+  z-index: var(--z-index-modal);
+}
+
+.delete-dialog-title {
+  margin: 0;
+}
+
+.delete-dialog-description {
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.delete-dialog-error {
+  margin-top: 0.75rem;
+  color: var(--color-danger);
+}
+
+.delete-dialog-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.delete-dialog-actions button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: 0.45rem 0.8rem;
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.delete-dialog-actions button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.delete-dialog-actions button:not(.delete-dialog-confirm):hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary-border);
+  color: var(--color-surface);
+}
+
+.delete-dialog-confirm {
+  border-color: color-mix(
+    in oklab,
+    var(--color-danger) 45%,
+    var(--color-border)
+  );
+  background: var(--color-danger);
+  color: var(--color-surface);
+}
+
+.delete-dialog-confirm:hover {
+  background: var(--color-danger-hover);
+}
+
+.delete-dialog-confirm:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

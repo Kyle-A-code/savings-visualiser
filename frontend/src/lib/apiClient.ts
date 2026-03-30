@@ -32,6 +32,21 @@ const request = async <T>(
     });
 };
 
+const requestDelete = async (endpoint: string, config: ApiClientConfig = {}) => {
+  return fetch(`${API_URL}${endpoint}`, {
+    ...config,
+    method: "DELETE",
+  }).then((response) => {
+    if (!response.ok) {
+      return response.json().then((data: { detail: string }) => {
+        console.error("API Error:", data);
+        throw new Error(data.detail);
+      });
+    }
+    return undefined;
+  });
+};
+
 export const apiClient = {
   get: <T>(endpoint: string, config: ApiClientConfig = {}) => {
     return request<T>(endpoint, "GET", config);
@@ -56,8 +71,8 @@ export const apiClient = {
       body: JSON.stringify(body),
     });
   },
-  delete: <T>(endpoint: string, config: ApiClientConfig = {}) => {
-    return request<T>(endpoint, "DELETE", config);
+  delete: (endpoint: string, config: ApiClientConfig = {}) => {
+    return requestDelete(endpoint, config);
   },
   patch: <T>(endpoint: string, body: unknown, config: ApiClientConfig = {}) => {
     return request<T>(endpoint, "PATCH", {
