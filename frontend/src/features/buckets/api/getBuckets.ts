@@ -9,7 +9,7 @@ export const getBuckets = async () : Promise<BucketData[]> => {
 
 export const useBuckets = () => {
   const { data, isError, isLoading } = useQuery<Bucket[]>({
-    queryKey: queryKeys.buckets.list(),
+    queryKey: queryKeys.list(),
     queryFn: async () => {
       const response = await getBuckets();
       return response.map((bucket) => {

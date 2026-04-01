@@ -12,7 +12,7 @@ export const useCreateBucket = () => {
   const { mutate, isPending, isError, isSuccess } = useMutation({
     mutationFn: createBucket,
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.buckets.list() });
+        queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       },
       onError: (error) => {
         console.error(error);

@@ -12,8 +12,8 @@ export const useDeleteBucket = () => {
     mutationFn: deleteBucket,
     onSuccess: (_, id) => {
       // refetch the list and detail queries
-      queryClient.invalidateQueries({ queryKey: queryKeys.buckets.list(), refetchType: "all" });
-      queryClient.invalidateQueries({ queryKey: queryKeys.buckets.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.list(), refetchType: "all" });
+      queryClient.invalidateQueries({ queryKey: queryKeys.detail(id) });
     },
     onError: (error) => {
       console.error(error);
