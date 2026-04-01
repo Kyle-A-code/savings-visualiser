@@ -1,8 +1,14 @@
 import type { Bucket } from "../../types";
 import "./card.css";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
-import { ArrowRightIcon, TransferIcon } from "../../../../components/icons";
+import {
+  ArrowRightIcon,
+  TransferIcon,
+  PlusIcon,
+  MinusIcon,
+} from "../../../../components/icons";
 import { Link } from "@tanstack/react-router";
+import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
 
 interface CardProps {
   bucket: Bucket;
@@ -30,6 +36,24 @@ const Card = ({ bucket }: CardProps) => {
           <p className="card-meta">Updated {formattedUpdatedAt}</p>
         </div>
         <div className="card-actions">
+          <CreateTransactionDialog
+            bucketId={Number(id)}
+            isCredit={true}
+            trigger={
+              <button className="credit-button" aria-label="Add credit transaction">
+                <PlusIcon width={18} height={18} />
+              </button>
+            }
+          />
+          <CreateTransactionDialog
+            bucketId={Number(id)}
+            isCredit={false}
+            trigger={
+              <button className="debit-button" aria-label="Add debit transaction">
+                <MinusIcon width={18} height={18} />
+              </button>
+            }
+          />
           <button
             className="transfer-button"
             aria-label="Transfer to another bucket"

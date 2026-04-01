@@ -12,10 +12,10 @@ const List = () => {
   if (data?.length === 0) return <Empty />;
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <CreateDialog />
       {data?.map((bucket) => (
-          <Card key={bucket.id} bucket={bucket}/>
+        <Card key={bucket.id} bucket={bucket} />
       ))}
     </div>
   );
