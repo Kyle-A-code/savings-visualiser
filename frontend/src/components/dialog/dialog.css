@@ -1,0 +1,168 @@
+.dialog-trigger {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  padding: 0.5rem 0.9rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.dialog-trigger:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.dialog-trigger-primary {
+  border-color: var(--color-primary-border);
+  background: var(--color-primary);
+  color: light-dark(var(--color-surface), var(--color-text-primary));
+}
+
+.dialog-trigger-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.dialog-trigger-success {
+  border-color: color-mix(in oklab, var(--color-success) 45%, var(--color-border));
+  background: var(--color-success);
+  color: var(--color-surface);
+}
+
+.dialog-trigger-success:hover {
+  background: var(--color-success-hover);
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: var(--z-index-overlay);
+}
+
+.dialog-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(28rem, calc(100vw - 2rem));
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  box-shadow: var(--elevation-sm);
+  padding: 1rem;
+  z-index: var(--z-index-modal);
+}
+
+.dialog-title {
+  margin: 0;
+}
+
+.dialog-description {
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.dialog-form {
+  margin-top: 0.75rem;
+}
+
+.dialog-form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dialog-form fieldset + fieldset {
+  margin-top: 0.75rem;
+}
+
+.dialog-form input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+}
+
+.dialog-amount-input-wrapper {
+  position: relative;
+}
+
+.dialog-amount-prefix {
+  position: absolute;
+  left: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.dialog-amount-input-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1.35rem;
+}
+
+.dialog-error {
+  margin-top: 0.75rem;
+  color: var(--color-danger);
+}
+
+.dialog-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dialog-actions button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: 0.45rem 0.8rem;
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.dialog-close-button:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary-border);
+  color: var(--color-surface);
+}
+
+.dialog-actions button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.dialog-submit-primary {
+  border-color: var(--color-primary-border);
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.dialog-submit-primary:hover {
+  background: var(--color-primary-hover);
+  color: light-dark(var(--color-surface), var(--color-text-primary));
+}
+
+.dialog-submit-success {
+  border-color: color-mix(in oklab, var(--color-success) 45%, var(--color-border));
+  background: var(--color-success);
+  color: var(--color-surface);
+}
+
+.dialog-submit-success:hover {
+  background: var(--color-success-hover);
+  color: light-dark(var(--color-surface), var(--color-text-primary));
+}
