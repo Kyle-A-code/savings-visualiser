@@ -1,6 +1,7 @@
 import type { Bucket } from "../../types";
-import "./card.css";
+import "./bucketCard.css";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
+import { CardPrimitive } from "../../../../components/card";
 import {
   ArrowRightIcon,
   TransferIcon,
@@ -10,11 +11,11 @@ import {
 import { Link } from "@tanstack/react-router";
 import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
 
-interface CardProps {
+interface BucketCardProps {
   bucket: Bucket;
 }
 
-const Card = ({ bucket }: CardProps) => {
+const BucketCard = ({ bucket }: BucketCardProps) => {
   const { id, title, balance, updatedAt } = bucket;
 
   const formattedBalance = `$${balance.toFixed(2)}`;
@@ -26,7 +27,7 @@ const Card = ({ bucket }: CardProps) => {
   });
 
   return (
-    <div className={`card`}>
+    <CardPrimitive className="bucket-card">
       <header className="card-header">
         <h3>{title}</h3>
       </header>
@@ -74,8 +75,8 @@ const Card = ({ bucket }: CardProps) => {
           height={18}
         />
       </Link>
-    </div>
+    </CardPrimitive>
   );
 };
 
-export default Card;
+export default BucketCard;

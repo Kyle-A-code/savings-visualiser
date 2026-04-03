@@ -1,6 +1,6 @@
 import { useBuckets } from "../api/getBuckets";
 import Empty from "./Empty";
-import Card from "./card/Card";
+import BucketCard from "./bucketCard/BucketCard";
 import CreateDialog from "./createDialog/CreateDialog";
 
 const List = () => {
@@ -15,7 +15,7 @@ const List = () => {
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <CreateDialog />
       {data?.map((bucket) => (
-        <Card key={bucket.id} bucket={bucket} />
+        <BucketCard key={bucket.id} bucket={bucket} />
       ))}
     </div>
   );
