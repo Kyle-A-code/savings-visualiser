@@ -9,13 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as BucketsRouteRouteImport } from './routes/buckets.route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BucketsIndexRouteImport } from './routes/buckets.index'
 import { Route as BucketsBucketIdRouteImport } from './routes/buckets.$bucketId'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const BucketsRouteRoute = BucketsRouteRouteImport.update({
+  id: '/buckets',
+  path: '/buckets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -23,49 +24,55 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BucketsIndexRoute = BucketsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BucketsRouteRoute,
+} as any)
 const BucketsBucketIdRoute = BucketsBucketIdRouteImport.update({
-  id: '/buckets/$bucketId',
-  path: '/buckets/$bucketId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$bucketId',
+  path: '/$bucketId',
+  getParentRoute: () => BucketsRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/buckets': typeof BucketsRouteRouteWithChildren
   '/buckets/$bucketId': typeof BucketsBucketIdRoute
+  '/buckets/': typeof BucketsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/buckets/$bucketId': typeof BucketsBucketIdRoute
+  '/buckets': typeof BucketsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/buckets': typeof BucketsRouteRouteWithChildren
   '/buckets/$bucketId': typeof BucketsBucketIdRoute
+  '/buckets/': typeof BucketsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/buckets/$bucketId'
+  fullPaths: '/' | '/buckets' | '/buckets/$bucketId' | '/buckets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/buckets/$bucketId'
-  id: '__root__' | '/' | '/about' | '/buckets/$bucketId'
+  to: '/' | '/buckets/$bucketId' | '/buckets'
+  id: '__root__' | '/' | '/buckets' | '/buckets/$bucketId' | '/buckets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  BucketsBucketIdRoute: typeof BucketsBucketIdRoute
+  BucketsRouteRoute: typeof BucketsRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/buckets': {
+      id: '/buckets'
+      path: '/buckets'
+      fullPath: '/buckets'
+      preLoaderRoute: typeof BucketsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -75,20 +82,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buckets/': {
+      id: '/buckets/'
+      path: '/'
+      fullPath: '/buckets/'
+      preLoaderRoute: typeof BucketsIndexRouteImport
+      parentRoute: typeof BucketsRouteRoute
+    }
     '/buckets/$bucketId': {
       id: '/buckets/$bucketId'
-      path: '/buckets/$bucketId'
+      path: '/$bucketId'
       fullPath: '/buckets/$bucketId'
       preLoaderRoute: typeof BucketsBucketIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BucketsRouteRoute
     }
   }
 }
 
+interface BucketsRouteRouteChildren {
+  BucketsBucketIdRoute: typeof BucketsBucketIdRoute
+  BucketsIndexRoute: typeof BucketsIndexRoute
+}
+
+const BucketsRouteRouteChildren: BucketsRouteRouteChildren = {
+  BucketsBucketIdRoute: BucketsBucketIdRoute,
+  BucketsIndexRoute: BucketsIndexRoute,
+}
+
+const BucketsRouteRouteWithChildren = BucketsRouteRoute._addFileChildren(
+  BucketsRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  BucketsBucketIdRoute: BucketsBucketIdRoute,
+  BucketsRouteRoute: BucketsRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

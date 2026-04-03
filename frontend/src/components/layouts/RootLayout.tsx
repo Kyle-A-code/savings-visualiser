@@ -5,7 +5,7 @@ import "./rootLayout.css";
 
 const navLinks = [
   { to: "/", label: "Home", key: "home" },
-  { to: "/about", label: "About", key: "about" },
+  { to: "/buckets", label: "Buckets", key: "buckets" },
 ];
 
 const RootLayout = () => (
