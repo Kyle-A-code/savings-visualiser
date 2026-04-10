@@ -2,8 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { Transaction, TransactionData } from "../types";
 import queryKeys from "./queryKeys";
 import { apiClient } from "../../../lib/apiClient";
+import { mapTransactionDataToTransaction } from "./mapper";
 
-const getBucketTransactions = async (bucketId: string) => {
+export const getBucketTransactions = async (bucketId: string) => {
   return await apiClient.get<TransactionData[]>(`/transactions/bucket/${bucketId}`);
 };
 
@@ -13,14 +14,7 @@ const useGetBucketTransactions = (bucketId: string) => {
     queryFn: async () => {
       const response = await getBucketTransactions(bucketId);
       return response.map((transaction) => {
-        return {
-          id: transaction.ID,
-          title: transaction.Title,
-          amount: transaction.Amount,
-          bucketId: transaction.BucketId,
-          createdAt: transaction.CreatedAt,
-          updatedAt: transaction.UpdatedAt,
-        };
+        return mapTransactionDataToTransaction(transaction);
       });
     },
   });

@@ -1,20 +1,19 @@
-import { useBuckets } from "../api/getBuckets";
+
 import Empty from "./Empty";
 import BucketCard from "./bucketCard/BucketCard";
 import CreateDialog from "./createDialog/CreateDialog";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { bucketsQueryOptions } from "../api/queryOptions";
 
 const List = () => {
-  const { data, isError, isLoading } = useBuckets();
+  const { data: buckets } = useSuspenseQuery(bucketsQueryOptions);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error:</div>;
-
-  if (data?.length === 0) return <Empty />;
+  if (buckets?.length === 0) return <Empty />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <CreateDialog />
-      {data?.map((bucket) => (
+      {buckets?.map((bucket) => (
         <BucketCard key={bucket.id} bucket={bucket} />
       ))}
     </div>

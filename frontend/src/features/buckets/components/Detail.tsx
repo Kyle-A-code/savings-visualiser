@@ -1,20 +1,19 @@
 import { getRouteApi, Link } from "@tanstack/react-router";
-import useGetBucketTransactions from "../../transactions/api/getBucketTransactions";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { bucketQueryOptions } from "../api/queryOptions";
+import { bucketTransactionsQueryOptions } from "../../transactions/api/queryOptions";
 import TransactionCard from "./transactionCard/TransactionCard";
-import "./detail.css";
 import type { TransactionWithBalance } from "../../transactions/types";
-import { useGetBucket } from "../api/getBucket";
 import ArrowLeftIcon from "../../../components/icons/ArrowLeft";
+import "./detail.css";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
 const Detail = () => {
   const { bucketId } = routeApi.useParams();
-  const { data: bucket, isError: isErrorBucket, isLoading: isLoadingBucket } = useGetBucket(bucketId);
-  const { data: transactions, isError: isErrorTransactions, isLoading: isLoadingTransactions } = useGetBucketTransactions(bucketId);
 
-  if (isLoadingBucket || isLoadingTransactions) return <div>Loading...</div>;
-  if (isErrorBucket || isErrorTransactions) return <div>Error:</div>;
+  const { data: bucket } = useSuspenseQuery(bucketQueryOptions(bucketId));
+  const { data: transactions } = useSuspenseQuery(bucketTransactionsQueryOptions(bucketId));
 
   if (transactions?.length === 0) return <div>No transactions found</div>;
 
@@ -38,7 +37,9 @@ const Detail = () => {
           Back to buckets
         </Link>
         <h1 className="bucket-detail-title">{bucket?.title}</h1>
-        <p className="bucket-detail-balance">Balance: ${bucket?.balance.toFixed(2)}</p>
+        <p className="bucket-detail-balance">
+          Balance: ${bucket?.balance.toFixed(2)}
+        </p>
       </div>
       <div className="transaction-list">
         {dataWithBalance?.map((transaction) => (

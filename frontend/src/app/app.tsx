@@ -1,18 +1,29 @@
-import ThemeProvider from '../providers/ThemeProvider.tsx'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ThemeProvider from "../providers/ThemeProvider.tsx";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { routeTree } from './routeTree.gen'
+import { routeTree } from "./routeTree.gen";
 
-const router = createRouter({ routeTree })
+const queryClient = new QueryClient();
 
-declare module '@tanstack/react-router' {
+// TODO: Add default components
+const router = createRouter({
+  routeTree,
+  context: {
+    queryClient,
+  },
+  defaultPreload: "intent",
+  scrollRestoration: true,
+  defaultErrorComponent: () => <div>Error</div>,
+  defaultPendingComponent: () => <div>Loading...</div>,
+  defaultNotFoundComponent: () => <div>Not Found</div>,
+});
+
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
-
-const queryClient = new QueryClient()
 
 const App = () => {
   return (
@@ -21,7 +32,7 @@ const App = () => {
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;
