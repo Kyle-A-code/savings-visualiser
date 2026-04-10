@@ -3,11 +3,11 @@ import type { Transaction, TransactionData } from "../types";
 import queryKeys from "./queryKeys";
 import { apiClient } from "../../../lib/apiClient";
 
-const getBucketTransactions = async (bucketId: number) => {
+const getBucketTransactions = async (bucketId: string) => {
   return await apiClient.get<TransactionData[]>(`/transactions/bucket/${bucketId}`);
 };
 
-const useGetBucketTransactions = (bucketId: number) => {
+const useGetBucketTransactions = (bucketId: string) => {
   const { data, isError, isLoading } = useQuery<Transaction[]>({
     queryKey: queryKeys.bucketList(bucketId),
     queryFn: async () => {

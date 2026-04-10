@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/apiClient";
 import type { Bucket, BucketData } from "../types";
 import queryKeys from "./queryKeys";
+import { mapBucketDataToBucket } from "./mappers";
 
 export const getBuckets = async () : Promise<BucketData[]> => {
   return await apiClient.get<BucketData[]>("/buckets");
@@ -12,15 +13,7 @@ export const useBuckets = () => {
     queryKey: queryKeys.list(),
     queryFn: async () => {
       const response = await getBuckets();
-      return response.map((bucket) => {
-        return {
-          id: bucket.ID,
-          title: bucket.Title,
-          balance: bucket.Balance,
-          createdAt: bucket.CreatedAt,
-          updatedAt: bucket.UpdatedAt,
-        };
-      });
+      return response.map(mapBucketDataToBucket);
     },
   });
 

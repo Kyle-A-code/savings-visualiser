@@ -1,6 +1,6 @@
 const queryKeys = {
   list: () => ["transactions"],
-  bucketList: (bucketId: number) => ["transactions", bucketId],
+  bucketList: (bucketId: string) => ["transactions", bucketId],
   detail: (id: string) => ["transactions", id],
 };
 
