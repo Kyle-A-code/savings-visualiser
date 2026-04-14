@@ -6,6 +6,8 @@ import TransactionCard from "./transactionCard/TransactionCard";
 import type { TransactionWithBalance } from "../../transactions/types";
 import ArrowLeftIcon from "../../../components/icons/ArrowLeft";
 import "./detail.css";
+import { MinusIcon, PlusIcon } from "../../../components/icons";
+import CreateTransactionDialog from "../../transactions/components/createDialog/CreateDialog";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
@@ -40,6 +42,26 @@ const Detail = () => {
         <p className="bucket-detail-balance">
           Balance: ${bucket?.balance.toFixed(2)}
         </p>
+        <span>
+        <CreateTransactionDialog
+            bucketId={Number(bucketId)}
+            isCredit={true}
+            trigger={
+              <button className="credit-button" aria-label="Add credit transaction">
+                <PlusIcon width={18} height={18} />
+              </button>
+            }
+          />
+          <CreateTransactionDialog
+            bucketId={Number(bucketId)}
+            isCredit={false}
+            trigger={
+              <button className="debit-button" aria-label="Add debit transaction">
+                <MinusIcon width={18} height={18} />
+              </button>
+            }
+          />
+        </span>
       </div>
       <div className="transaction-list">
         {dataWithBalance?.map((transaction) => (
