@@ -17,7 +17,7 @@ export const useCreateTransaction = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(data.BucketId),
+        queryKey: queryKeys.bucketList(data.BucketId.toString()),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.detail(data.BucketId.toString()),

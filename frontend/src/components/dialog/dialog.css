@@ -120,8 +120,9 @@
 
 .dialog-actions {
   margin-top: 1rem;
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 
@@ -132,17 +133,27 @@
   background: var(--color-surface-alt);
   color: var(--color-text-primary);
   cursor: pointer;
+  text-align: center;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
-.dialog-close-button:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary-border);
-  color: var(--color-surface);
-}
+.dialog-close-button {
+  width: 30%;
 
-.dialog-actions button:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary-border);
+    color: var(--color-surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
 .dialog-submit-primary {
@@ -157,6 +168,7 @@
 }
 
 .dialog-submit-success {
+  width: 100%;
   border-color: color-mix(in oklab, var(--color-success) 45%, var(--color-border));
   background: var(--color-success);
   color: var(--color-surface);
