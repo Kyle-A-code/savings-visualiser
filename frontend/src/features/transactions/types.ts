@@ -26,3 +26,8 @@ export interface CreateTransactionRequest {
   bucketId: number;
 }
 
+export interface TransferRequest {
+  fromBucketId: number;
+  toBucketId: number;
+  amount: number;
+}
