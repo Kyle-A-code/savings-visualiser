@@ -1,45 +1,46 @@
-/* reset */
-button {
-	all: unset;
+.switch {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  width: 42px;
+  height: 25px;
+  background-color: var(--surface-container-highest);
+  border-radius: var(--radius-max);
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  &[data-state="checked"] {
+    background-color: var(--primary);
+  }
 }
 
-.SwitchRoot {
-	width: 42px;
-	height: 25px;
-	background-color: var(--color-surface-alt);
-	border-radius: var(--border-radius-lg);
-	position: relative;
-	box-shadow: var(--elevation-sm);
-	z-index: var(--z-index-raised);
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-	&:focus {
-		box-shadow: 0 0 0 2px var(--color-focus-ring);
-	}
-	&[data-state="checked"] {
-		background-color: var(--color-primary);
-	}
-}
+.thumb {
+  display: block;
+  width: 21px;
+  height: 21px;
+  background-color: var(--surface-container-lowest);
+  border-radius: var(--radius-max);
+  transition: transform 100ms;
+  transform: translateX(2px);
+  will-change: transform;
 
-.SwitchThumb {
-	display: block;
-	width: 21px;
-	height: 21px;
-	background-color: var(--color-surface);
-	border-radius: var(--border-radius-lg);
-	box-shadow: var(--elevation-sm);
-	transition: transform 100ms;
-	transform: translateX(2px);
-	will-change: transform;
-	z-index: var(--z-index-raised);
-	&[data-state="checked"] {
-		transform: translateX(19px);
-	}
+  &[data-state="checked"] {
+    transform: translateX(19px);
+  }
 }
 
 .Label {
-	color: var(--color-text-primary);
-	font-size: var(--font-size-sm);
-	font-weight: var(--font-weight-medium);
-	line-height: 1;
-	user-select: none;
+  color: var(--on-surface);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  user-select: none;
 }

@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { bucketsQueryOptions } from "../../features/buckets/api/queryOptions";
-import Home from "../../features/buckets/components/Home";
+import Overview from "../../features/buckets/components/Overview";
 
 export const Route = createFileRoute("/")({
-  component: Home,
+  component: Overview,
   loader: ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(bucketsQueryOptions);
   }

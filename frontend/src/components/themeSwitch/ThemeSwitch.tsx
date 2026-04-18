@@ -17,11 +17,11 @@ const ThemeSwitch = () => {
   return (
     <Switch
       aria-label="Toggle theme"
-      className="SwitchRoot"
+      className="switch"
       checked={theme === "dark"}
       onCheckedChange={onThemeChange}
     >
-      <SwitchThumb className="SwitchThumb" />
+      <SwitchThumb className="thumb" />
     </Switch>
   );
 };

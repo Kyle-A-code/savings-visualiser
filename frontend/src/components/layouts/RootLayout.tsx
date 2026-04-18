@@ -4,31 +4,35 @@ import ThemeSwitch from "../themeSwitch/ThemeSwitch";
 import "./rootLayout.css";
 
 const navLinks = [
-  { to: "/", label: "Home", key: "home" },
-  { to: "/buckets", label: "Buckets", key: "buckets" },
-];
+  { to: "/", label: "Home", key: "home", exact: true },
+  { to: "/buckets", label: "Buckets", key: "buckets", exact: false },
+] as const;
 
 const RootLayout = () => (
-  <div>
-    <header className="top-nav">
-      <nav className="nav-links" aria-label="Primary">
-        {navLinks.map((link) => (
-          <Link
-            key={link.key}
-            to={link.to}
-            aria-label={link.label}
-            className="nav-link"
-            activeProps={{ className: "nav-link-active" }}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-      <span className="nav-actions">
-        <ThemeSwitch />
-      </span>
+  <div className="root-layout">
+    <header className="root-header">
+      <div className="top-nav">
+        <div className="app-title">Working Title</div>
+        <nav className="nav-links" aria-label="Primary">
+          {navLinks.map((link) => (
+            <Link
+              key={link.key}
+              to={link.to}
+              aria-label={link.label}
+              activeOptions={link.exact ? { exact: true } : undefined}
+              className="nav-link"
+              activeProps={{ className: "nav-link-active" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="nav-actions">
+          <ThemeSwitch />
+        </div>
+      </div>
     </header>
-    <main>
+    <main className="root-main">
       <Outlet />
     </main>
     <TanStackRouterDevtools />
