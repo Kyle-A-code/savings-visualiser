@@ -33,7 +33,7 @@ const CreateDialog = ({
     const title = formData.get("title") as string;
     const amount = formData.get("amount") as string;
     const parsedAmount = parseFloat(amount);
-    // would be nice to render the error message in the form
+    // TODO: would be nice to render the error message in the form
     const isInvalidAmount = Number.isNaN(parsedAmount) || parsedAmount <= 0;
 
     const signedAmount = isCredit ? parsedAmount : -parsedAmount;
@@ -64,75 +64,122 @@ const CreateDialog = ({
         trigger === null
           ? null
           : (trigger ?? (
-              <button className="dialog-trigger dialog-trigger-success">
+              <button
+                className="dialog-trigger dialog-trigger-success"
+                type="button"
+              >
                 {isCredit ? "Credit" : "Debit"}
               </button>
             ))
       }
     >
-      <Dialog.Title className="dialog-title">
-        {isCredit ? "Credit" : "Debit"}
-      </Dialog.Title>
-      <Dialog.Description className="dialog-description">
-        {isCredit ? "Credit the bucket." : "Debit the bucket."}
-      </Dialog.Description>
+      <header className="dialog-header">
+        <div className="dialog-header-text">
+          <Dialog.Title className="dialog-title">Add Transaction</Dialog.Title>
+          <Dialog.Description className="dialog-lede">
+            Record a credit or debit for this bucket.
+          </Dialog.Description>
+        </div>
+        <Dialog.Close asChild>
+          <button
+            type="button"
+            className="dialog-close-icon"
+            aria-label="Close"
+          >
+            <span aria-hidden>×</span>
+          </button>
+        </Dialog.Close>
+      </header>
       <form className="dialog-form" onSubmit={handleSubmit}>
-        <fieldset>
-          <label htmlFor="transaction-title">TRANSACTION TITLE</label>
-          <input
-            type="text"
-            id="transaction-title"
-            name="title"
-            placeholder="e.g: Rent"
-            required
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="transaction-amount">AMOUNT</label>
-          <div className="dialog-amount-input-wrapper">
-            <span aria-hidden className="dialog-amount-prefix">
+        <div className="dialog-field">
+          <label htmlFor="transaction-title" className="dialog-label">
+            Transaction title
+          </label>
+          <div className="dialog-input-group">
+            <input
+              id="transaction-title"
+              name="title"
+              className="dialog-input"
+              type="text"
+              placeholder="e.g. Monthly rent"
+              required
+              autoComplete="off"
+            />
+          </div>
+        </div>
+        <div className="dialog-field">
+          <label htmlFor="transaction-amount" className="dialog-label">
+            Amount
+          </label>
+          <div className="dialog-input-group dialog-amount-input-wrapper">
+            <span className="dialog-amount-prefix" aria-hidden>
               $
             </span>
             <input
-              type="number"
-              aria-label="Credit amount"
               id="transaction-amount"
+              name="amount"
+              className="dialog-input dialog-input--amount"
+              type="number"
               min="0.01"
               step="0.01"
-              name="amount"
               placeholder="0.00"
               required
+              aria-label="Amount"
             />
           </div>
-        </fieldset>
+        </div>
         {isError && (
-          <p className="dialog-error">
+          <p className="dialog-error" role="alert">
             Error creating transaction, please try again.
           </p>
         )}
-        <div>
-          <label>TRANSACTION TYPE</label>
-          <div className="transaction-type-container">
-            <button data-state={isCredit ? "" : "active"} type="button" onClick={() => setIsCredit(false)}>
-              <MinusIcon width={18} height={18} />
-              Debit
-            </button>
-            <button data-state={isCredit ? "active" : ""} type="button" onClick={() => setIsCredit(true)}>
-              <PlusIcon width={18} height={18} />
-              Credit
-            </button>
+        <div className="dialog-field">
+          <p className="dialog-label" id="transaction-type-label">
+            Transaction type
+          </p>
+          <div
+            className="tx-type-row"
+            role="group"
+            aria-labelledby="transaction-type-label"
+          >
+            <div className="tx-type-option">
+              <button
+                type="button"
+                className="tx-type-btn tx-type-btn--debit"
+                data-state={!isCredit ? "active" : undefined}
+                aria-pressed={!isCredit}
+                onClick={() => setIsCredit(false)}
+              >
+                <MinusIcon width={20} height={20} aria-hidden />
+                Debit
+              </button>
+            </div>
+            <div className="tx-type-option">
+              <button
+                type="button"
+                className="tx-type-btn tx-type-btn--credit"
+                data-state={isCredit ? "active" : undefined}
+                aria-pressed={isCredit}
+                onClick={() => setIsCredit(true)}
+              >
+                <PlusIcon width={20} height={20} aria-hidden />
+                Credit
+              </button>
+            </div>
           </div>
         </div>
-        <div className="dialog-actions">
+        <div className="dialog-footer-actions">
           <Dialog.Close asChild>
-            <button className="dialog-close-button">Cancel</button>
+            <button type="button" className="dialog-btn-ghost">
+              Cancel
+            </button>
           </Dialog.Close>
           <button
             type="submit"
+            className="dialog-btn-primary"
             disabled={isPending}
-            className="dialog-submit-success"
           >
-            {isPending ? "Creating..." : "Create"}
+            {isPending ? "Adding…" : "Add transaction"}
           </button>
         </div>
       </form>
