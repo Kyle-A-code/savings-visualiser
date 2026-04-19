@@ -28,40 +28,83 @@ const CreateDialog = () => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <button className="dialog-trigger dialog-trigger-primary" type="button">
+        <button className="dialog-trigger" type="button">
           <CirclePlusIcon width={18} height={18} />
           Create New Bucket
         </button>
       }
     >
-      <Dialog.Title className="dialog-title">Create Bucket</Dialog.Title>
-      <Dialog.Description className="dialog-description">
-        Create a new bucket to track your savings.
-      </Dialog.Description>
+      <header className="dialog-header">
+        <div className="dialog-header-text">
+          <Dialog.Title className="dialog-title">Create Bucket</Dialog.Title>
+          <Dialog.Description className="dialog-lede">
+            Create a new bucket to track your savings.
+          </Dialog.Description>
+        </div>
+        <Dialog.Close asChild>
+          <button
+            type="button"
+            className="dialog-close-icon"
+            aria-label="Close"
+          >
+            <span aria-hidden>×</span>
+          </button>
+        </Dialog.Close>
+      </header>
       <form className="dialog-form" onSubmit={handleSubmit}>
-        <fieldset>
-          <label htmlFor="title">Title</label>
-          <input type="text" id="title" name="title" required />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="amount">Amount</label>
-          <input type="number" id="amount" name="amount" min="0" step="0.01" required />
-        </fieldset>
+        <div className="dialog-field">
+          <label htmlFor="bucket-title" className="dialog-label">
+            Bucket title
+          </label>
+          <div className="dialog-input-group">
+            <input
+              id="bucket-title"
+              name="title"
+              className="dialog-input"
+              type="text"
+              placeholder="e.g. Emergency fund"
+              required
+              autoComplete="off"
+            />
+          </div>
+        </div>
+        <div className="dialog-field">
+          <label htmlFor="bucket-amount" className="dialog-label">
+            Starting amount
+          </label>
+          <div className="dialog-input-group dialog-amount-input-wrapper">
+            <span className="dialog-amount-prefix" aria-hidden>
+              $
+            </span>
+            <input
+              id="bucket-amount"
+              name="amount"
+              className="dialog-input dialog-input--amount"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+        </div>
         {isError && (
-          <p className="dialog-error">
+          <p className="dialog-error" role="alert">
             Error creating bucket, please try again.
           </p>
         )}
-        <div className="dialog-actions">
+        <div className="dialog-footer-actions">
           <Dialog.Close asChild>
-            <button type="button" className="dialog-close-button">Cancel</button>
+            <button type="button" className="dialog-btn-ghost">
+              Cancel
+            </button>
           </Dialog.Close>
           <button
             type="submit"
+            className="dialog-btn-primary"
             disabled={isPending}
-            className="dialog-submit-primary"
           >
-            {isPending ? "Creating..." : "Create"}
+            {isPending ? "Creating…" : "Create bucket"}
           </button>
         </div>
       </form>
