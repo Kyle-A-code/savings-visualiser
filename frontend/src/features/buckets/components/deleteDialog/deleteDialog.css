@@ -1,111 +1,160 @@
 .delete-button {
+  box-sizing: border-box;
   width: 2.25rem;
   height: 2.25rem;
   padding: 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-surface-alt);
-  color: var(--color-text-secondary);
+  border: 1px solid var(--ghost-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
   display: inline-grid;
   place-items: center;
   line-height: 0;
   cursor: pointer;
   transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    color 120ms ease;
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+
   &:hover {
-    background-color: var(--color-danger-hover);
-    border-color: var(--color-danger);
-    color: light-dark(var(--color-surface), var(--color-text-primary));
+    border-color: color-mix(in srgb, var(--tertiary) 45%, var(--ghost-border));
+    background: color-mix(in srgb, var(--tertiary) 12%, var(--surface-container-high));
+    color: var(--tertiary);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-focus-ring);
+    outline: 2px solid var(--tertiary);
     outline-offset: 2px;
   }
-}
-
-.delete-dialog-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  z-index: var(--z-index-overlay);
 }
 
 .delete-dialog-content {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(28rem, calc(100vw - 2rem));
-  border: 2px solid var(--color-danger);
-  border-radius: var(--border-radius-lg);
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  box-shadow: var(--elevation-sm);
-  padding: 1rem;
   z-index: var(--z-index-modal);
+  box-sizing: border-box;
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: min(90dvh, 100%);
+  overflow: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--ghost-border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-ambient);
+  transform: translate(-50%, -50%);
+}
+
+.delete-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: 2.5rem;
 }
 
 .delete-dialog-title {
   margin: 0;
+  font-family: var(--font-headline);
+  font-size: clamp(1.5rem, 0.65rem + 2.2vw, 1.875rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--on-surface);
 }
 
 .delete-dialog-description {
-  margin-top: 0.25rem;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.625;
+  color: var(--on-surface-variant);
+}
+
+.delete-dialog-emphasis {
+  font-weight: var(--font-weight-bold);
+  color: var(--on-surface);
 }
 
 .delete-dialog-error {
-  margin-top: 0.75rem;
-  color: var(--color-danger);
+  margin: 0;
+  font-size: var(--text-body-lg);
+  color: var(--tertiary);
 }
 
 .delete-dialog-actions {
-  margin-top: 1rem;
   display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.delete-dialog-actions button {
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  padding: 0.45rem 0.8rem;
-  background: var(--color-surface-alt);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  transition: background-color 120ms ease, border-color 120ms ease;
-}
-
-.delete-dialog-actions button:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
-}
-
-.delete-dialog-actions button:not(.delete-dialog-confirm):hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary-border);
-  color: var(--color-surface);
+  width: 100%;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .delete-dialog-confirm {
-  border-color: color-mix(
-    in oklab,
-    var(--color-danger) 45%,
-    var(--color-border)
-  );
-  background: var(--color-danger);
-  color: var(--color-surface);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-max);
+  font-family: var(--font-headline);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--on-primary);
+  cursor: pointer;
+  background: var(--tertiary);
+  transition:
+    transform 150ms ease,
+    filter 200ms ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--tertiary) 70%, transparent);
+    outline-offset: 3px;
+  }
 }
 
-.delete-dialog-confirm:hover {
-  background: var(--color-danger-hover);
-}
+.delete-dialog-cancel {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-max);
+  font-family: var(--font-headline);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  background: var(--surface-container-high);
+  transition:
+    transform 150ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
 
-.delete-dialog-confirm:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+  &:hover {
+    background: var(--surface-container-highest);
+    color: var(--on-surface);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
 }
