@@ -8,7 +8,23 @@ const navLinks = [
   { to: "/buckets", label: "Buckets", key: "buckets", exact: false },
 ] as const;
 
-const RootLayout = () => (
+const footerDate = () => {
+  const d = new Date();
+  return {
+    iso: d.toISOString().slice(0, 10),
+    label: d.toLocaleDateString("en-AU", {
+      weekday: "short",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+  };
+};
+
+const RootLayout = () => {
+  const { iso, label } = footerDate();
+
+  return (
   <div className="root-layout">
     <header className="root-header">
       <div className="top-nav">
@@ -35,8 +51,19 @@ const RootLayout = () => (
     <main className="root-main">
       <Outlet />
     </main>
+    <footer className="root-footer">
+      <div className="root-footer-inner">
+        <div className="root-footer-lead">
+          <span className="root-footer-title">{"\u2009"}Working Title</span>
+        </div>
+        <time className="root-footer-date" dateTime={iso}>
+          {label}
+        </time>
+      </div>
+    </footer>
     <TanStackRouterDevtools />
   </div>
-);
+  );
+};
 
 export default RootLayout;
