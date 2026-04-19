@@ -140,7 +140,6 @@ html {
 #root {
   width: min(1126px, 100%);
   margin-inline: auto;
-  padding-inline: var(--space-3) var(--space-2);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
