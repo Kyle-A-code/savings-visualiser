@@ -79,7 +79,13 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
           onOpenChange={setCreateTransactionOpen}
           trigger={null}
         />
-        <DeleteDialog id={id} open={deleteOpen} onOpenChange={setDeleteOpen} trigger={null} />
+        <DeleteDialog
+          id={id}
+          bucketTitle={title}
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          trigger={null}
+        />
       </div>
       <div className="bucket-card-body">
         <span className="bucket-balance-label">Current Balance</span>

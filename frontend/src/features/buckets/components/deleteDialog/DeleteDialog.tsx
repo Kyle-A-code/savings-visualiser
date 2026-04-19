@@ -1,12 +1,14 @@
 import { useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import type { ReactNode } from "react";
+import "../../../../components/dialog/dialog.css";
 import "./deleteDialog.css";
 import { useDeleteBucket } from "../../api/deleteBucket";
 import { RubbishIcon } from "../../../../components/icons";
 
 interface DeleteDialogProps {
   id: string;
+  bucketTitle: string;
   trigger?: ReactNode | null;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -14,6 +16,7 @@ interface DeleteDialogProps {
 
 const DeleteDialog = ({
   id,
+  bucketTitle,
   trigger,
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
@@ -47,17 +50,23 @@ const DeleteDialog = ({
         </AlertDialog.Trigger>
       )}
       <AlertDialog.Portal>
-        <AlertDialog.Overlay className="delete-dialog-overlay" />
+        <AlertDialog.Overlay className="dialog-overlay" />
         <AlertDialog.Content className="delete-dialog-content">
-          <AlertDialog.Title className="delete-dialog-title">Delete Bucket</AlertDialog.Title>
-          <AlertDialog.Description className="delete-dialog-description">
-            Are you sure you want to delete this bucket?
-          </AlertDialog.Description>
-          {isError && <p className="delete-dialog-error">Error deleting bucket, please try again.</p>}
+          <div className="delete-dialog-body">
+            <AlertDialog.Title className="delete-dialog-title">
+              Delete Bucket?
+            </AlertDialog.Title>
+            <AlertDialog.Description className="delete-dialog-description">
+              Are you sure you want to delete this bucket? This action is permanent and all progress
+              for <span className="delete-dialog-emphasis">{bucketTitle}</span> will be archived.
+            </AlertDialog.Description>
+            {isError && (
+              <p className="delete-dialog-error" role="alert">
+                Error deleting bucket, please try again.
+              </p>
+            )}
+          </div>
           <div className="delete-dialog-actions">
-            <AlertDialog.Cancel asChild>
-              <button type="button">Cancel</button>
-            </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
               <button
                 type="button"
@@ -65,9 +74,14 @@ const DeleteDialog = ({
                 onClick={handleDelete}
                 disabled={isPending}
               >
-                {isPending ? "Deleting..." : "Delete"}
+                {isPending ? "Deleting…" : "Delete Bucket"}
               </button>
             </AlertDialog.Action>
+            <AlertDialog.Cancel asChild>
+              <button type="button" className="delete-dialog-cancel">
+                Cancel
+              </button>
+            </AlertDialog.Cancel>
           </div>
         </AlertDialog.Content>
       </AlertDialog.Portal>
