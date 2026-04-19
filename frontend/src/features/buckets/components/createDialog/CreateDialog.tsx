@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useCreateBucket } from "../../api/createBucket";
 import { DialogPrimitive } from "../../../../components/dialog";
+import { CirclePlusIcon } from "../../../../components/icons";
 
 const CreateDialog = () => {
   const [open, setOpen] = useState(false);
@@ -28,8 +28,9 @@ const CreateDialog = () => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <button className="dialog-trigger dialog-trigger-primary">
-          Create Bucket
+        <button className="dialog-trigger dialog-trigger-primary" type="button">
+          <CirclePlusIcon width={18} height={18} />
+          Create New Bucket
         </button>
       }
     >

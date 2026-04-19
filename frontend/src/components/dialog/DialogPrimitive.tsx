@@ -5,7 +5,7 @@ import "./dialog.css";
 interface DialogPrimitiveProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  trigger: ReactNode;
+  trigger?: ReactNode | null;
   children: ReactNode;
 }
 
@@ -17,7 +17,9 @@ const DialogPrimitive = ({
 }: DialogPrimitiveProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      {trigger != null ? (
+        <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      ) : null}
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-content">{children}</Dialog.Content>
