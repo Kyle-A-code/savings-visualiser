@@ -8,11 +8,22 @@ import "./createDialog.css";
 
 interface CreateDialogProps {
   bucketId: number;
-  trigger?: ReactNode;
+  trigger?: ReactNode | null;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const CreateDialog = ({ bucketId, trigger }: CreateDialogProps) => {
-  const [open, setOpen] = useState(false);
+const CreateDialog = ({
+  bucketId,
+  trigger,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: CreateDialogProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled =
+    controlledOpen !== undefined && controlledOnOpenChange !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? controlledOnOpenChange : setInternalOpen;
   const [isCredit, setIsCredit] = useState(true);
   const { createTransaction, isPending, isError } = useCreateTransaction();
 
@@ -50,11 +61,13 @@ const CreateDialog = ({ bucketId, trigger }: CreateDialogProps) => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        trigger ?? (
-          <button className="dialog-trigger dialog-trigger-success">
-            {isCredit ? "Credit" : "Debit"}
-          </button>
-        )
+        trigger === null
+          ? null
+          : (trigger ?? (
+              <button className="dialog-trigger dialog-trigger-success">
+                {isCredit ? "Credit" : "Debit"}
+              </button>
+            ))
       }
     >
       <Dialog.Title className="dialog-title">

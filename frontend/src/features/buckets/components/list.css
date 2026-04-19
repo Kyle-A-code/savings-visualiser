@@ -1,0 +1,198 @@
+/* Buckets list page — flat class names (see test.html) */
+
+.bucket-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+}
+
+.bucket-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.bucket-page-intro {
+  max-width: 42rem;
+  width: 100%;
+}
+
+.bucket-page-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-headline);
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--on-surface);
+}
+
+.bucket-page-lede {
+  margin: 0;
+  line-height: 1.625;
+  color: var(--on-surface-variant);
+}
+
+.bucket-create {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--on-primary-container);
+  cursor: pointer;
+  background: var(--gradient-primary-cta);
+  box-shadow: 0 10px 25px color-mix(in srgb, var(--primary) 20%, transparent);
+  transition:
+    transform 150ms ease,
+    box-shadow 200ms ease,
+    filter 200ms ease;
+
+  &:hover {
+    filter: brightness(1.05);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+}
+
+.bucket-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.bucket-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--outline-variant) 10%, transparent);
+  background: var(--surface-container-lowest);
+  box-shadow: var(--shadow-ambient);
+}
+
+.bucket-stat-label {
+  margin-bottom: 0.25rem;
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--outline-variant);
+}
+
+.bucket-stat-value {
+  font-family: var(--font-headline);
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--on-surface);
+}
+
+.bucket-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1536px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bucket-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  padding: 2rem;
+  border: 2px dashed color-mix(in srgb, var(--outline-variant) 30%, transparent);
+  border-radius: 2rem;
+  background: color-mix(in srgb, var(--surface-container-low) 50%, transparent);
+  cursor: pointer;
+  transition:
+    background-color 500ms ease,
+    border-color 500ms ease,
+    transform 200ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    background: var(--surface-container-low);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+}
+
+.bucket-add-circle {
+  display: flex;
+  width: 4rem;
+  height: 4rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-max);
+  background: var(--surface-container-lowest);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--on-surface) 12%, transparent);
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease;
+
+  .bucket-add:hover & {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--on-surface) 15%, transparent);
+    transform: scale(1.08);
+  }
+}
+
+.bucket-add-plus {
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.bucket-add-label {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--outline-variant);
+  transition: color 300ms ease;
+
+  .bucket-add:hover & {
+    color: var(--primary);
+  }
+}

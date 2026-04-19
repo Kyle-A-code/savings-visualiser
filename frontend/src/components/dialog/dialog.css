@@ -1,73 +1,102 @@
 .dialog-trigger {
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  background: var(--color-surface-alt);
-  color: var(--color-text-primary);
-  padding: 0.5rem 0.9rem;
-  font-size: var(--font-size-sm);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--ghost-border);
+  border-radius: var(--radius-max);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    color 120ms ease;
-}
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
 
-.dialog-trigger:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
 }
 
 .dialog-trigger-primary {
-  border-color: var(--color-primary-border);
-  background: var(--color-primary);
-  color: light-dark(var(--color-surface), var(--color-text-primary));
-}
+  padding: calc((var(--space-1) + var(--space-2)) / 2) var(--space-3);
+  border: none;
+  font-weight: var(--font-weight-semibold);
+  color: var(--on-primary-container);
+  background: var(--primary-container);
+  box-shadow:
+    0 10px 15px -3px color-mix(in srgb, var(--primary) 20%, transparent),
+    0 4px 6px -4px color-mix(in srgb, var(--primary) 15%, transparent);
+  transition:
+    transform 150ms ease,
+    box-shadow 200ms ease,
+    filter 200ms ease;
 
-.dialog-trigger-primary:hover {
-  background: var(--color-primary-hover);
+  &:hover {
+    filter: brightness(1.05);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--primary) 65%, transparent);
+    outline-offset: 3px;
+  }
 }
 
 .dialog-trigger-success {
-  border-color: color-mix(in oklab, var(--color-success) 45%, var(--color-border));
-  background: var(--color-success);
-  color: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--secondary) 45%, var(--ghost-border));
+  background: var(--secondary);
+  color: var(--on-primary-container);
 }
 
 .dialog-trigger-success:hover {
-  background: var(--color-success-hover);
+  filter: brightness(1.08);
 }
 
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
   z-index: var(--z-index-overlay);
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .dialog-content {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(28rem, calc(100vw - 2rem));
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  box-shadow: var(--elevation-sm);
-  padding: 1rem;
   z-index: var(--z-index-modal);
+  box-sizing: border-box;
+  width: min(28rem, calc(100vw - 2rem));
+  padding: var(--space-3);
+  border: 1px solid var(--ghost-border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-ambient);
+  transform: translate(-50%, -50%);
 }
 
 .dialog-title {
   margin: 0;
+  font-family: var(--font-headline);
+  color: var(--on-surface);
 }
 
 .dialog-description {
-  margin-top: 0.25rem;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  margin-top: var(--label-field-gap);
+  font-size: var(--text-label-md);
+  color: var(--on-surface-variant);
 }
 
 .dialog-form {
@@ -75,12 +104,12 @@
 }
 
 .dialog-form fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 .dialog-form fieldset + fieldset {
@@ -88,10 +117,13 @@
 }
 
 .dialog-form input {
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  padding: 0.5rem 0.6rem;
+  box-sizing: border-box;
+  padding: var(--space-1) 0.6rem;
+  border: 1px solid var(--ghost-border);
+  border-radius: calc((var(--space-1) + var(--space-2)) / 2);
   font: inherit;
+  color: var(--on-surface);
+  background: var(--surface-container-highest);
 }
 
 .dialog-amount-input-wrapper {
@@ -100,43 +132,43 @@
 
 .dialog-amount-prefix {
   position: absolute;
-  left: 0.6rem;
   top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-secondary);
+  left: 0.6rem;
+  color: var(--on-surface-variant);
   pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .dialog-amount-input-wrapper input {
   width: 100%;
-  box-sizing: border-box;
   padding-left: 1.35rem;
 }
 
 .dialog-error {
   margin-top: 0.75rem;
-  color: var(--color-danger);
+  color: var(--tertiary);
 }
 
 .dialog-actions {
-  margin-top: 1rem;
-  width: 100%;
   display: flex;
+  width: 100%;
+  margin-top: var(--space-2);
+  gap: var(--space-1);
   justify-content: space-between;
-  gap: 0.5rem;
 }
 
 .dialog-actions button {
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
+  box-sizing: border-box;
   padding: 0.45rem 0.8rem;
-  background: var(--color-surface-alt);
-  color: var(--color-text-primary);
-  cursor: pointer;
+  border: 1px solid var(--ghost-border);
+  border-radius: calc((var(--space-1) + var(--space-2)) / 2);
   text-align: center;
+  color: var(--on-surface);
+  cursor: pointer;
+  background: var(--surface-container-low);
 
   &:focus-visible {
-    outline: 2px solid var(--color-focus-ring);
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
 }
@@ -145,36 +177,34 @@
   width: 30%;
 
   &:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary-border);
-    color: var(--color-surface);
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--on-primary-container);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-focus-ring);
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
 }
 
 .dialog-submit-primary {
-  border-color: var(--color-primary-border);
-  background: var(--color-primary);
-  color: var(--color-surface);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--ghost-border));
+  background: var(--primary);
+  color: var(--on-primary-container);
 }
 
 .dialog-submit-primary:hover {
-  background: var(--color-primary-hover);
-  color: light-dark(var(--color-surface), var(--color-text-primary));
+  filter: brightness(1.08);
 }
 
 .dialog-submit-success {
   width: 100%;
-  border-color: color-mix(in oklab, var(--color-success) 45%, var(--color-border));
-  background: var(--color-success);
-  color: var(--color-surface);
+  border-color: color-mix(in srgb, var(--secondary) 45%, var(--ghost-border));
+  background: var(--secondary);
+  color: var(--on-primary-container);
 }
 
 .dialog-submit-success:hover {
-  background: var(--color-success-hover);
-  color: light-dark(var(--color-surface), var(--color-text-primary));
+  filter: brightness(1.08);
 }

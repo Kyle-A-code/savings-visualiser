@@ -1,70 +1,98 @@
+import { useState } from "react";
 import type { Bucket } from "../../types";
 import "./bucketCard.css";
-import DeleteDialog from "../deleteDialog/DeleteDialog";
-import { CardPrimitive } from "../../../../components/card";
-import {
-  ArrowRightIcon,
-  TransferIcon,
-  PlusIcon,
-} from "../../../../components/icons";
 import { Link } from "@tanstack/react-router";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
+import DeleteDialog from "../deleteDialog/DeleteDialog";
 
 interface BucketCardProps {
   bucket: Bucket;
 }
 
 const BucketCard = ({ bucket }: BucketCardProps) => {
-  const { id, title, balance, updatedAt } = bucket;
+  const { id, title, balance } = bucket;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [createTransactionOpen, setCreateTransactionOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const formattedBalance = `$${balance.toFixed(2)}`;
-
-  const formattedUpdatedAt = new Date(updatedAt).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+  const formattedBalance = balance.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
   });
 
   return (
-    <CardPrimitive className="bucket-card">
-      <header className="card-header">
-        <h3>{title}</h3>
-      </header>
-      <div className="card-content">
-        <div className="card-details">
-          <p className="card-balance">{formattedBalance}</p>
-          <p className="card-meta">Updated {formattedUpdatedAt}</p>
-        </div>
-        <div className="card-actions">
-          <CreateTransactionDialog
-            bucketId={Number(id)}
-            trigger={
-              <button className="credit-button" aria-label="Add credit transaction">
-                <PlusIcon width={18} height={18} />
-              </button>
-            }
-          />
-          <button
-            className="transfer-button"
-            aria-label="Transfer to another bucket"
-          >
-            <TransferIcon width={24} height={24} />
-          </button>
-          <DeleteDialog id={id} />
-        </div>
+    <article className="bucket-card">
+      <div className="bucket-card-bar">
+        <h3 className="bucket-card-name">{title}</h3>
+        <DropdownMenu.Root open={menuOpen} onOpenChange={setMenuOpen}>
+          <DropdownMenu.Trigger asChild>
+            <button type="button" className="bucket-menu" aria-label="Bucket actions">
+              ⋯
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              className="bucket-menu-content"
+              sideOffset={8}
+              align="end"
+              collisionPadding={16}
+            >
+              <DropdownMenu.Label className="bucket-menu-label">Actions</DropdownMenu.Label>
+              <DropdownMenu.Item
+                className="bucket-menu-item"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setCreateTransactionOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                <span className="bucket-menu-row">Create transaction</span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator className="bucket-menu-separator" />
+              <DropdownMenu.Item className="bucket-menu-item">
+                <button
+                  type="button"
+                  className="bucket-menu-row bucket-menu-row-icon"
+                  aria-label="Transfer to another bucket"
+                >
+                  Transfer to another bucket
+                </button>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator className="bucket-menu-separator" />
+              <DropdownMenu.Item
+                className="bucket-menu-item bucket-menu-item-danger"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setDeleteOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                <span className="bucket-menu-row">Delete bucket</span>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+        <CreateTransactionDialog
+          bucketId={Number(id)}
+          open={createTransactionOpen}
+          onOpenChange={setCreateTransactionOpen}
+          trigger={null}
+        />
+        <DeleteDialog id={id} open={deleteOpen} onOpenChange={setDeleteOpen} trigger={null} />
+      </div>
+      <div className="bucket-card-body">
+        <span className="bucket-balance-label">Current Balance</span>
+        <p className="bucket-balance-value">{formattedBalance}</p>
       </div>
       <Link
         to="/buckets/$bucketId"
         params={{ bucketId: id }}
-        className="card-details-link"
+        className="bucket-view"
       >
-        View Transactions
-        <ArrowRightIcon
-          width={18}
-          height={18}
-        />
+        View Details
       </Link>
-    </CardPrimitive>
+    </article>
   );
 };
 
