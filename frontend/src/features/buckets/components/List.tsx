@@ -22,7 +22,7 @@ const List = () => {
           <h1 className="bucket-page-title">Buckets</h1>
 
           <p className="bucket-page-lede">
-            Allocate your savings int buckets to visualize your financial growth.
+            Allocate your savings into buckets to visualize your financial growth.
           </p>
         </div>
         <CreateDialog />
