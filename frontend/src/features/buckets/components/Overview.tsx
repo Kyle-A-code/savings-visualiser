@@ -25,7 +25,7 @@ const Overview = () => {
   const total = buckets.reduce((sum, b) => sum + b.balance, 0);
   const { whole, frac } = splitCurrency(total);
 
-  const chartData = buckets.map((bucket) => ({
+  const chartData = buckets.sort((a, b) => a.balance - b.balance).map((bucket) => ({
     id: bucket.id,
     name: bucket.title,
     amount: bucket.balance,

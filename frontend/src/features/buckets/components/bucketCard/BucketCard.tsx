@@ -27,7 +27,11 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
         <h3 className="bucket-card-name">{title}</h3>
         <DropdownMenu.Root open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenu.Trigger asChild>
-            <button type="button" className="bucket-menu" aria-label="Bucket actions">
+            <button
+              type="button"
+              className="bucket-menu"
+              aria-label="Bucket actions"
+            >
               ⋯
             </button>
           </DropdownMenu.Trigger>
@@ -38,7 +42,9 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
               align="end"
               collisionPadding={16}
             >
-              <DropdownMenu.Label className="bucket-menu-label">Actions</DropdownMenu.Label>
+              <DropdownMenu.Label className="bucket-menu-label">
+                Actions
+              </DropdownMenu.Label>
               <DropdownMenu.Item
                 className="bucket-menu-item"
                 onSelect={(e) => {
@@ -57,6 +63,16 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
                   aria-label="Transfer to another bucket"
                 >
                   Transfer to another bucket
+                </button>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator className="bucket-menu-separator" />
+              <DropdownMenu.Item className="bucket-menu-item">
+                <button
+                  type="button"
+                  className="bucket-menu-row bucket-menu-row-icon"
+                  aria-label="Rename bucket"
+                >
+                  Rename bucket
                 </button>
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="bucket-menu-separator" />
