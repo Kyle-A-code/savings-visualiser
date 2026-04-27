@@ -1,15 +1,13 @@
-
-import BucketCard from "./bucketCard/BucketCard";
-import CreateDialog from "./createDialog/CreateDialog";
+import BucketCard from "./components/bucketCard/BucketCard";
+import CreateDialog from "../shared/createDialog/CreateDialog";
+import { bucketsQueryOptions } from "../../api/queryOptions";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { bucketsQueryOptions } from "../api/queryOptions";
 import "./list.css";
 
 const List = () => {
   const { data: buckets } = useSuspenseQuery(bucketsQueryOptions);
 
-  const totalAllocated =
-    buckets?.reduce((sum, b) => sum + b.balance, 0) ?? 0;
+  const totalAllocated = buckets?.reduce((sum, b) => sum + b.balance, 0) ?? 0;
   const activeCount = buckets?.length ?? 0;
 
   const formatMoney = (n: number) =>
@@ -22,7 +20,8 @@ const List = () => {
           <h1 className="bucket-page-title">Buckets</h1>
 
           <p className="bucket-page-lede">
-            Allocate your savings into buckets to visualize your financial growth.
+            Allocate your savings into buckets to visualize your financial
+            growth.
           </p>
         </div>
         <CreateDialog />

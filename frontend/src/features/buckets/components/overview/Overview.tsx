@@ -1,6 +1,6 @@
-import Empty from "./Empty";
+import Empty from "../empty/Empty";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { bucketsQueryOptions } from "../api/queryOptions";
+import { bucketsQueryOptions } from "../../api/queryOptions";
 import {
   Bar,
   BarChart,
@@ -10,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import "./overview.css";
+import type { Bucket } from "../../types";
 
 function splitCurrency(amount: number) {
   const [whole, frac] = amount.toFixed(2).split(".");
@@ -20,7 +21,7 @@ function splitCurrency(amount: number) {
 const Overview = () => {
   const { data: buckets } = useSuspenseQuery(bucketsQueryOptions);
 
-  if (buckets?.length === 0) return <Empty />;
+  if ((buckets as Bucket[])?.length === 0) return <Empty />;
 
   const total = buckets.reduce((sum, b) => sum + b.balance, 0);
   const { whole, frac } = splitCurrency(total);
