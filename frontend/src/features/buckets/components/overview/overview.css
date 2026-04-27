@@ -1,15 +1,15 @@
-.container {
+.bucket-overview {
   width: 100%;
 }
 
-.content {
+.bucket-overview-content {
   box-sizing: border-box;
   width: 100%;
   max-width: 72rem;
   margin-inline: auto;
 }
 
-.content__header {
+.bucket-overview-header {
   margin-bottom: 5rem;
   text-align: center;
 
@@ -18,7 +18,7 @@
   }
 }
 
-.content__eyebrow {
+.bucket-overview-eyebrow {
   display: block;
   margin-bottom: 0.75rem;
   font-family: var(--font-body);
@@ -29,7 +29,7 @@
   color: var(--on-surface-variant);
 }
 
-.content__title {
+.bucket-overview-title {
   margin: 0 0 1.5rem;
   font-family: var(--font-headline);
   font-size: clamp(3rem, 10vw, 6rem);
@@ -39,26 +39,26 @@
   color: var(--on-surface);
 }
 
-.content__title-currency {
+.bucket-overview-title-currency {
   margin-right: 0.125em;
   font-weight: 800;
 }
 
-.content__title-fraction {
+.bucket-overview-title-fraction {
   font-size: 0.55em;
   font-weight: 800;
   color: var(--on-surface-variant);
   vertical-align: baseline;
 }
 
-.content__bars {
+.bucket-overview-bars {
   box-sizing: border-box;
   width: 100%;
   height: 20rem;
   padding-inline: 1rem;
 }
 
-.content__chart {
+.bucket-overview-chart {
   width: 100%;
   height: 100%;
   min-height: 20rem;
@@ -72,7 +72,7 @@
   }
 }
 
-.content__bar-labels {
+.bucket-overview-bar-labels {
   display: flex;
   gap: 0.5rem;
   margin-top: 1.5rem;
@@ -89,7 +89,7 @@
   }
 }
 
-.content__bar-label {
+.bucket-overview-bar-label {
   flex: 1;
   min-width: 0;
   overflow: hidden;

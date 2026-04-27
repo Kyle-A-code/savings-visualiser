@@ -303,3 +303,11 @@
     outline-offset: 2px;
   }
 }
+
+.dialog-btn-danger {
+  background: var(--danger);
+
+  &:focus-visible {
+    outline-color: color-mix(in srgb, var(--danger) 70%, transparent);
+  }
+}

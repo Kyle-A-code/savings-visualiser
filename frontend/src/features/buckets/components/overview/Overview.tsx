@@ -33,23 +33,23 @@ const Overview = () => {
   }));
 
   return (
-    <div className="container">
-      <div className="content">
-        <header className="content__header">
-          <span className="content__eyebrow">Total Savings</span>
-          <h1 className="content__title">
-            <span className="content__title-currency">$</span>
+    <div className="bucket-overview">
+      <div className="bucket-overview-content">
+        <header className="bucket-overview-header">
+          <span className="bucket-overview-eyebrow">Total Savings</span>
+          <h1 className="bucket-overview-title">
+            <span className="bucket-overview-title-currency">$</span>
             {whole}
-            <span className="content__title-fraction">.{frac}</span>
+            <span className="bucket-overview-title-fraction">.{frac}</span>
           </h1>
         </header>
 
         <div
-          className="content__bars"
+          className="bucket-overview-bars"
           role="img"
           aria-label="Relative balance amount per bucket"
         >
-          <div className="content__chart">
+          <div className="bucket-overview-chart">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 accessibilityLayer
@@ -81,9 +81,9 @@ const Overview = () => {
           </div>
         </div>
 
-        <div className="content__bar-labels">
+        <div className="bucket-overview-bar-labels">
           {buckets.map((bucket) => (
-            <span key={bucket.id} className="content__bar-label">
+            <span key={bucket.id} className="bucket-overview-bar-label">
               {bucket.title}
             </span>
           ))}
