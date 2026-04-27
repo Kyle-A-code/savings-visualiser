@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { Bucket } from "../../types";
+import type { Bucket } from "../../../../types";
 import "./bucketCard.css";
 import { Link } from "@tanstack/react-router";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
+import CreateTransactionDialog from "../../../../../transactions/components/createDialog/CreateDialog";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
 
 interface BucketCardProps {

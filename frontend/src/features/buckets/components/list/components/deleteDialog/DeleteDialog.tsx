@@ -1,10 +1,10 @@
 import { useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import type { ReactNode } from "react";
-import "../../../../components/dialog/dialog.css";
+import "../../../../../../components/dialog/dialog.css";
 import "./deleteDialog.css";
-import { useDeleteBucket } from "../../api/deleteBucket";
-import { RubbishIcon } from "../../../../components/icons";
+import { useDeleteBucket } from "../../../../api/deleteBucket";
+import { RubbishIcon } from "../../../../../../components/icons";
 
 interface DeleteDialogProps {
   id: string;

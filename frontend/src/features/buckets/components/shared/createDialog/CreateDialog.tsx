@@ -1,14 +1,14 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useCreateBucket } from "../../api/createBucket";
-import { DialogPrimitive } from "../../../../components/dialog";
-import { CirclePlusIcon } from "../../../../components/icons";
+import { useCreateBucket } from "../../../api/createBucket";
+import { DialogPrimitive } from "../../../../../components/dialog";
+import { CirclePlusIcon } from "../../../../../components/icons";
 
 const CreateDialog = () => {
   const [open, setOpen] = useState(false);
   const { createBucket, isPending, isError } = useCreateBucket();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const title = formData.get("title") as string;

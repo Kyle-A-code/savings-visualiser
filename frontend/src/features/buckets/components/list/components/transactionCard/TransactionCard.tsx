@@ -1,5 +1,5 @@
-import { CardPrimitive } from "../../../../components/card";
-import type { TransactionWithBalance } from "../../../transactions/types";
+import { CardPrimitive } from "../../../../../../components/card";
+import type { TransactionWithBalance } from "../../../../../transactions/types";
 import "./transactionCard.css";
 
 interface TransactionCardProps {

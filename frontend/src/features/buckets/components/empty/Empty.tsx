@@ -1,4 +1,4 @@
-import CreateDialog from "./createDialog/CreateDialog";
+import CreateDialog from "../shared/createDialog/CreateDialog";
 import "./empty.css";
 
 const Empty = () => {

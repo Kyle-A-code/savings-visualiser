@@ -1,14 +1,14 @@
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { bucketQueryOptions } from "../api/queryOptions";
-import { bucketTransactionsQueryOptions } from "../../transactions/api/queryOptions";
-import TransactionCard from "./transactionCard/TransactionCard";
-import type { TransactionWithBalance } from "../../transactions/types";
-import Divider from "../../../components/divider/Divider";
-import "../../../components/dialog/dialog.css";
+import { bucketQueryOptions } from "../../api/queryOptions";
+import { bucketTransactionsQueryOptions } from "../../../transactions/api/queryOptions";
+import TransactionCard from "../list/components/transactionCard/TransactionCard";
+import type { TransactionWithBalance } from "../../../transactions/types";
+import Divider from "../../../../components/divider/Divider";
+import "../../../../components/dialog/dialog.css";
 import "./detail.css";
-import { PlusIcon } from "../../../components/icons";
-import CreateTransactionDialog from "../../transactions/components/createDialog/CreateDialog";
+import { PlusIcon } from "../../../../components/icons";
+import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
@@ -16,7 +16,9 @@ const Detail = () => {
   const { bucketId } = routeApi.useParams();
 
   const { data: bucket } = useSuspenseQuery(bucketQueryOptions(bucketId));
-  const { data: transactions } = useSuspenseQuery(bucketTransactionsQueryOptions(bucketId));
+  const { data: transactions } = useSuspenseQuery(
+    bucketTransactionsQueryOptions(bucketId),
+  );
 
   if (transactions?.length === 0) {
     return (
@@ -49,7 +51,9 @@ const Detail = () => {
             <span className="bucket-detail-breadcrumb-sep" aria-hidden>
               ›
             </span>
-            <span className="bucket-detail-breadcrumb-current">{bucket?.title}</span>
+            <span className="bucket-detail-breadcrumb-current">
+              {bucket?.title}
+            </span>
           </nav>
           <h1 className="bucket-detail-title">{bucket?.title}</h1>
           <p className="bucket-detail-lede">
@@ -75,7 +79,10 @@ const Detail = () => {
         </div>
       </header>
 
-      <section className="bucket-detail-ledger" aria-labelledby="bucket-ledger-heading">
+      <section
+        className="bucket-detail-ledger"
+        aria-labelledby="bucket-ledger-heading"
+      >
         <div className="bucket-detail-ledger-toolbar">
           <h2 id="bucket-ledger-heading" className="bucket-detail-ledger-title">
             Ledger history
