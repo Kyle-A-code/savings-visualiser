@@ -51,7 +51,7 @@ const DeleteDialog = ({
       )}
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="dialog-overlay" />
-        <AlertDialog.Content className="delete-dialog-content">
+        <AlertDialog.Content className="dialog-content delete-dialog-content">
           <div className="delete-dialog-body">
             <AlertDialog.Title className="delete-dialog-title">
               Delete Bucket?
@@ -70,7 +70,7 @@ const DeleteDialog = ({
             <AlertDialog.Action asChild>
               <button
                 type="button"
-                className="delete-dialog-confirm"
+                className="dialog-btn-primary dialog-btn-danger delete-dialog-confirm"
                 onClick={handleDelete}
                 disabled={isPending}
               >

@@ -29,21 +29,7 @@
 }
 
 .delete-dialog-content {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: var(--z-index-modal);
-  box-sizing: border-box;
-  width: min(32rem, calc(100vw - 2rem));
-  max-height: min(90dvh, 100%);
-  overflow: auto;
   padding: var(--space-4);
-  border: 1px solid var(--ghost-border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-container-lowest);
-  color: var(--on-surface);
-  box-shadow: var(--shadow-ambient);
-  transform: translate(-50%, -50%);
 }
 
 .delete-dialog-body {
@@ -91,39 +77,10 @@
 }
 
 .delete-dialog-confirm {
-  box-sizing: border-box;
   width: 100%;
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  border-radius: var(--radius-max);
   font-family: var(--font-headline);
   font-size: 1.125rem;
-  font-weight: var(--font-weight-bold);
   line-height: 1.2;
-  color: var(--on-primary);
-  cursor: pointer;
-  background: var(--tertiary);
-  transition:
-    transform 150ms ease,
-    filter 200ms ease;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.06);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.65;
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--tertiary) 70%, transparent);
-    outline-offset: 3px;
-  }
 }
 
 .delete-dialog-cancel {

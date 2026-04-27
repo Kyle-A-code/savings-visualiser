@@ -22,8 +22,8 @@
 
 .transaction-title {
   margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-md);
+  color: var(--on-surface);
+  font-size: var(--text-body-lg);
   font-weight: var(--font-weight-medium);
 }
 
@@ -40,39 +40,39 @@
 }
 
 .transaction-type-badge {
-  border-radius: 999px;
+  border-radius: var(--radius-max);
   padding: 0.2rem 0.55rem;
-  font-size: var(--font-size-sm);
+  font-size: var(--text-label-md);
   font-weight: var(--font-weight-medium);
 }
 
 .transaction-type-badge.credit {
-  background: color-mix(in oklab, var(--color-success) 20%, transparent);
-  color: var(--color-success);
+  background: color-mix(in srgb, var(--success) 20%, transparent);
+  color: var(--success);
 }
 
 .transaction-type-badge.debit {
-  background: color-mix(in oklab, var(--color-danger) 20%, transparent);
-  color: var(--color-danger);
+  background: color-mix(in srgb, var(--danger) 20%, transparent);
+  color: var(--danger);
 }
 
 .transaction-amount {
   margin: 0;
-  font-size: var(--font-size-md);
+  font-size: var(--text-body-lg);
   font-weight: var(--font-weight-semibold);
 }
 
 .transaction-amount.credit {
-  color: var(--color-success);
+  color: var(--success);
 }
 
 .transaction-amount.debit {
-  color: var(--color-danger);
+  color: var(--danger);
 }
 
 .transaction-balance {
   margin: 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  color: var(--on-surface-variant);
+  font-size: var(--text-body-sm);
   font-weight: var(--font-weight-medium);
 }

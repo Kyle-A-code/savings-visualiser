@@ -37,10 +37,3 @@
   }
 }
 
-.Label {
-  color: var(--on-surface);
-  font-size: var(--text-label-md);
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
-  user-select: none;
-}

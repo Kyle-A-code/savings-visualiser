@@ -40,6 +40,7 @@ html {
 
   --text-display-lg: 3.5rem;
   --text-headline-sm: 1.5rem;
+  --text-body-sm: 0.875rem;
   --text-body-lg: 1rem;
   --text-label-md: 0.75rem;
 
@@ -104,6 +105,11 @@ html {
   --on-primary-container: #0d1438;
   --secondary: #00c48c;
   --tertiary: #ff6b6b;
+  --success: var(--secondary);
+  --danger: var(--tertiary);
+  --focus-ring-primary: 2px solid var(--primary);
+  --panel-border: 1px solid
+    color-mix(in srgb, var(--outline-variant) 10%, transparent);
 
   --gradient-primary-cta: linear-gradient(
     135deg,
