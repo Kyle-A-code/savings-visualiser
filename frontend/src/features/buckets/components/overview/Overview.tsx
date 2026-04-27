@@ -2,15 +2,21 @@ import Empty from "../empty/Empty";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { bucketsQueryOptions } from "../../api/queryOptions";
 import {
-  Bar,
-  BarChart,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
+  Sector,
   Tooltip,
-  XAxis,
-  YAxis,
 } from "recharts";
 import "./overview.css";
 import type { Bucket } from "../../types";
+
+const CHART_COUNT = 8;
+
+function chartFill(index: number) {
+  return `var(--chart-${(index % CHART_COUNT) + 1})`;
+}
 
 function splitCurrency(amount: number) {
   const [whole, frac] = amount.toFixed(2).split(".");
@@ -26,10 +32,11 @@ const Overview = () => {
   const total = buckets.reduce((sum, b) => sum + b.balance, 0);
   const { whole, frac } = splitCurrency(total);
 
-  const chartData = buckets.sort((a, b) => a.balance - b.balance).map((bucket) => ({
+  const chartData = buckets.map((bucket, index) => ({
     id: bucket.id,
     name: bucket.title,
     amount: bucket.balance,
+    fill: chartFill(index),
   }));
 
   return (
@@ -45,18 +52,19 @@ const Overview = () => {
         </header>
 
         <div
-          className="bucket-overview-bars"
+          className="bucket-overview-chart-region"
           role="img"
-          aria-label="Relative balance amount per bucket"
+          aria-label="Share of total balance per bucket"
         >
           <div className="bucket-overview-chart">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
+            <ResponsiveContainer
+              minHeight={320}
+              minWidth={0}
+              width="100%"
+              height={500}
+            >
+              <PieChart
                 accessibilityLayer
-                barCategoryGap="8%"
-                barGap={4}
-                data={chartData}
-                margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
                 throttleDelay="raf"
                 throttledEvents={[
                   "mousemove",
@@ -66,27 +74,29 @@ const Overview = () => {
                   "wheel",
                 ]}
               >
-                <XAxis dataKey="name" hide />
-                <YAxis domain={[0, "auto"]} hide />
-                <Tooltip />
-                <Bar
-                  animationDuration={500}
-                  cursor="pointer"
-                  dataKey="amount"
-                  radius={[24, 24, 0, 0]}
-                  unit="$"
+                <Tooltip
+                  formatter={(value) =>
+                    typeof value === "number" ? `$${value.toFixed(2)}` : null
+                  }
                 />
-              </BarChart>
+                <Legend
+                  align="center"
+                  className="bucket-overview-legend"
+                  layout="horizontal"
+                  verticalAlign="bottom"
+                />
+                <Pie
+                  animationDuration={200}
+                  cursor="pointer"
+                  data={chartData}
+                  dataKey="amount"
+                  isAnimationActive
+                  nameKey="name"
+                  shape={(sectorProps) => <Sector {...sectorProps} />}
+                />
+              </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
-
-        <div className="bucket-overview-bar-labels">
-          {buckets.map((bucket) => (
-            <span key={bucket.id} className="bucket-overview-bar-label">
-              {bucket.title}
-            </span>
-          ))}
         </div>
       </div>
     </div>

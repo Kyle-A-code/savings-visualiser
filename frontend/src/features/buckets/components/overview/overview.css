@@ -10,7 +10,6 @@
 }
 
 .bucket-overview-header {
-  margin-bottom: 5rem;
   text-align: center;
 
   @media (min-width: 768px) {
@@ -51,49 +50,22 @@
   vertical-align: baseline;
 }
 
-.bucket-overview-bars {
+.bucket-overview-chart {
   box-sizing: border-box;
   width: 100%;
-  height: 20rem;
-  padding-inline: 1rem;
-}
-
-.bucket-overview-chart {
-  width: 100%;
-  height: 100%;
+  min-width: 0;
   min-height: 20rem;
-}
-
-.recharts-bar-rectangle {
-  fill: var(--primary);
-
-  &:nth-child(even) {
-    fill: var(--primary-container);
-  }
-}
-
-.bucket-overview-bar-labels {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
   padding-inline: 1rem;
+}
+
+.bucket-overview-chart .recharts-legend-wrapper {
   font-family: var(--font-body);
   font-size: 0.625rem;
+  border-radius: var(--radius-md);
+  background: var(--glass-surface);
+  padding: 0.5rem 1rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--on-surface-variant);
-
-  @media (min-width: 768px) {
-    gap: 1rem;
-  }
-}
-
-.bucket-overview-bar-label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
