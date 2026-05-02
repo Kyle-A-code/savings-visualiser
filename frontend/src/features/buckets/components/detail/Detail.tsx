@@ -44,8 +44,8 @@ const Detail = () => {
     <div className="bucket-detail">
       <header className="bucket-detail-hero">
         <div className="bucket-detail-hero-main">
-          <nav className="bucket-detail-breadcrumb" aria-label="Breadcrumb">
-            <Link className="bucket-detail-breadcrumb-link" to="/buckets">
+          <nav className="bucket-detail-breadcrumb ui-eyebrow" aria-label="Breadcrumb">
+            <Link className="bucket-detail-breadcrumb-link ui-focus-ring" to="/buckets">
               Buckets
             </Link>
             <span className="bucket-detail-breadcrumb-sep" aria-hidden>
@@ -62,7 +62,7 @@ const Detail = () => {
         </div>
         <div className="bucket-detail-hero-aside">
           <div className="bucket-detail-balance-block">
-            <p className="bucket-detail-balance-label">Current balance</p>
+            <p className="bucket-detail-balance-label ui-eyebrow">Current balance</p>
             <p className="bucket-detail-balance-value">
               {bucket != null ? `$${bucket.balance.toFixed(2)}` : "—"}
             </p>
@@ -70,7 +70,10 @@ const Detail = () => {
           <CreateTransactionDialog
             bucketId={Number(bucketId)}
             trigger={
-              <button type="button" className="dialog-trigger">
+              <button
+                type="button"
+                className="ui-btn ui-btn-primary ui-focus-ring dialog-trigger"
+              >
                 <PlusIcon width={18} height={18} aria-hidden />
                 Add transaction
               </button>

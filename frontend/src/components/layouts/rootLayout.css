@@ -13,9 +13,6 @@
   z-index: var(--z-index-sticky);
   height: 4rem;
   border: none;
-  background: var(--glass-surface);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .top-nav {
@@ -56,10 +53,9 @@
   letter-spacing: 0.05em;
   color: var(--on-surface-variant);
   text-decoration: none;
-  transition:
-    color 200ms ease,
-    border-color 200ms ease,
-    transform 150ms ease;
+  border-radius: 2px;
+  transition: all 180ms ease;
+  --focus-ring-offset: 4px;
 
   &:hover {
     color: var(--on-surface);
@@ -67,12 +63,6 @@
 
   &:active {
     transform: scale(0.95);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 4px;
-    border-radius: 2px;
   }
 }
 
@@ -138,7 +128,7 @@
   box-sizing: border-box;
   width: 100%;
   padding-block: 2rem 3rem;
-  border-top: 1px solid color-mix(in srgb, var(--outline-variant) 10%, transparent);
+  border-top: var(--panel-border);
 }
 
 .root-footer-inner {

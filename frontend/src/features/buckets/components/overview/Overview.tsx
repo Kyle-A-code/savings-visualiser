@@ -43,7 +43,7 @@ const Overview = () => {
     <div className="bucket-overview">
       <div className="bucket-overview-content">
         <header className="bucket-overview-header">
-          <span className="bucket-overview-eyebrow">Total Savings</span>
+          <span className="bucket-overview-eyebrow ui-eyebrow">Total Savings</span>
           <h1 className="bucket-overview-title">
             <span className="bucket-overview-title-currency">$</span>
             {whole}

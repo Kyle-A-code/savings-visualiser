@@ -34,18 +34,13 @@
   flex-shrink: 0;
 }
 
-.tx-type-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.tx-type-btn--debit[data-state="active"] {
+.tx-type-btn[data-flow="debit"][data-state="active"] {
   border-color: var(--tertiary);
   color: var(--tertiary);
   background: color-mix(in srgb, var(--tertiary) 24%, transparent);
 }
 
-.tx-type-btn--credit[data-state="active"] {
+.tx-type-btn[data-flow="credit"][data-state="active"] {
   border-color: var(--secondary);
   color: var(--secondary);
   background: color-mix(in srgb, var(--secondary) 22%, transparent);

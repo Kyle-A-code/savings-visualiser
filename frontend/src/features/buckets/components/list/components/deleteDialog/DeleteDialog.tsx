@@ -37,7 +37,11 @@ const DeleteDialog = ({
   };
 
   const defaultTrigger = (
-    <button type="button" className="delete-button" aria-label="Delete bucket">
+    <button
+      type="button"
+      className="ui-btn ui-btn-icon ui-focus-ring delete-button"
+      aria-label="Delete bucket"
+    >
       <RubbishIcon width={24} height={24} />
     </button>
   );
@@ -70,7 +74,7 @@ const DeleteDialog = ({
             <AlertDialog.Action asChild>
               <button
                 type="button"
-                className="dialog-btn-primary dialog-btn-danger delete-dialog-confirm"
+                className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary dialog-btn-danger delete-dialog-confirm"
                 onClick={handleDelete}
                 disabled={isPending}
               >
@@ -78,7 +82,10 @@ const DeleteDialog = ({
               </button>
             </AlertDialog.Action>
             <AlertDialog.Cancel asChild>
-              <button type="button" className="delete-dialog-cancel">
+              <button
+                type="button"
+                className="ui-btn ui-btn-surface ui-focus-ring delete-dialog-cancel"
+              >
                 Cancel
               </button>
             </AlertDialog.Cancel>

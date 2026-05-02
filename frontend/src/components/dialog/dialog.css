@@ -1,35 +1,7 @@
 .dialog-trigger {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
-  border: none;
-  border-radius: var(--radius-max);
-  font-family: var(--font-body);
-  font-size: var(--text-label-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--on-primary);
-  cursor: pointer;
-  background: var(--primary);
   box-shadow: none;
-  transition:
-    transform 150ms ease,
-    filter 200ms ease;
-
-  &:hover {
-    filter: brightness(1.06);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--primary) 65%, transparent);
-    outline-offset: 3px;
-  }
+  --focus-ring-color: color-mix(in srgb, var(--primary) 65%, transparent);
+  --focus-ring-offset: 3px;
 }
 
 .dialog-trigger-success {
@@ -62,10 +34,7 @@
   overflow: auto;
   padding: 0;
   border: 1px solid var(--ghost-border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-container-lowest);
   color: var(--on-surface);
-  box-shadow: var(--shadow-ambient);
   transform: translate(-50%, -50%);
 }
 
@@ -111,32 +80,10 @@
 }
 
 .dialog-close-icon {
-  box-sizing: border-box;
-  display: inline-flex;
   flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-1);
-  border: none;
-  border-radius: var(--radius-md);
   color: var(--on-surface-variant);
-  cursor: pointer;
-  background: transparent;
   font-size: 1.35rem;
   line-height: 1;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease;
-
-  &:hover {
-    color: var(--on-surface);
-    background: var(--surface-container-high);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-  }
 }
 
 .dialog-form {
@@ -154,12 +101,6 @@
 
 .dialog-label {
   margin-left: 2px;
-  font-family: var(--font-body);
-  font-size: var(--text-label-md);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--on-surface-variant);
 }
 
 .dialog-input-group {
@@ -206,7 +147,7 @@
   outline: none;
 }
 
-.dialog-input--amount {
+.dialog-input[data-variant="amount"] {
   padding-left: 2.25rem;
   font-family: var(--font-headline);
   font-size: 1.875rem;
@@ -244,70 +185,21 @@
 
 .dialog-btn-ghost {
   flex: 1;
-  box-sizing: border-box;
-  padding: var(--space-2) var(--space-3);
-  border: none;
   border-radius: var(--radius-md);
-  font-family: var(--font-body);
   font-size: var(--text-body-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--on-surface-variant);
-  cursor: pointer;
-  background: transparent;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease;
-
-  &:hover {
-    background: var(--surface-container-high);
-    color: var(--on-surface);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-  }
+  --focus-ring-offset: 2px;
 }
 
 .dialog-btn-primary {
   flex: 2;
-  box-sizing: border-box;
-  padding: var(--space-2) var(--space-3);
-  border: none;
-  border-radius: var(--radius-max);
-  font-family: var(--font-body);
   font-size: var(--text-body-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--on-primary);
-  cursor: pointer;
-  background: var(--primary);
-  transition:
-    transform 150ms ease,
-    filter 200ms ease;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.06);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.65;
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--primary) 65%, transparent);
-    outline-offset: 2px;
-  }
+  --focus-ring-color: color-mix(in srgb, var(--primary) 65%, transparent);
+  --focus-ring-offset: 2px;
 }
 
 .dialog-btn-danger {
   background: var(--danger);
-
-  &:focus-visible {
-    outline-color: color-mix(in srgb, var(--danger) 70%, transparent);
-  }
+  --focus-ring-color: color-mix(in srgb, var(--danger) 70%, transparent);
 }

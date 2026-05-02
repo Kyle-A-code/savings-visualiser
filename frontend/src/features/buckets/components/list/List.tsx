@@ -28,14 +28,14 @@ const List = () => {
       </header>
 
       <div className="bucket-stats">
-        <div className="bucket-stat">
-          <span className="bucket-stat-label">Total Allocated</span>
+        <div className="bucket-stat ui-panel">
+          <span className="bucket-stat-label ui-eyebrow">Total Allocated</span>
           <span className="bucket-stat-value">
             {formatMoney(totalAllocated)}
           </span>
         </div>
-        <div className="bucket-stat">
-          <span className="bucket-stat-label">Active Buckets</span>
+        <div className="bucket-stat ui-panel">
+          <span className="bucket-stat-label ui-eyebrow">Active Buckets</span>
           <span className="bucket-stat-value">{activeCount}</span>
         </div>
       </div>

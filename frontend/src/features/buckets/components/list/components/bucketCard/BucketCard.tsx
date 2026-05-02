@@ -22,14 +22,14 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
   });
 
   return (
-    <article className="bucket-card">
+    <article className="bucket-card ui-panel">
       <div className="bucket-card-bar">
         <h3 className="bucket-card-name">{title}</h3>
         <DropdownMenu.Root open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenu.Trigger asChild>
             <button
               type="button"
-              className="bucket-menu"
+              className="ui-btn ui-btn-icon ui-btn-ghost ui-focus-ring bucket-menu"
               aria-label="Bucket actions"
             >
               ⋯
@@ -37,12 +37,12 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content
-              className="bucket-menu-content"
+              className="bucket-menu-content ui-glass"
               sideOffset={8}
               align="end"
               collisionPadding={16}
             >
-              <DropdownMenu.Label className="bucket-menu-label">
+              <DropdownMenu.Label className="bucket-menu-label ui-eyebrow">
                 Actions
               </DropdownMenu.Label>
               <DropdownMenu.Item
@@ -104,13 +104,13 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
         />
       </div>
       <div className="bucket-card-body">
-        <span className="bucket-balance-label">Current Balance</span>
+        <span className="bucket-balance-label ui-eyebrow">Current Balance</span>
         <p className="bucket-balance-value">{formattedBalance}</p>
       </div>
       <Link
         to="/buckets/$bucketId"
         params={{ bucketId: id }}
-        className="bucket-view"
+        className="ui-btn ui-btn-surface ui-focus-ring bucket-view"
       >
         View Details
       </Link>
