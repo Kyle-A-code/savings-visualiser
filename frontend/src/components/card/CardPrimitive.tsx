@@ -8,8 +8,8 @@ interface CardPrimitiveProps {
 
 const CardPrimitive = ({ children, className }: CardPrimitiveProps) => {
   const cardClassName = className
-    ? `card-primitive ${className}`
-    : "card-primitive";
+    ? `card-primitive ui-panel ${className}`
+    : "card-primitive ui-panel";
 
   return <article className={cardClassName}>{children}</article>;
 };

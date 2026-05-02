@@ -1,30 +1,14 @@
 .delete-button {
-  box-sizing: border-box;
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
   border: 1px solid var(--ghost-border);
-  border-radius: var(--radius-md);
   background: var(--surface-container-high);
   color: var(--on-surface-variant);
-  display: inline-grid;
-  place-items: center;
   line-height: 0;
-  cursor: pointer;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease;
+  --focus-ring-color: var(--tertiary);
 
   &:hover {
     border-color: color-mix(in srgb, var(--tertiary) 45%, var(--ghost-border));
     background: color-mix(in srgb, var(--tertiary) 12%, var(--surface-container-high));
     color: var(--tertiary);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--tertiary);
-    outline-offset: 2px;
   }
 }
 
@@ -84,34 +68,10 @@
 }
 
 .delete-dialog-cancel {
-  box-sizing: border-box;
   width: 100%;
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  border-radius: var(--radius-max);
   font-family: var(--font-headline);
   font-size: 1.125rem;
   font-weight: var(--font-weight-semibold);
   line-height: 1.2;
-  color: var(--on-surface-variant);
-  cursor: pointer;
-  background: var(--surface-container-high);
-  transition:
-    transform 150ms ease,
-    background-color 180ms ease,
-    color 180ms ease;
-
-  &:hover {
-    background: var(--surface-container-highest);
-    color: var(--on-surface);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
-  }
+  --focus-ring-offset: 3px;
 }

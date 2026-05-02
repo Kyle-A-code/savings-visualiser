@@ -22,7 +22,7 @@ const DialogPrimitive = ({
       ) : null}
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
-        <Dialog.Content className="dialog-content">{children}</Dialog.Content>
+        <Dialog.Content className="dialog-content ui-panel">{children}</Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );

@@ -3,10 +3,8 @@
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  border: 1px solid color-mix(in srgb, var(--outline-variant) 5%, transparent);
+  border: var(--panel-border-quiet);
   border-radius: 2rem;
-  background: var(--surface-container-lowest);
-  box-shadow: var(--shadow-ambient);
   transition:
     transform 500ms ease,
     box-shadow 500ms ease;
@@ -36,26 +34,13 @@
 
 .bucket-menu {
   flex-shrink: 0;
-  padding: 0.5rem;
-  border: none;
-  border-radius: var(--radius-max);
   font-size: 1.25rem;
   line-height: 1;
   color: var(--outline-variant);
-  cursor: pointer;
-  background: transparent;
-  transition:
-    color 200ms ease,
-    background-color 200ms ease;
 
   &:hover {
     color: var(--on-surface);
     background: var(--surface-container-highest);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
   }
 
   &[data-state="open"] {
@@ -69,11 +54,6 @@
   min-width: 12rem;
   padding: var(--space-1);
   border: 1px solid var(--ghost-border);
-  border-radius: var(--radius-lg);
-  background: var(--glass-surface);
-  box-shadow: var(--shadow-ambient);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
   animation: bucket-menu-enter 160ms ease;
 }
 
@@ -89,12 +69,6 @@
 
 .bucket-menu-label {
   padding: 0.35rem 0.65rem 0.5rem;
-  font-family: var(--font-body);
-  font-size: var(--text-label-md);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--on-surface-variant);
 }
 
 .bucket-menu-separator {
@@ -200,12 +174,9 @@
 .bucket-balance-label {
   display: block;
   margin-bottom: 0.25rem;
-  font-family: var(--font-body);
-  font-size: var(--text-label-md);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--outline-variant) 60%, transparent);
+  color: var(--outline-variant);
 }
 
 .bucket-balance-value {
@@ -219,29 +190,14 @@
 .bucket-view {
   display: block;
   width: 100%;
-  box-sizing: border-box;
-  padding: 0.875rem 1rem;
-  border: none;
   border-radius: var(--radius-md);
-  font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: var(--font-weight-bold);
   text-align: center;
-  text-decoration: none;
   color: var(--on-surface);
-  cursor: pointer;
-  background: var(--surface-container-low);
-  transition:
-    background-color 300ms ease,
-    color 300ms ease;
 
   &:hover {
     background: var(--primary);
     color: var(--on-primary-container);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
   }
 }

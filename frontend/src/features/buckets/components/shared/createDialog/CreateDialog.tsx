@@ -28,7 +28,7 @@ const CreateDialog = () => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <button className="dialog-trigger" type="button">
+        <button className="ui-btn ui-btn-gradient ui-focus-ring dialog-trigger" type="button">
           <CirclePlusIcon width={18} height={18} />
           Create New Bucket
         </button>
@@ -44,7 +44,7 @@ const CreateDialog = () => {
         <Dialog.Close asChild>
           <button
             type="button"
-            className="dialog-close-icon"
+            className="ui-btn ui-btn-icon ui-btn-ghost ui-focus-ring dialog-close-icon"
             aria-label="Close"
           >
             <span aria-hidden>×</span>
@@ -53,7 +53,7 @@ const CreateDialog = () => {
       </header>
       <form className="dialog-form" onSubmit={handleSubmit}>
         <div className="dialog-field">
-          <label htmlFor="bucket-title" className="dialog-label">
+          <label htmlFor="bucket-title" className="dialog-label ui-eyebrow">
             Bucket title
           </label>
           <div className="dialog-input-group">
@@ -69,7 +69,7 @@ const CreateDialog = () => {
           </div>
         </div>
         <div className="dialog-field">
-          <label htmlFor="bucket-amount" className="dialog-label">
+          <label htmlFor="bucket-amount" className="dialog-label ui-eyebrow">
             Starting amount
           </label>
           <div className="dialog-input-group dialog-amount-input-wrapper">
@@ -79,7 +79,8 @@ const CreateDialog = () => {
             <input
               id="bucket-amount"
               name="amount"
-              className="dialog-input dialog-input--amount"
+              className="dialog-input"
+              data-variant="amount"
               type="number"
               min="0"
               step="0.01"
@@ -95,13 +96,13 @@ const CreateDialog = () => {
         )}
         <div className="dialog-footer-actions">
           <Dialog.Close asChild>
-            <button type="button" className="dialog-btn-ghost">
+            <button type="button" className="ui-btn ui-btn-ghost ui-focus-ring dialog-btn-ghost">
               Cancel
             </button>
           </Dialog.Close>
           <button
             type="submit"
-            className="dialog-btn-primary"
+            className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary"
             disabled={isPending}
           >
             {isPending ? "Creating…" : "Create bucket"}

@@ -39,40 +39,6 @@
   color: var(--on-surface-variant);
 }
 
-.bucket-create {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--on-primary-container);
-  cursor: pointer;
-  background: var(--gradient-primary-cta);
-  box-shadow: 0 10px 25px color-mix(in srgb, var(--primary) 20%, transparent);
-  transition:
-    transform 150ms ease,
-    box-shadow 200ms ease,
-    filter 200ms ease;
-
-  &:hover {
-    filter: brightness(1.05);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
-  }
-}
-
 .bucket-stats {
   display: grid;
   grid-template-columns: 1fr;
@@ -88,19 +54,12 @@
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid color-mix(in srgb, var(--outline-variant) 10%, transparent);
-  background: var(--surface-container-lowest);
-  box-shadow: var(--shadow-ambient);
 }
 
 .bucket-stat-label {
   margin-bottom: 0.25rem;
-  font-family: var(--font-body);
-  font-size: var(--text-label-md);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.2em;
-  text-transform: uppercase;
   color: var(--outline-variant);
 }
 

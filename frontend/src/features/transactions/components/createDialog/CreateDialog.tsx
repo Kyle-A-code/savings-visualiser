@@ -65,7 +65,7 @@ const CreateDialog = ({
           ? null
           : (trigger ?? (
               <button
-                className="dialog-trigger dialog-trigger-success"
+                className="ui-btn ui-btn-primary ui-focus-ring dialog-trigger dialog-trigger-success"
                 type="button"
               >
                 {isCredit ? "Credit" : "Debit"}
@@ -83,7 +83,7 @@ const CreateDialog = ({
         <Dialog.Close asChild>
           <button
             type="button"
-            className="dialog-close-icon"
+            className="ui-btn ui-btn-icon ui-btn-ghost ui-focus-ring dialog-close-icon"
             aria-label="Close"
           >
             <span aria-hidden>×</span>
@@ -92,7 +92,7 @@ const CreateDialog = ({
       </header>
       <form className="dialog-form" onSubmit={handleSubmit}>
         <div className="dialog-field">
-          <label htmlFor="transaction-title" className="dialog-label">
+          <label htmlFor="transaction-title" className="dialog-label ui-eyebrow">
             Transaction title
           </label>
           <div className="dialog-input-group">
@@ -108,7 +108,7 @@ const CreateDialog = ({
           </div>
         </div>
         <div className="dialog-field">
-          <label htmlFor="transaction-amount" className="dialog-label">
+          <label htmlFor="transaction-amount" className="dialog-label ui-eyebrow">
             Amount
           </label>
           <div className="dialog-input-group dialog-amount-input-wrapper">
@@ -118,7 +118,8 @@ const CreateDialog = ({
             <input
               id="transaction-amount"
               name="amount"
-              className="dialog-input dialog-input--amount"
+              className="dialog-input"
+              data-variant="amount"
               type="number"
               min="0.01"
               step="0.01"
@@ -134,7 +135,7 @@ const CreateDialog = ({
           </p>
         )}
         <div className="dialog-field">
-          <p className="dialog-label" id="transaction-type-label">
+          <p className="dialog-label ui-eyebrow" id="transaction-type-label">
             Transaction type
           </p>
           <div
@@ -145,7 +146,8 @@ const CreateDialog = ({
             <div className="tx-type-option">
               <button
                 type="button"
-                className="tx-type-btn tx-type-btn--debit"
+                className="ui-focus-ring tx-type-btn"
+                data-flow="debit"
                 data-state={!isCredit ? "active" : undefined}
                 aria-pressed={!isCredit}
                 onClick={() => setIsCredit(false)}
@@ -157,7 +159,8 @@ const CreateDialog = ({
             <div className="tx-type-option">
               <button
                 type="button"
-                className="tx-type-btn tx-type-btn--credit"
+                className="ui-focus-ring tx-type-btn"
+                data-flow="credit"
                 data-state={isCredit ? "active" : undefined}
                 aria-pressed={isCredit}
                 onClick={() => setIsCredit(true)}
@@ -170,13 +173,13 @@ const CreateDialog = ({
         </div>
         <div className="dialog-footer-actions">
           <Dialog.Close asChild>
-            <button type="button" className="dialog-btn-ghost">
+            <button type="button" className="ui-btn ui-btn-ghost ui-focus-ring dialog-btn-ghost">
               Cancel
             </button>
           </Dialog.Close>
           <button
             type="submit"
-            className="dialog-btn-primary"
+            className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary"
             disabled={isPending}
           >
             {isPending ? "Adding…" : "Add transaction"}

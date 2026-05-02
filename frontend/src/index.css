@@ -110,6 +110,15 @@ html {
   --focus-ring-primary: 2px solid var(--primary);
   --panel-border: 1px solid
     color-mix(in srgb, var(--outline-variant) 10%, transparent);
+  --panel-border-quiet: 1px solid
+    color-mix(in srgb, var(--outline-variant) 5%, transparent);
+  --divider-border: 1px solid
+    color-mix(in srgb, var(--outline-variant) 12%, transparent);
+  --outline-variant-muted: color-mix(
+    in srgb,
+    var(--outline-variant) 60%,
+    transparent
+  );
 
   --gradient-primary-cta: linear-gradient(
     135deg,
@@ -191,4 +200,109 @@ h2 {
 p {
   margin: 0;
   font-size: var(--text-body-lg);
+}
+
+:where(.ui-focus-ring) {
+  --focus-ring-color: var(--primary);
+  --focus-ring-offset: 2px;
+}
+
+:where(.ui-focus-ring):focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+:where(.ui-btn) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-max);
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+:where(.ui-btn):disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+:where(.ui-btn):active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+:where(.ui-btn-primary) {
+  color: var(--on-primary);
+  background: var(--primary);
+}
+
+:where(.ui-btn-primary):hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+:where(.ui-btn-gradient) {
+  color: var(--on-primary-container);
+  background: var(--gradient-primary-cta);
+}
+
+:where(.ui-btn-gradient):hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+:where(.ui-btn-ghost) {
+  color: var(--on-surface-variant);
+  background: transparent;
+}
+
+:where(.ui-btn-ghost):hover:not(:disabled) {
+  color: var(--on-surface);
+  background: var(--surface-container-high);
+}
+
+:where(.ui-btn-surface) {
+  color: var(--on-surface-variant);
+  background: var(--surface-container-high);
+}
+
+:where(.ui-btn-surface):hover:not(:disabled) {
+  color: var(--on-surface);
+  background: var(--surface-container-highest);
+}
+
+:where(.ui-btn-icon) {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+
+:where(.ui-panel) {
+  border: var(--panel-border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-lowest);
+  box-shadow: var(--shadow-ambient);
+}
+
+:where(.ui-glass) {
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+:where(.ui-eyebrow) {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
 }

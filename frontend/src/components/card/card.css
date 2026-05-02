@@ -1,8 +1,4 @@
 .card-primitive {
-  border: var(--panel-border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-container-lowest);
   padding: 1rem 1.25rem;
   text-align: left;
-  box-shadow: var(--shadow-ambient);
 }

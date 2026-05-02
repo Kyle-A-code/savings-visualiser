@@ -26,7 +26,7 @@ const RootLayout = () => {
 
   return (
   <div className="root-layout">
-    <header className="root-header">
+    <header className="root-header ui-glass">
       <div className="top-nav">
         <div className="app-title">Working Title</div>
         <nav className="nav-links" aria-label="Primary">
@@ -36,8 +36,8 @@ const RootLayout = () => {
               to={link.to}
               aria-label={link.label}
               activeOptions={link.exact ? { exact: true } : undefined}
-              className="nav-link"
-              activeProps={{ className: "nav-link-active" }}
+              className="nav-link ui-focus-ring"
+              activeProps={{ className: "nav-link nav-link-active ui-focus-ring" }}
             >
               {link.label}
             </Link>

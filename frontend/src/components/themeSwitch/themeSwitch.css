@@ -13,8 +13,8 @@
   -webkit-tap-highlight-color: transparent;
 
   &:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus-ring-color, var(--primary));
+    outline-offset: var(--focus-ring-offset, 2px);
   }
 
   &[data-state="checked"] {
@@ -36,4 +36,3 @@
     transform: translateX(19px);
   }
 }
-

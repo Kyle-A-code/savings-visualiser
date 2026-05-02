@@ -17,7 +17,7 @@ const ThemeSwitch = () => {
   return (
     <Switch
       aria-label="Toggle theme"
-      className="switch"
+      className="switch ui-focus-ring"
       checked={theme === "dark"}
       onCheckedChange={onThemeChange}
     >
