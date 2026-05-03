@@ -75,7 +75,7 @@
   height: 1px;
   margin: var(--space-1) 0;
   border: none;
-  background: color-mix(in srgb, var(--on-surface) 8%, transparent);
+  background: var(--divider-border);
 }
 
 .bucket-menu-item {
@@ -134,11 +134,6 @@
   cursor: pointer;
   background: transparent;
   transition: background-color 160ms ease, color 160ms ease;
-}
-
-.bucket-menu-row-icon {
-  justify-content: center;
-  color: var(--on-surface-variant);
 }
 
 .bucket-menu-item-danger .delete-button {

@@ -2,25 +2,35 @@ import { apiClient } from "../../../lib/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../api/queryKeys";
 import bucketQueryKeys from "../../buckets/api/queryKeys";
-import { type TransactionData, type TransferRequest } from "../types";
+import { type TransferRequest } from "../types";
 
-export const createTransaction = async (
+interface TransferResponse {
+  status: string;
+}
+
+export const createTransfer = async (
   transfer: TransferRequest,
 ) => {
-  return await apiClient.post<TransactionData>("/transactions/transfer", transfer);
+  return await apiClient.post<TransferResponse>("/transactions/transfer", transfer);
 };
 
 export const useTransfer = () => {
   const queryClient = useQueryClient();
   const { mutate, isPending, isError, isSuccess } = useMutation({
-    mutationFn: createTransaction,
-    onSuccess: (data) => {
+    mutationFn: createTransfer,
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(data.BucketId.toString()),
+        queryKey: queryKeys.bucketList(variables.fromBucketId.toString()),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(data.BucketId.toString()),
+        queryKey: bucketQueryKeys.detail(variables.fromBucketId.toString()),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.bucketList(variables.toBucketId.toString()),
+      });
+      queryClient.invalidateQueries({
+        queryKey: bucketQueryKeys.detail(variables.toBucketId.toString()),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.list(),

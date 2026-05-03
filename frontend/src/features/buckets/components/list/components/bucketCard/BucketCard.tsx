@@ -4,17 +4,26 @@ import "./bucketCard.css";
 import { Link } from "@tanstack/react-router";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import CreateTransactionDialog from "../../../../../transactions/components/createDialog/CreateDialog";
+import TransferDialog from "../../../../../transactions/components/transferDialog/TransferDialog";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
 
 interface BucketCardProps {
   bucket: Bucket;
+  allBuckets: Bucket[];
 }
 
-const BucketCard = ({ bucket }: BucketCardProps) => {
+const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
   const { id, title, balance } = bucket;
   const [menuOpen, setMenuOpen] = useState(false);
   const [createTransactionOpen, setCreateTransactionOpen] = useState(false);
+  const [transferOpen, setTransferOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const transferTargets = allBuckets
+    .filter((candidate) => candidate.id !== id)
+    .map((candidate) => ({
+      id: candidate.id,
+      title: candidate.title,
+    }));
 
   const formattedBalance = balance.toLocaleString("en-US", {
     style: "currency",
@@ -56,24 +65,24 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
                 <span className="bucket-menu-row">Create transaction</span>
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="bucket-menu-separator" />
-              <DropdownMenu.Item className="bucket-menu-item">
-                <button
-                  type="button"
-                  className="bucket-menu-row bucket-menu-row-icon"
-                  aria-label="Transfer to another bucket"
-                >
+              <DropdownMenu.Item
+                className="bucket-menu-item"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setTransferOpen(true);
+                  setMenuOpen(false);
+                }}
+                disabled={transferTargets.length === 0}
+              >
+                <span className="bucket-menu-row">
                   Transfer to another bucket
-                </button>
+                </span>
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="bucket-menu-separator" />
               <DropdownMenu.Item className="bucket-menu-item">
-                <button
-                  type="button"
-                  className="bucket-menu-row bucket-menu-row-icon"
-                  aria-label="Rename bucket"
-                >
+                <span className="bucket-menu-row" aria-label="Rename bucket">
                   Rename bucket
-                </button>
+                </span>
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="bucket-menu-separator" />
               <DropdownMenu.Item
@@ -94,6 +103,14 @@ const BucketCard = ({ bucket }: BucketCardProps) => {
           open={createTransactionOpen}
           onOpenChange={setCreateTransactionOpen}
           trigger={null}
+        />
+        <TransferDialog
+          fromBucketId={Number(id)}
+          fromBucketTitle={title}
+          fromBucketBalance={balance}
+          targets={transferTargets}
+          open={transferOpen}
+          onOpenChange={setTransferOpen}
         />
         <DeleteDialog
           id={id}

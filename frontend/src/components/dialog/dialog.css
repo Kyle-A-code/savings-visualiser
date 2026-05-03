@@ -1,7 +1,13 @@
 .dialog-trigger {
   box-shadow: none;
+  color: var(--on-primary-container);
+  background: var(--gradient-primary-cta);
   --focus-ring-color: color-mix(in srgb, var(--primary) 65%, transparent);
   --focus-ring-offset: 3px;
+}
+
+.dialog-trigger:hover {
+  filter: brightness(1.05);
 }
 
 .dialog-trigger-success {

@@ -42,7 +42,7 @@ const List = () => {
 
       <div className="bucket-grid">
         {buckets?.map((bucket) => (
-          <BucketCard key={bucket.id} bucket={bucket} />
+          <BucketCard key={bucket.id} bucket={bucket} allBuckets={buckets} />
         ))}
       </div>
     </div>

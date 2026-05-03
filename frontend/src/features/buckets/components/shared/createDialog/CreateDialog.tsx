@@ -28,7 +28,7 @@ const CreateDialog = () => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <button className="ui-btn ui-btn-gradient ui-focus-ring dialog-trigger" type="button">
+        <button className="ui-btn ui-focus-ring dialog-trigger" type="button">
           <CirclePlusIcon width={18} height={18} />
           Create New Bucket
         </button>

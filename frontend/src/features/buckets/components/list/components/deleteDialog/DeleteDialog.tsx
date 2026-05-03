@@ -55,7 +55,7 @@ const DeleteDialog = ({
       )}
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="dialog-overlay" />
-        <AlertDialog.Content className="dialog-content delete-dialog-content">
+        <AlertDialog.Content className="dialog-content ui-panel delete-dialog-content">
           <div className="delete-dialog-body">
             <AlertDialog.Title className="delete-dialog-title">
               Delete Bucket?
