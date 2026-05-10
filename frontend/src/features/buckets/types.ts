@@ -18,3 +18,8 @@ export interface CreateBucketRequest {
   title: string;
   amount: number;
 }
+
+export interface PatchBucketRequest {
+  id: string;
+  title: string;
+}

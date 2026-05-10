@@ -6,6 +6,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import CreateTransactionDialog from "../../../../../transactions/components/createDialog/CreateDialog";
 import TransferDialog from "../../../../../transactions/components/transferDialog/TransferDialog";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
+import RenameDialog from "../renameDialog/RenameDialog";
 
 interface BucketCardProps {
   bucket: Bucket;
@@ -17,6 +18,7 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [createTransactionOpen, setCreateTransactionOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
+  const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const transferTargets = allBuckets
     .filter((candidate) => candidate.id !== id)
@@ -79,7 +81,14 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
                 </span>
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="bucket-menu-separator" />
-              <DropdownMenu.Item className="bucket-menu-item">
+              <DropdownMenu.Item
+                className="bucket-menu-item"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setRenameOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
                 <span className="bucket-menu-row" aria-label="Rename bucket">
                   Rename bucket
                 </span>
@@ -118,6 +127,12 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
           open={deleteOpen}
           onOpenChange={setDeleteOpen}
           trigger={null}
+        />
+        <RenameDialog
+          id={id}
+          currentTitle={title}
+          open={renameOpen}
+          onOpenChange={setRenameOpen}
         />
       </div>
       <div className="bucket-card-body">
