@@ -80,7 +80,21 @@ func (repo *BucketRepository) UpdateTitle(ctx context.Context, id int, title str
 }
 
 func (repo *BucketRepository) Delete(ctx context.Context, id int) (int, error) {
-	rowsAffected, err := gorm.G[models.Bucket](repo.db).Where("id = ?", id).Delete(ctx)
+	rowsAffected := 0
+	err := repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if _, err := gorm.G[models.Transaction](tx).Where("bucket_id = ?", id).Delete(ctx); err != nil {
+			return err
+		}
+
+		bucketRows, err := gorm.G[models.Bucket](tx).Where("id = ?", id).Delete(ctx)
+		if err != nil {
+			return err
+		}
+
+		rowsAffected = bucketRows
+		return nil
+	})
+
 	return rowsAffected, err
 }
 
