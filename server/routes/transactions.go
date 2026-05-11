@@ -16,6 +16,5 @@ func AddTransactionRoutes(router *gin.Engine, db *gorm.DB) {
 	transactions.GET("/bucket/:id", handlers.GetTransactionsForBucket(transactionRepository))
 	transactions.POST("", handlers.CreateTransaction(transactionRepository))
 	transactions.POST("/transfer", handlers.TransferTransaction(transactionRepository))
-	transactions.PATCH("/:id", handlers.PatchTransaction(transactionRepository))
 	transactions.DELETE("/:id", handlers.DeleteTransactionByID(transactionRepository))
 }

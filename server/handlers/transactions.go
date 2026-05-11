@@ -106,50 +106,6 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 	}
 }
 
-func PatchTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		ctx := c.Request.Context()
-		id, err := parseIDParam(c)
-		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
-			return
-		}
-
-		var request struct {
-			Title  *string  `json:"title"`
-			Amount *float64 `json:"amount"`
-		}
-
-		if err := c.ShouldBindJSON(&request); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		if request.Title != nil && *request.Title == "" {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "title cannot be blank"})
-			return
-		}
-		if request.Amount != nil && *request.Amount == 0 {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "amount cannot be zero"})
-			return
-		}
-
-		updated, err := repo.Update(ctx, id, repositories.UpdateParams{
-			Title:  request.Title,
-			Amount: request.Amount,
-		})
-		if err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
-				return
-			}
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.IndentedJSON(http.StatusOK, updated)
-	}
-}
-
 func TransferTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()

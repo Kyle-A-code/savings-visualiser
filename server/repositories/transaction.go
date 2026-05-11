@@ -57,37 +57,6 @@ func (repo *TransactionRepository) Create(ctx context.Context, transaction *mode
 	return err
 }
 
-func (repo *TransactionRepository) Update(ctx context.Context, id int, params UpdateParams) (models.Transaction, error) {
-	transaction, err := repo.GetById(ctx, id)
-	if err != nil {
-		return transaction, err
-	}
-
-	if params.Title == nil && params.Amount == nil {
-		return transaction, nil
-	}
-
-	updates := models.Transaction{}
-	if params.Title != nil {
-		updates.Title = *params.Title
-	}
-
-	if params.Amount != nil {
-		updates.Amount = *params.Amount
-	}
-
-	_, err = gorm.G[models.Transaction](repo.db).Where("id = ?", transaction.ID).Updates(ctx, updates)
-	if err != nil {
-		return transaction, err
-	}
-
-	updated, err := repo.GetById(ctx, id)
-	if err != nil {
-		return updated, err
-	}
-	return updated, nil
-}
-
 func (repo *TransactionRepository) Transfer(ctx context.Context, fromBucketId int, toBucketId int, amount float64) error {
 	if amount <= 0.0 {
 		return errors.New("amount must be positive")
