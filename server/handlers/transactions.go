@@ -13,13 +13,19 @@ import (
 func GetTransactions(repo *repositories.TransactionRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
+		params, err := parsePaginationQuery(c)
+		if err != nil {
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			return
+		}
 
-		transactions, err := repo.GetAll(ctx)
+		transactions, totalRecords, err := repo.GetAll(ctx, params)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, transactions)
+
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
 	}
 }
 
@@ -54,14 +60,19 @@ func GetTransactionsForBucket(repo *repositories.TransactionRepository) gin.Hand
 			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 			return
 		}
+		params, err := parsePaginationQuery(c)
+		if err != nil {
+			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			return
+		}
 
-		transactions, err := repo.GetForBucket(ctx, bucketID)
+		transactions, totalRecords, err := repo.GetForBucket(ctx, bucketID, params)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, transactions)
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 
 	"github.com/Kyle-A-code/savings-visualiser/internal/testutil"
 	"github.com/Kyle-A-code/savings-visualiser/models"
+	"github.com/Kyle-A-code/savings-visualiser/query"
 	"gorm.io/gorm"
 )
 
@@ -153,11 +154,11 @@ func TestTransactionRepository_Transfer(t *testing.T) {
 				t.Fatalf("transfer: %v", err)
 			}
 
-			fromTxs, err := repo.GetForBucket(context.Background(), int(fromBucket.ID))
+			fromTxs, _, err := repo.GetForBucket(context.Background(), int(fromBucket.ID), query.DefaultListParams())
 			if err != nil {
 				t.Fatalf("list from-bucket txs: %v", err)
 			}
-			toTxs, err := repo.GetForBucket(context.Background(), int(toBucket.ID))
+			toTxs, _, err := repo.GetForBucket(context.Background(), int(toBucket.ID), query.DefaultListParams())
 			if err != nil {
 				t.Fatalf("list to-bucket txs: %v", err)
 			}
