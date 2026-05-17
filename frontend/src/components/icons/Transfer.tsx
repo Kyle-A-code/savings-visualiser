@@ -1,6 +1,6 @@
 import type { IconProps } from "./types";
 
-const Rubbish = ({ width = 24, height = 24 }: IconProps) => {
+const Transfer = ({ width = 24, height = 24 }: IconProps) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width={width} height={height}>
       {/* <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--> */}
@@ -12,4 +12,4 @@ const Rubbish = ({ width = 24, height = 24 }: IconProps) => {
   );
 };
 
-export default Rubbish;
+export default Transfer;

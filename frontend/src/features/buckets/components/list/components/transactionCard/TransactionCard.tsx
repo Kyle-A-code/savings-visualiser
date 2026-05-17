@@ -1,9 +1,9 @@
 import { CardPrimitive } from "../../../../../../components/card";
-import type { TransactionWithBalance } from "../../../../../transactions/types";
+import type { Transaction } from "../../../../../transactions/types";
 import "./transactionCard.css";
 
 interface TransactionCardProps {
-  transaction: TransactionWithBalance;
+  transaction: Transaction;
 }
 
 const TransactionCard = ({ transaction }: TransactionCardProps) => {
@@ -29,9 +29,6 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
               {amountPrefix}${Math.abs(transaction.amount).toFixed(2)}
             </p>
           </div>
-          <p className="transaction-balance">
-            Balance: ${transaction.balance.toFixed(2)}
-          </p>
         </div>
       </div>
     </CardPrimitive>

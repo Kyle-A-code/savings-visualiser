@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"github.com/Kyle-A-code/savings-visualiser/models"
+	"github.com/Kyle-A-code/savings-visualiser/query"
 	"gorm.io/gorm"
 )
 
@@ -23,9 +24,22 @@ func NewTransactionRepository(db *gorm.DB) *TransactionRepository {
 	return &TransactionRepository{db: db, bucketRepo: NewBucketRepository(db)}
 }
 
-func (repo *TransactionRepository) GetAll(ctx context.Context) ([]models.Transaction, error) {
-	transactions, err := gorm.G[models.Transaction](repo.db).Find(ctx)
-	return transactions, err
+func (repo *TransactionRepository) GetAll(ctx context.Context, params query.ListParams) ([]models.Transaction, int64, error) {
+	transactions := []models.Transaction{}
+	var totalRecords int64
+
+	err := repo.db.WithContext(ctx).
+		Model(&models.Transaction{}).
+		Count(&totalRecords).Error
+	if err != nil {
+		return transactions, 0, err
+	}
+
+	err = repo.db.WithContext(ctx).
+		Scopes(paginate(params)).
+		Order("id DESC").
+		Find(&transactions).Error
+	return transactions, totalRecords, err
 }
 
 func (repo *TransactionRepository) GetById(ctx context.Context, id int) (models.Transaction, error) {
@@ -33,9 +47,24 @@ func (repo *TransactionRepository) GetById(ctx context.Context, id int) (models.
 	return transaction, err
 }
 
-func (repo *TransactionRepository) GetForBucket(ctx context.Context, bucketId int) ([]models.Transaction, error) {
-	transactions, err := gorm.G[models.Transaction](repo.db).Where("bucket_id = ?", bucketId).Find(ctx)
-	return transactions, err
+func (repo *TransactionRepository) GetForBucket(ctx context.Context, bucketId int, params query.ListParams) ([]models.Transaction, int64, error) {
+	transactions := []models.Transaction{}
+	var totalRecords int64
+
+	err := repo.db.WithContext(ctx).
+		Model(&models.Transaction{}).
+		Where("bucket_id = ?", bucketId).
+		Count(&totalRecords).Error
+	if err != nil {
+		return transactions, 0, err
+	}
+
+	err = repo.db.WithContext(ctx).
+		Where("bucket_id = ?", bucketId).
+		Scopes(paginate(params)).
+		Order("id DESC").
+		Find(&transactions).Error
+	return transactions, totalRecords, err
 }
 
 func (repo *TransactionRepository) Create(ctx context.Context, transaction *models.Transaction) error {

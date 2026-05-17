@@ -1,6 +1,6 @@
 import type { IconProps } from "./types";
 
-const ArrowRight = ({ width = 24, height = 24 }: IconProps) => {
+const ArrowLeft = ({ width = 24, height = 24 }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,4 +17,4 @@ const ArrowRight = ({ width = 24, height = 24 }: IconProps) => {
   );
 };
 
-export default ArrowRight;
+export default ArrowLeft;
