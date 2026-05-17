@@ -1,5 +1,9 @@
 import { useState } from "react";
 import type { Bucket } from "../../../../types";
+import {
+  BUCKET_TRANSACTIONS_DEFAULT_LIMIT,
+  BUCKET_TRANSACTIONS_DEFAULT_OFFSET,
+} from "../../../../constants";
 import "./bucketCard.css";
 import { Link } from "@tanstack/react-router";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -142,6 +146,10 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
       <Link
         to="/buckets/$bucketId"
         params={{ bucketId: id }}
+        search={{
+          limit: BUCKET_TRANSACTIONS_DEFAULT_LIMIT,
+          offset: BUCKET_TRANSACTIONS_DEFAULT_OFFSET,
+        }}
         className="ui-btn ui-btn-surface ui-focus-ring bucket-view"
       >
         View Details

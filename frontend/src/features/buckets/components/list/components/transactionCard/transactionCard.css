@@ -69,10 +69,3 @@
 .transaction-amount.debit {
   color: var(--danger);
 }
-
-.transaction-balance {
-  margin: 0;
-  color: var(--on-surface-variant);
-  font-size: var(--text-body-sm);
-  font-weight: var(--font-weight-medium);
-}

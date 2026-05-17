@@ -7,10 +7,6 @@ export interface Transaction {
   updatedAt: Date;
 }
 
-export interface TransactionWithBalance extends Transaction {
-  balance: number;
-}
-
 export interface TransactionData {
   ID: string;
   Title: string;
