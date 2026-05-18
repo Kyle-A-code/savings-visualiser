@@ -20,6 +20,6 @@ func GetDatabase() *gorm.DB {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&models.Bucket{}, &models.Transaction{})
+	db.AutoMigrate(&models.Bucket{}, &models.Transaction{}, &models.Goal{})
 	return db
 }

@@ -23,7 +23,7 @@ func NewTestDB() (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(1)
 	sqlDB.SetConnMaxLifetime(0)
 
-	if err := db.AutoMigrate(&models.Bucket{}, &models.Transaction{}); err != nil {
+	if err := db.AutoMigrate(&models.Bucket{}, &models.Transaction{}, &models.Goal{}); err != nil {
 		return nil, err
 	}
 
