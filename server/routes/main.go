@@ -15,4 +15,5 @@ func Run(db *gorm.DB) {
 func getRoutes(db *gorm.DB) {
 	AddBucketRoutes(router, db)
 	AddTransactionRoutes(router, db)
+	AddGoalRoutes(router, db)
 }
