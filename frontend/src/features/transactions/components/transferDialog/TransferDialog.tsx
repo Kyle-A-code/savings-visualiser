@@ -35,7 +35,7 @@ const TransferDialog = ({
   );
   const canSubmit = hasTargets && maxAmount > 0;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!canSubmit) {
       return;
