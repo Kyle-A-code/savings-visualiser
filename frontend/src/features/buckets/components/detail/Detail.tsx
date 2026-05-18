@@ -10,6 +10,7 @@ import "./detail.css";
 import { PlusIcon } from "../../../../components/icons";
 import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
 import Controls from "./controls/Controls";
+import CreateGoalDialog from "./createGoalDialog/CreateGoalDialog";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
@@ -24,10 +25,7 @@ const Detail = () => {
   );
   const transactions = paginatedResponse.items;
   const totalRecords = paginatedResponse.totalRecords;
-  const totalPages = Math.max(
-    1,
-    Math.ceil(totalRecords / limit),
-  );
+  const totalPages = Math.max(1, Math.ceil(totalRecords / limit));
   const hasNextPage = offset + limit < totalRecords;
   const hasPreviousPage = offset > 0;
   const queryClient = useQueryClient();
@@ -149,6 +147,20 @@ const Detail = () => {
           <h2 id="bucket-ledger-heading" className="bucket-detail-ledger-title">
             Ledger history
           </h2>
+          {bucket?.goal == null ? (
+            <CreateGoalDialog
+              bucketId={bucketId}
+              trigger={
+                <button
+                  type="button"
+                  className="ui-btn ui-btn-ghost ui-focus-ring dialog-trigger"
+                >
+                  <PlusIcon width={18} height={18} aria-hidden />
+                  Create goal
+                </button>
+              }
+            />
+          ) : null}
         </div>
         <Divider />
         <div className="bucket-detail-transaction-list">
