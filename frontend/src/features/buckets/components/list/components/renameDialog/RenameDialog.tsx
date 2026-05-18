@@ -14,7 +14,7 @@ const RenameDialog = ({ id, currentTitle, open, onOpenChange }: RenameDialogProp
   const [title, setTitle] = useState('');
   const { patchBucket, isPending, isError } = usePatchBucket();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextTitle = title.trim();
     if (!nextTitle) {
