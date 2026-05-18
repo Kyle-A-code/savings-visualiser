@@ -11,7 +11,7 @@ export interface TransactionData {
   ID: string;
   Title: string;
   Amount: number;
-  BucketId: number;
+  BucketID: number;
   CreatedAt: Date;
   UpdatedAt: Date;
 }

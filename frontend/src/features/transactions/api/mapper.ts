@@ -5,7 +5,7 @@ export const mapTransactionDataToTransaction = (transaction: TransactionData): T
     id: transaction.ID,
     title: transaction.Title,
     amount: transaction.Amount,
-    bucketId: transaction.BucketId,
+    bucketId: transaction.BucketID,
     createdAt: transaction.CreatedAt,
     updatedAt: transaction.UpdatedAt,
   };
