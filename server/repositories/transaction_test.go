@@ -133,6 +133,118 @@ func TestTransactionRepository_Create(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("keeps goal incomplete when transaction does not reach amount", func(t *testing.T) {
+		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+			repo := NewTransactionRepository(tx)
+			bucket := seedBucket(t, tx, "Goal bucket")
+			goal := models.Goal{
+				Title:    "Emergency fund",
+				Amount:   100.0,
+				BucketID: int(bucket.ID),
+			}
+			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
+				t.Fatalf("create goal: %v", err)
+			}
+			seedTransaction(t, tx, int(bucket.ID), "Seed", 60.0)
+
+			transaction := models.Transaction{
+				Title:    "Small deposit",
+				Amount:   20.0,
+				Date:     time.Now(),
+				BucketID: int(bucket.ID),
+			}
+			if err := repo.Create(context.Background(), &transaction); err != nil {
+				t.Fatalf("create transaction: %v", err)
+			}
+
+			gotGoal, err := gorm.G[models.Goal](tx).Where("id = ?", goal.ID).First(context.Background())
+			if err != nil {
+				t.Fatalf("get goal: %v", err)
+			}
+			if gotGoal.Completed {
+				t.Fatalf("expected goal to remain incomplete before reaching target")
+			}
+		})
+	})
+
+	t.Run("marks goal completed when transaction reaches amount", func(t *testing.T) {
+		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+			repo := NewTransactionRepository(tx)
+			bucket := seedBucket(t, tx, "Goal bucket")
+			goal := models.Goal{
+				Title:    "Emergency fund",
+				Amount:   100.0,
+				BucketID: int(bucket.ID),
+			}
+			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
+				t.Fatalf("create goal: %v", err)
+			}
+			seedTransaction(t, tx, int(bucket.ID), "Seed", 90.0)
+
+			transaction := models.Transaction{
+				Title:    "Payday",
+				Amount:   10.0,
+				Date:     time.Now(),
+				BucketID: int(bucket.ID),
+			}
+			if err := repo.Create(context.Background(), &transaction); err != nil {
+				t.Fatalf("create transaction: %v", err)
+			}
+
+			gotGoal, err := gorm.G[models.Goal](tx).Where("id = ?", goal.ID).First(context.Background())
+			if err != nil {
+				t.Fatalf("get goal: %v", err)
+			}
+			if !gotGoal.Completed {
+				t.Fatalf("expected goal to be completed after reaching target")
+			}
+		})
+	})
+
+	t.Run("keeps goal completed after later debit", func(t *testing.T) {
+		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+			repo := NewTransactionRepository(tx)
+			bucket := seedBucket(t, tx, "Goal bucket")
+			goal := models.Goal{
+				Title:    "Car",
+				Amount:   100.0,
+				BucketID: int(bucket.ID),
+			}
+			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
+				t.Fatalf("create goal: %v", err)
+			}
+			seedTransaction(t, tx, int(bucket.ID), "Seed", 100.0)
+
+			credit := models.Transaction{
+				Title:    "Bonus",
+				Amount:   5.0,
+				Date:     time.Now(),
+				BucketID: int(bucket.ID),
+			}
+			if err := repo.Create(context.Background(), &credit); err != nil {
+				t.Fatalf("create credit: %v", err)
+			}
+
+			debit := models.Transaction{
+				Title:    "Spend",
+				Amount:   -20.0,
+				Date:     time.Now(),
+				BucketID: int(bucket.ID),
+			}
+			if err := repo.Create(context.Background(), &debit); err != nil {
+				t.Fatalf("create debit: %v", err)
+			}
+
+			gotGoal, err := gorm.G[models.Goal](tx).Where("id = ?", goal.ID).First(context.Background())
+			if err != nil {
+				t.Fatalf("get goal: %v", err)
+			}
+			if !gotGoal.Completed {
+				t.Fatalf("expected goal to remain completed after debit")
+			}
+		})
+	})
 }
 
 func TestTransactionRepository_Transfer(t *testing.T) {
