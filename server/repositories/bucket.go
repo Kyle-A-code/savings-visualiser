@@ -16,7 +16,9 @@ func NewBucketRepository(db *gorm.DB) *BucketRepository {
 }
 
 func (repo *BucketRepository) GetAll(ctx context.Context) ([]models.Bucket, error) {
-	buckets, err := gorm.G[models.Bucket](repo.db).Find(ctx)
+	buckets, err := gorm.G[models.Bucket](repo.db).
+		Preload("Goal", func(db gorm.PreloadBuilder) error { return nil }).
+		Find(ctx)
 	if err != nil {
 		return buckets, err
 	}
@@ -34,6 +36,7 @@ func (repo *BucketRepository) GetAll(ctx context.Context) ([]models.Bucket, erro
 func (repo *BucketRepository) GetById(ctx context.Context, id int) (models.Bucket, error) {
 	bucket, err := gorm.G[models.Bucket](repo.db).
 		Where("id = ?", id).
+		Preload("Goal", func(db gorm.PreloadBuilder) error { return nil }).
 		First(ctx)
 	if err != nil {
 		return bucket, err
@@ -83,6 +86,10 @@ func (repo *BucketRepository) Delete(ctx context.Context, id int) (int, error) {
 	rowsAffected := 0
 	err := repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if _, err := gorm.G[models.Transaction](tx).Where("bucket_id = ?", id).Delete(ctx); err != nil {
+			return err
+		}
+
+		if _, err := gorm.G[models.Goal](tx).Where("bucket_id = ?", id).Delete(ctx); err != nil {
 			return err
 		}
 
