@@ -13,15 +13,15 @@ import (
 type TransactionRepository struct {
 	db         *gorm.DB
 	bucketRepo *BucketRepository
-}
-
-type UpdateParams struct {
-	Title  *string
-	Amount *float64
+	goalRepo   *GoalRepository
 }
 
 func NewTransactionRepository(db *gorm.DB) *TransactionRepository {
-	return &TransactionRepository{db: db, bucketRepo: NewBucketRepository(db)}
+	return &TransactionRepository{
+		db:         db,
+		bucketRepo: NewBucketRepository(db),
+		goalRepo:   NewGoalRepository(db),
+	}
 }
 
 func (repo *TransactionRepository) GetAll(ctx context.Context, params query.ListParams) ([]models.Transaction, int64, error) {
@@ -72,18 +72,35 @@ func (repo *TransactionRepository) Create(ctx context.Context, transaction *mode
 		return nil
 	}
 
-	if transaction.Amount <= 0.0 {
-		valid, err := repo.validNextBalance(ctx, transaction.Amount, transaction.BucketID)
+	return repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		txRepo := NewTransactionRepository(tx)
+
+		if transaction.Amount <= 0.0 {
+			valid, err := txRepo.validNextBalance(ctx, transaction.Amount, transaction.BucketID)
+			if err != nil {
+				return err
+			}
+			if valid != true {
+				return errors.New("Unable to create transaction, not enough balance.")
+			}
+		}
+
+		if err := gorm.G[models.Transaction](tx).Create(ctx, transaction); err != nil {
+			return err
+		}
+
+		goalID, shouldComplete, err := txRepo.goalCompleted(ctx, transaction.BucketID)
 		if err != nil {
 			return err
 		}
-		if valid != true {
-			return errors.New("Unable to create transaction, not enough balance.")
+		if shouldComplete {
+			if _, err := txRepo.goalRepo.MarkCompleted(ctx, int(goalID)); err != nil {
+				return err
+			}
 		}
-	}
 
-	err := gorm.G[models.Transaction](repo.db).Create(ctx, transaction)
-	return err
+		return nil
+	})
 }
 
 func (repo *TransactionRepository) Transfer(ctx context.Context, fromBucketID int, toBucketID int, amount float64) error {
@@ -138,4 +155,22 @@ func (repo *TransactionRepository) validNextBalance(ctx context.Context, amount 
 	}
 	valid := balance-math.Abs(amount) >= 0.0
 	return valid, nil
+}
+
+func (repo *TransactionRepository) goalCompleted(ctx context.Context, bucketID int) (uint, bool, error) {
+	bucket, err := repo.bucketRepo.GetById(ctx, bucketID)
+	if err != nil {
+		return 0, false, err
+	}
+
+	if bucket.Goal == nil {
+		return 0, false, nil
+	}
+
+	if bucket.Goal.Completed {
+		return bucket.Goal.ID, false, nil
+	}
+
+	shouldComplete := bucket.Balance >= bucket.Goal.Amount
+	return bucket.Goal.ID, shouldComplete, nil
 }
