@@ -46,7 +46,7 @@ func seedTransaction(t *testing.T, tx *gorm.DB, bucketID int, title string, amou
 		Title:    title,
 		Amount:   amount,
 		Date:     time.Now(),
-		BucketId: bucketID,
+		BucketID: bucketID,
 	}
 	if err := gorm.G[models.Transaction](tx).Create(context.Background(), &transaction); err != nil {
 		t.Fatalf("seed transaction: %v", err)

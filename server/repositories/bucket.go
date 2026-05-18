@@ -61,7 +61,7 @@ func (repo *BucketRepository) Create(ctx context.Context, bucket *models.Bucket,
 		transaction := models.Transaction{
 			Title:    "Initial balance",
 			Amount:   amount,
-			BucketId: int(bucket.ID),
+			BucketID: int(bucket.ID),
 		}
 
 		if err := gorm.G[models.Transaction](tx).Create(ctx, &transaction); err != nil {

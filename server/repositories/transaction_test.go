@@ -23,7 +23,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 				Title:    "Credit",
 				Amount:   400.00,
 				Date:     time.Now(),
-				BucketId: int(bucket.ID),
+				BucketID: int(bucket.ID),
 			}
 
 			if err := repo.Create(context.Background(), &transaction); err != nil {
@@ -46,7 +46,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 				Title:    "Transaction",
 				Amount:   0.0,
 				Date:     time.Now(),
-				BucketId: int(bucket.ID),
+				BucketID: int(bucket.ID),
 			}
 
 			err := repo.Create(context.Background(), &transaction)
@@ -80,7 +80,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 				Title:    "Too much",
 				Amount:   -20.0,
 				Date:     time.Now(),
-				BucketId: int(bucket.ID),
+				BucketID: int(bucket.ID),
 			}
 
 			err := repo.Create(context.Background(), &transaction)
@@ -112,7 +112,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 				Title:    "Test",
 				Amount:   -20.0,
 				Date:     time.Now(),
-				BucketId: int(bucket.ID),
+				BucketID: int(bucket.ID),
 			}
 
 			if err := repo.Create(context.Background(), &transaction); err != nil {

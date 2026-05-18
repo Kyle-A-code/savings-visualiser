@@ -102,7 +102,7 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 		transaction := models.Transaction{
 			Title:    request.Title,
 			Amount:   request.Amount,
-			BucketId: request.BucketID,
+			BucketID: request.BucketID,
 		}
 		if err := repo.Create(ctx, &transaction); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -17,10 +17,10 @@ export const useCreateTransaction = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(data.BucketId.toString()),
+        queryKey: queryKeys.bucketList(data.BucketID.toString()),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(data.BucketId.toString()),
+        queryKey: bucketQueryKeys.detail(data.BucketID.toString()),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.list(),
