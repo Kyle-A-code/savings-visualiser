@@ -11,6 +11,7 @@ import CreateTransactionDialog from "../../../../../transactions/components/crea
 import TransferDialog from "../../../../../transactions/components/transferDialog/TransferDialog";
 import DeleteDialog from "../deleteDialog/DeleteDialog";
 import RenameDialog from "../renameDialog/RenameDialog";
+import GoalProgress from "../../../shared/goalProgress/GoalProgress";
 
 interface BucketCardProps {
   bucket: Bucket;
@@ -18,7 +19,7 @@ interface BucketCardProps {
 }
 
 const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
-  const { id, title, balance } = bucket;
+  const { id, title, balance, goal } = bucket;
   const [menuOpen, setMenuOpen] = useState(false);
   const [createTransactionOpen, setCreateTransactionOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
@@ -142,6 +143,12 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
       <div className="bucket-card-body">
         <span className="bucket-balance-label ui-eyebrow">Current Balance</span>
         <p className="bucket-balance-value">{formattedBalance}</p>
+        {goal && (
+          <GoalProgress
+            goal={goal}
+            currentAmount={balance}
+          />
+        )}
       </div>
       <Link
         to="/buckets/$bucketId"
