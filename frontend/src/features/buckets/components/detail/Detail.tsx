@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { bucketQueryOptions } from "../../api/queryOptions";
@@ -12,6 +12,8 @@ import CreateTransactionDialog from "../../../transactions/components/createDial
 import Controls from "./controls/Controls";
 import CreateGoalDialog from "./createGoalDialog/CreateGoalDialog";
 import GoalProgress from "../shared/goalProgress/GoalProgress";
+import GoalCompleted from "./goalCompleted/goalCompleted";
+import { useDeleteBucketGoal } from "../../api/deleteBucketGoal";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
@@ -24,12 +26,23 @@ const Detail = () => {
   const { data: paginatedResponse } = useSuspenseQuery(
     bucketTransactionsQueryOptions(bucketId, limit, offset),
   );
+  const { deleteBucketGoal } = useDeleteBucketGoal();
   const transactions = paginatedResponse.items;
   const totalRecords = paginatedResponse.totalRecords;
   const totalPages = Math.max(1, Math.ceil(totalRecords / limit));
   const hasNextPage = offset + limit < totalRecords;
   const hasPreviousPage = offset > 0;
   const queryClient = useQueryClient();
+  const [hasCelebrated, setHasCelebrated] = useState(false);
+  const goal = bucket.goal;
+
+  const onGoalCompleted = () => {
+    if (goal == null) {
+      return;
+    }
+    setHasCelebrated(true);
+    deleteBucketGoal(bucketId);
+  };
 
   const onPrevious = () => {
     if (!hasPreviousPage) {
@@ -81,6 +94,16 @@ const Detail = () => {
       }),
     });
   }, [transactions.length, totalRecords, limit, offset, navigate]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setHasCelebrated(false);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [goal?.id]);
 
   if (totalRecords === 0) {
     return (
@@ -156,7 +179,7 @@ const Detail = () => {
           <h2 id="bucket-ledger-heading" className="bucket-detail-ledger-title">
             Ledger history
           </h2>
-          {bucket?.goal == null ? <CreateGoalDialog bucketId={bucketId} /> : null}
+          {bucket?.goal == null && <CreateGoalDialog bucketId={bucketId} />}
         </div>
         <Divider />
         <div className="bucket-detail-transaction-list">
@@ -171,6 +194,9 @@ const Detail = () => {
         currentPage={paginatedResponse.currentPage}
         totalPages={totalPages}
       />
+      {goal?.completed === true && !hasCelebrated && (
+        <GoalCompleted onComplete={onGoalCompleted} />
+      )}
     </div>
   );
 };

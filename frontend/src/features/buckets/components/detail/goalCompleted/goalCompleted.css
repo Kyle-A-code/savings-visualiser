@@ -1,0 +1,39 @@
+.coin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  transition: opacity 300ms ease, backdrop-filter 300ms ease;
+}
+
+.coin-overlay-exit {
+  opacity: 0;
+  backdrop-filter: blur(0);
+}
+
+.coin-canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+.coin-overlay-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-headline);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--on-surface);
+  text-shadow:
+    0 0 0.7rem light-dark(rgb(225 166 45 / 46%), rgb(255 214 120 / 52%)),
+    0 0 1.4rem light-dark(rgb(196 133 22 / 34%), rgb(255 194 74 / 42%)),
+    0 2px 0 light-dark(rgb(255 255 255 / 58%), transparent);
+}
