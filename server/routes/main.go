@@ -8,6 +8,7 @@ import (
 var router = gin.Default()
 
 func Run(db *gorm.DB) {
+	router.SetTrustedProxies(nil)
 	getRoutes(db)
 	_ = router.Run("localhost:8080")
 }
