@@ -4,7 +4,6 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { DialogPrimitive } from "../../../../../components/dialog";
 import { PencilIcon } from "../../../../../components/icons";
 import { usePatchBucketGoal } from "../../../api/patchBucketGoal";
-import "./updateGoalDialog.css";
 
 interface UpdateGoalDialogProps {
   bucketId: string;
@@ -65,9 +64,9 @@ const UpdateGoalDialog = ({
           </button>
         </Tooltip.Trigger>
         <Tooltip.Portal>
-          <Tooltip.Content className="update-goal-tooltip" sideOffset={6}>
+          <Tooltip.Content className="ui-tooltip" sideOffset={6}>
             Edit goal
-            <Tooltip.Arrow className="update-goal-tooltip-arrow" />
+            <Tooltip.Arrow className="ui-tooltip-arrow" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

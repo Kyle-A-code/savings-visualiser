@@ -1,6 +1,7 @@
 import * as Progress from "@radix-ui/react-progress";
 import "./goalProgress.css";
 import type { Goal } from "../../../types";
+import DeleteGoalDialog from "../../detail/deleteGoalDialog/DeleteGoalDialog";
 import UpdateGoalDialog from "../../detail/updateGoalDialog/UpdateGoalDialog";
 
 interface GoalProgressProps {
@@ -46,6 +47,7 @@ const GoalProgress = ({
               currentTitle={title}
               currentAmount={amount}
             />
+            <DeleteGoalDialog bucketId={bucketId} goalTitle={title} />
           </div>
         )}
       </div>
