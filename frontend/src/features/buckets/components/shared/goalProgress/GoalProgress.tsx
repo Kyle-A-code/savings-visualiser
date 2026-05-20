@@ -1,17 +1,20 @@
 import * as Progress from "@radix-ui/react-progress";
 import "./goalProgress.css";
 import type { Goal } from "../../../types";
+import UpdateGoalDialog from "../../detail/updateGoalDialog/UpdateGoalDialog";
 
 interface GoalProgressProps {
   goal: Goal;
   currentAmount: number;
+  showActions?: boolean;
 }
 
 const GoalProgress = ({
   goal,
   currentAmount,
+  showActions = false,
 }: GoalProgressProps) => {
-  const { title, amount } = goal;
+  const { bucketId, title, amount } = goal;
   const progressValue = Math.min((currentAmount / amount) * 100, 100);
   const roundedPercent = Math.round(progressValue);
 
@@ -32,9 +35,20 @@ const GoalProgress = ({
           style={{ transform: `translateX(-${100 - progressValue}%)` }}
         />
       </Progress.Root>
-      <p className="goal-progress-amounts">
-        ${currentAmount.toFixed(2)} of ${amount.toFixed(2)}
-      </p>
+      <div className="goal-progress-footer">
+        <p className="goal-progress-amounts">
+          ${currentAmount.toFixed(2)} of ${amount.toFixed(2)}
+        </p>
+        {showActions && (
+          <div className="goal-progress-actions">
+            <UpdateGoalDialog
+              bucketId={bucketId}
+              currentTitle={title}
+              currentAmount={amount}
+            />
+          </div>
+        )}
+      </div>
     </section>
   );
 };

@@ -1,15 +1,14 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import type { ReactNode } from "react";
 import { DialogPrimitive } from "../../../../../components/dialog";
+import { PlusIcon } from "../../../../../components/icons";
 import { useCreateBucketGoal } from "../../../api/createBucketGoal";
 
 interface CreateGoalDialogProps {
   bucketId: string;
-  trigger: ReactNode;
 }
 
-const CreateGoalDialog = ({ bucketId, trigger }: CreateGoalDialogProps) => {
+const CreateGoalDialog = ({ bucketId }: CreateGoalDialogProps) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -37,7 +36,16 @@ const CreateGoalDialog = ({ bucketId, trigger }: CreateGoalDialogProps) => {
   };
 
   return (
-    <DialogPrimitive open={open} onOpenChange={setOpen} trigger={trigger}>
+    <DialogPrimitive
+      open={open}
+      onOpenChange={setOpen}
+      trigger={
+        <button type="button" className="ui-btn ui-btn-ghost ui-focus-ring dialog-trigger">
+          <PlusIcon width={18} height={18} aria-hidden />
+          Create goal
+        </button>
+      }
+    >
       <header className="dialog-header">
         <div className="dialog-header-text">
           <Dialog.Title className="dialog-title">Create Goal</Dialog.Title>

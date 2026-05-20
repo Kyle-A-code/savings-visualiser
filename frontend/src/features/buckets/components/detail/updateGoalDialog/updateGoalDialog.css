@@ -1,0 +1,15 @@
+.update-goal-tooltip {
+  border-radius: var(--radius-sm);
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  padding: var(--space-1) var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  line-height: 1.1;
+  box-shadow: var(--shadow-ambient);
+  z-index: 40;
+}
+
+.update-goal-tooltip-arrow {
+  fill: var(--surface-container-high);
+}

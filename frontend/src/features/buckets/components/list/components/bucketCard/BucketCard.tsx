@@ -140,7 +140,7 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
           onOpenChange={setRenameOpen}
         />
       </div>
-      <div className="bucket-card-body">
+      <div>
         <span className="bucket-balance-label ui-eyebrow">Current Balance</span>
         <p className="bucket-balance-value">{formattedBalance}</p>
         {goal && (
