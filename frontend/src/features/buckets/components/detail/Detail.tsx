@@ -11,6 +11,7 @@ import { PlusIcon } from "../../../../components/icons";
 import CreateTransactionDialog from "../../../transactions/components/createDialog/CreateDialog";
 import Controls from "./controls/Controls";
 import CreateGoalDialog from "./createGoalDialog/CreateGoalDialog";
+import GoalProgress from "../shared/goalProgress/GoalProgress";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
@@ -137,8 +138,15 @@ const Detail = () => {
             }
           />
         </div>
+        {bucket?.goal && (
+          <div className="bucket-detail-goal-progress">
+            <GoalProgress
+              goal={bucket.goal}
+              currentAmount={bucket.balance}
+            />
+          </div>
+        )}
       </header>
-
       <section
         className="bucket-detail-ledger"
         aria-labelledby="bucket-ledger-heading"

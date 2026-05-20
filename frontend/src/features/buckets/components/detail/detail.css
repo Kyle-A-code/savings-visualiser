@@ -24,7 +24,7 @@
 .bucket-detail-hero {
   display: grid;
   gap: var(--space-4);
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-1);
 
   @media (min-width: 768px) {
     grid-template-columns: 1fr auto;
@@ -112,6 +112,13 @@
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--primary);
+}
+
+.bucket-detail-goal-progress {
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
 }
 
 .bucket-detail-ledger {
