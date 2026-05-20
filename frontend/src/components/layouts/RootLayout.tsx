@@ -28,7 +28,7 @@ const RootLayout = () => {
   <div className="root-layout">
     <header className="root-header ui-glass">
       <div className="top-nav">
-        <div className="app-title">Working Title</div>
+        <div className="app-title">Savings Visualiser</div>
         <nav className="nav-links" aria-label="Primary">
           {navLinks.map((link) => (
             <Link
@@ -54,7 +54,7 @@ const RootLayout = () => {
     <footer className="root-footer">
       <div className="root-footer-inner">
         <div className="root-footer-lead">
-          <span className="root-footer-title">{"\u2009"}Working Title</span>
+          <span className="root-footer-title">{"\u2009"}Savings Visualiser</span>
         </div>
         <time className="root-footer-date" dateTime={iso}>
           {label}
