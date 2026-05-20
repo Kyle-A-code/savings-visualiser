@@ -5,3 +5,4 @@ export { default as ArrowLeftIcon } from "./ArrowLeft";
 export { default as PlusIcon } from "./Plus";
 export { default as MinusIcon } from "./Minus";
 export { default as CirclePlusIcon } from "./CirclePlus";
+export { default as PencilIcon } from "./Pencil";

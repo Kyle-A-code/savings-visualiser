@@ -143,6 +143,7 @@ const Detail = () => {
             <GoalProgress
               goal={bucket.goal}
               currentAmount={bucket.balance}
+              showActions
             />
           </div>
         )}
@@ -155,20 +156,7 @@ const Detail = () => {
           <h2 id="bucket-ledger-heading" className="bucket-detail-ledger-title">
             Ledger history
           </h2>
-          {bucket?.goal == null ? (
-            <CreateGoalDialog
-              bucketId={bucketId}
-              trigger={
-                <button
-                  type="button"
-                  className="ui-btn ui-btn-ghost ui-focus-ring dialog-trigger"
-                >
-                  <PlusIcon width={18} height={18} aria-hidden />
-                  Create goal
-                </button>
-              }
-            />
-          ) : null}
+          {bucket?.goal == null ? <CreateGoalDialog bucketId={bucketId} /> : null}
         </div>
         <Divider />
         <div className="bucket-detail-transaction-list">

@@ -1,6 +1,7 @@
 import ThemeProvider from "../providers/ThemeProvider.tsx";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 import { routeTree } from "./routeTree.gen";
 
@@ -29,7 +30,9 @@ const App = () => {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <TooltipProvider>
+          <RouterProvider router={router} />
+        </TooltipProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );
