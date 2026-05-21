@@ -33,6 +33,10 @@ type TransactionResponseDTO struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
+type ErrorResponseDTO struct {
+	Error string `json:"error"`
+}
+
 func newBucketResponseDTO(bucket models.Bucket) BucketResponseDTO {
 	var goal *GoalResponseDTO
 	if bucket.Goal != nil {
@@ -75,6 +79,10 @@ func newTransactionResponseDTO(transaction models.Transaction) TransactionRespon
 		CreatedAt: transaction.CreatedAt,
 		UpdatedAt: transaction.UpdatedAt,
 	}
+}
+
+func newErrorResponse(message string) ErrorResponseDTO {
+	return ErrorResponseDTO{Error: message}
 }
 
 func newBucketResponseDTOs(buckets []models.Bucket) []BucketResponseDTO {

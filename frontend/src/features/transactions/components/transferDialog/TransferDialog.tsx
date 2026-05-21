@@ -25,7 +25,7 @@ const TransferDialog = ({
   open = false,
   onOpenChange,
 }: TransferDialogProps) => {
-  const { transfer, isPending, isError } = useTransfer();
+  const { transfer, isPending, isError, error } = useTransfer();
 
   const hasTargets = targets.length > 0;
   const firstTargetId = useMemo(() => targets[0]?.id ?? "", [targets]);
@@ -137,7 +137,7 @@ const TransferDialog = ({
         )}
         {isError && (
           <p className="dialog-error" role="alert">
-            Error completing transfer, please try again.
+            {error?.message ?? "Error completing transfer, please try again."}
           </p>
         )}
         <div className="dialog-footer-actions">

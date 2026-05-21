@@ -16,17 +16,17 @@ func GetBucketById(repo *repositories.BucketRepository) gin.HandlerFunc {
 		ctx := c.Request.Context()
 		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		bucket, err := repo.GetById(ctx, id)
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		c.IndentedJSON(http.StatusOK, newBucketResponseDTO(bucket))
@@ -39,7 +39,7 @@ func GetBuckets(repo *repositories.BucketRepository) gin.HandlerFunc {
 
 		buckets, err := repo.GetAll(ctx)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		c.IndentedJSON(http.StatusOK, newBucketResponseDTOs(buckets))
@@ -56,39 +56,39 @@ func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 
 		if request.Title == "" {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "title cannot be blank"})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse("title cannot be blank"))
 			return
 		}
 		if request.Amount <= 0 {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "initialBalance must be positive"})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse("initialBalance must be positive"))
 			return
 		}
 
 		bucket := models.Bucket{Title: request.Title}
 
-		existing, err := repo.GetByTitle(ctx, bucket.Title)
+		_, err := repo.GetByTitle(ctx, bucket.Title)
 		if err == nil {
-			c.IndentedJSON(http.StatusConflict, gin.H{"error": "a bucket with this title already exists", "existing_id": existing.ID})
+			c.IndentedJSON(http.StatusConflict, newErrorResponse("a bucket with this title already exists"))
 			return
 		}
 		if err != gorm.ErrRecordNotFound {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
 		if err := repo.Create(ctx, &bucket, request.Amount); err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
 		created, err := repo.GetById(ctx, int(bucket.ID))
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -99,43 +99,43 @@ func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 func PatchBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var request struct {
-			Title string
+			Title string `json:"title"`
 		}
 
 		ctx := c.Request.Context()
 		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 
 		if request.Title == "" {
-			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Title cannot be blank"})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse("Title cannot be blank"))
 			return
 		}
 
 		rows, err := repo.UpdateTitle(ctx, id, request.Title)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		if rows == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"error": "bucket not found"})
+			c.IndentedJSON(http.StatusNotFound, newErrorResponse("bucket not found"))
 			return
 		}
 
 		updated, err := repo.GetById(ctx, id)
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -149,13 +149,13 @@ func DeleteBucketById(repo *repositories.BucketRepository) gin.HandlerFunc {
 
 		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		_, err = repo.Delete(ctx, id)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 

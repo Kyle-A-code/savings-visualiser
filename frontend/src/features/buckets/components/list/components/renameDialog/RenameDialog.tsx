@@ -12,7 +12,7 @@ interface RenameDialogProps {
 
 const RenameDialog = ({ id, currentTitle, open, onOpenChange }: RenameDialogProps) => {
   const [title, setTitle] = useState('');
-  const { patchBucket, isPending, isError } = usePatchBucket();
+  const { patchBucket, isPending, isError, error } = usePatchBucket();
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -71,7 +71,7 @@ const RenameDialog = ({ id, currentTitle, open, onOpenChange }: RenameDialogProp
         </div>
         {isError && (
           <p className="dialog-error" role="alert">
-            Error renaming bucket, please try again.
+            {error?.message ?? "Error renaming bucket, please try again."}
           </p>
         )}
         <div className="dialog-footer-actions">

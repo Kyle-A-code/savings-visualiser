@@ -16,7 +16,11 @@ export const createBucketGoal = async ({
 
 export const useCreateBucketGoal = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    Goal,
+    Error,
+    UpsertBucketGoalRequest
+  >({
     mutationFn: createBucketGoal,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
@@ -34,5 +38,6 @@ export const useCreateBucketGoal = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };

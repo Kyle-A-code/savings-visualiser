@@ -16,7 +16,11 @@ export const createTransfer = async (
 
 export const useTransfer = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    TransferResponse,
+    Error,
+    TransferRequest
+  >({
     mutationFn: createTransfer,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
@@ -45,5 +49,6 @@ export const useTransfer = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };

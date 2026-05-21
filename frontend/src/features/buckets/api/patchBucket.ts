@@ -9,7 +9,11 @@ const patchBucket = async ({ id, title }: PatchBucketRequest) => {
 
 export const usePatchBucket = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    Bucket,
+    Error,
+    PatchBucketRequest
+  >({
     mutationFn: patchBucket,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
@@ -25,5 +29,6 @@ export const usePatchBucket = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };

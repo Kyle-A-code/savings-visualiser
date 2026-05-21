@@ -28,26 +28,26 @@ func CreateBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 		ctx := c.Request.Context()
 		bucketID, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		request, err := parseGoalUpsertRequest(c)
 		if err != nil {
 			if errors.Is(err, errTitleBlank) || errors.Is(err, errAmountNotPositive) {
-				c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 
 		if err := ensureGoalDoesNotExistForBucket(ctx, repo, bucketID); err != nil {
 			if errors.Is(err, errGoalAlreadyExists) {
-				c.IndentedJSON(http.StatusConflict, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusConflict, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -59,10 +59,10 @@ func CreateBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 
 		if err := repo.Create(ctx, &goal); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": "bucket not found"})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse("bucket not found"))
 				return
 			}
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -75,27 +75,27 @@ func PatchBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 		ctx := c.Request.Context()
 		bucketID, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		request, err := parseGoalUpsertRequest(c)
 		if err != nil {
 			if errors.Is(err, errTitleBlank) || errors.Is(err, errAmountNotPositive) {
-				c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 
 		existing, err := getGoalForBucket(ctx, repo, bucketID)
 		if err != nil {
 			if errors.Is(err, errGoalNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -107,17 +107,17 @@ func PatchBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 
 		rows, err := repo.Patch(ctx, &patch)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 		if rows == 0 {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"error": "goal not found"})
+			c.IndentedJSON(http.StatusNotFound, newErrorResponse("goal not found"))
 			return
 		}
 
 		updated, err := repo.GetForBucket(ctx, bucketID)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		c.IndentedJSON(http.StatusOK, newGoalResponseDTO(updated))
@@ -129,27 +129,27 @@ func DeleteBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 		ctx := c.Request.Context()
 		bucketID, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		goal, err := getGoalForBucket(ctx, repo, bucketID)
 		if err != nil {
 			if errors.Is(err, errGoalNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
 		rows, err := repo.Delete(ctx, int(goal.ID))
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		if rows == 0 {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"error": "goal not found"})
+			c.IndentedJSON(http.StatusNotFound, newErrorResponse("goal not found"))
 			return
 		}
 

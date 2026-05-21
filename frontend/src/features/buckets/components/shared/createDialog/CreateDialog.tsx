@@ -6,7 +6,7 @@ import { CirclePlusIcon } from "../../../../../components/icons";
 
 const CreateDialog = () => {
   const [open, setOpen] = useState(false);
-  const { createBucket, isPending, isError } = useCreateBucket();
+  const { createBucket, isPending, isError, error } = useCreateBucket();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +91,7 @@ const CreateDialog = () => {
         </div>
         {isError && (
           <p className="dialog-error" role="alert">
-            Error creating bucket, please try again.
+            {error?.message ?? "Error creating bucket, please try again."}
           </p>
         )}
         <div className="dialog-footer-actions">

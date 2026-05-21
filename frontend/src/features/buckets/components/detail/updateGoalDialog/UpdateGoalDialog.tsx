@@ -19,7 +19,7 @@ const UpdateGoalDialog = ({
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(currentTitle);
   const [amount, setAmount] = useState(currentAmount.toFixed(2));
-  const { patchBucketGoal, isPending, isError } = usePatchBucketGoal();
+  const { patchBucketGoal, isPending, isError, error } = usePatchBucketGoal();
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
@@ -142,7 +142,7 @@ const UpdateGoalDialog = ({
           </div>
           {isError && (
             <p className="dialog-error" role="alert">
-              Error updating goal, please try again.
+              {error?.message ?? "Error updating goal, please try again."}
             </p>
           )}
           <div className="dialog-footer-actions">

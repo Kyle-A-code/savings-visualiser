@@ -12,7 +12,7 @@ const CreateGoalDialog = ({ bucketId }: CreateGoalDialogProps) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
-  const { createBucketGoal, isPending, isError } = useCreateBucketGoal();
+  const { createBucketGoal, isPending, isError, error } = useCreateBucketGoal();
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -107,7 +107,7 @@ const CreateGoalDialog = ({ bucketId }: CreateGoalDialogProps) => {
         </div>
         {isError && (
           <p className="dialog-error" role="alert">
-            Error creating goal, please try again.
+            {error?.message ?? "Error creating goal, please try again."}
           </p>
         )}
         <div className="dialog-footer-actions">

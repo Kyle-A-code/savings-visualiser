@@ -5,7 +5,7 @@ interface ApiClientConfig extends RequestInit {
 }
 
 type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-type ApiErrorResponse = { detail?: string; error?: string };
+type ApiErrorResponse = { error: string };
 
 const request = async <T>(
   endpoint: string,
@@ -23,7 +23,7 @@ const request = async <T>(
       if (!response.ok) {
         return response.json().then((data: ApiErrorResponse) => {
           console.error("API Error:", data);
-          throw new Error(data.detail ?? data.error ?? "Request failed");
+          throw new Error(data.error ?? "Request failed");
         });
       }
       return response.json();
@@ -41,7 +41,7 @@ const requestDelete = async (endpoint: string, config: ApiClientConfig = {}) => 
     if (!response.ok) {
       return response.json().then((data: ApiErrorResponse) => {
         console.error("API Error:", data);
-        throw new Error(data.detail ?? data.error ?? "Request failed");
+        throw new Error(data.error);
       });
     }
     return undefined;

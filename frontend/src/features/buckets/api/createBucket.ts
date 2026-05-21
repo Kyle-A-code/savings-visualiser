@@ -9,19 +9,24 @@ export const createBucket = async (bucket: CreateBucketRequest) => {
 
 export const useCreateBucket = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    Bucket,
+    Error,
+    CreateBucketRequest
+  >({
     mutationFn: createBucket,
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.list() });
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-    });
+      queryClient.invalidateQueries({ queryKey: queryKeys.list() });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
   return {
     createBucket: mutate,
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };

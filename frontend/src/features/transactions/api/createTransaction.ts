@@ -12,7 +12,11 @@ export const createTransaction = async (
 
 export const useCreateTransaction = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    Transaction,
+    Error,
+    CreateTransactionRequest
+  >({
     mutationFn: createTransaction,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
@@ -35,5 +39,6 @@ export const useCreateTransaction = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };
