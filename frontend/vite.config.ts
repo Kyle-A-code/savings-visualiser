@@ -3,6 +3,8 @@ import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
+const apiProxyTarget = process.env.VITE_API_PROXY_TARGET ?? "http://localhost:8080";
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -16,11 +18,10 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
   ],
   server: {
-    host: "0.0.0.0",
     port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: apiProxyTarget,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

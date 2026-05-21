@@ -1,0 +1,26 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: dockerfile
+    environment:
+      DATABASE: /data/savings.db
+      SERVER_ADDR: 0.0.0.0:8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - server_db:/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    environment:
+      VITE_API_PROXY_TARGET: http://server:8080
+    depends_on:
+      - server
+    ports:
+      - "5173:5173"
+
+volumes:
+  server_db:

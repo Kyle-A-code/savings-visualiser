@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -10,7 +12,12 @@ var router = gin.Default()
 func Run(db *gorm.DB) {
 	router.SetTrustedProxies(nil)
 	getRoutes(db)
-	_ = router.Run("localhost:8080")
+	bindAddress := os.Getenv("SERVER_ADDR")
+	if bindAddress == "" {
+		bindAddress = "0.0.0.0:8080"
+	}
+
+	_ = router.Run(bindAddress)
 }
 
 func getRoutes(db *gorm.DB) {

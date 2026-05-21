@@ -1,0 +1,6 @@
+*.db
+.env
+.git
+.gitignore
+dockerfile
+tmp
