@@ -66,12 +66,17 @@ const TransferDialog = ({
   };
 
   return (
-    <DialogPrimitive open={open} onOpenChange={onOpenChange ?? (() => {})} trigger={null}>
+    <DialogPrimitive
+      open={open}
+      onOpenChange={onOpenChange ?? (() => {})}
+      trigger={null}
+    >
       <header className="dialog-header">
         <div className="dialog-header-text">
           <Dialog.Title className="dialog-title">Transfer funds</Dialog.Title>
           <Dialog.Description className="dialog-lede">
-            Move money from <strong>{fromBucketTitle}</strong> to another bucket.
+            Move money from <strong>{fromBucketTitle}</strong> to another
+            bucket.
           </Dialog.Description>
         </div>
         <Dialog.Close asChild>
@@ -86,7 +91,10 @@ const TransferDialog = ({
       </header>
       <form className="dialog-form" onSubmit={handleSubmit}>
         <div className="dialog-field">
-          <label htmlFor={`transfer-target-${fromBucketId}`} className="dialog-label ui-eyebrow">
+          <label
+            htmlFor={`transfer-target-${fromBucketId}`}
+            className="dialog-label ui-eyebrow"
+          >
             To bucket
           </label>
           <div className="dialog-input-group">
@@ -100,14 +108,17 @@ const TransferDialog = ({
             >
               {targets.map((bucket) => (
                 <option key={bucket.id} value={bucket.id}>
-                  {bucket.title} (#{bucket.id})
+                  {bucket.title}
                 </option>
               ))}
             </select>
           </div>
         </div>
         <div className="dialog-field">
-          <label htmlFor={`transfer-amount-${fromBucketId}`} className="dialog-label ui-eyebrow">
+          <label
+            htmlFor={`transfer-amount-${fromBucketId}`}
+            className="dialog-label ui-eyebrow"
+          >
             Amount
           </label>
           <div className="dialog-input-group">
@@ -142,7 +153,10 @@ const TransferDialog = ({
         )}
         <div className="dialog-footer-actions">
           <Dialog.Close asChild>
-            <button type="button" className="ui-btn ui-btn-ghost ui-focus-ring dialog-btn-ghost">
+            <button
+              type="button"
+              className="ui-btn ui-btn-ghost ui-focus-ring dialog-btn-ghost"
+            >
               Cancel
             </button>
           </Dialog.Close>

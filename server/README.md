@@ -19,7 +19,7 @@ Request flow: `routes` → `handlers` → `repositories` → SQLite.
 
 ## Dependencies
 
-- [Go](https://go.dev/dl/) 1.25+
+- [Go](https://go.dev/dl/) 1.26+
 - SQLite (embedded via `mattn/go-sqlite3`; no separate DB server)
 
 ## Environment

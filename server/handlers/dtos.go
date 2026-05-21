@@ -40,13 +40,8 @@ type ErrorResponseDTO struct {
 func newBucketResponseDTO(bucket models.Bucket) BucketResponseDTO {
 	var goal *GoalResponseDTO
 	if bucket.Goal != nil {
-		goal = &GoalResponseDTO{
-			ID:        bucket.Goal.ID,
-			Title:     bucket.Goal.Title,
-			Amount:    bucket.Goal.Amount,
-			Completed: bucket.Goal.Completed,
-			BucketID:  bucket.Goal.BucketID,
-		}
+		goalDTO := newGoalResponseDTO(*bucket.Goal)
+		goal = &goalDTO
 	}
 
 	return BucketResponseDTO{
