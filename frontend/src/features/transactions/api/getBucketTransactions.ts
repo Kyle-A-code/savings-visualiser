@@ -4,7 +4,11 @@ import type { Transaction } from "../types";
 import queryKeys from "./queryKeys";
 import { apiClient } from "../../../lib/apiClient";
 
-export const getBucketTransactions = async (bucketId: number, limit: number, offset: number) => {
+export const getBucketTransactions = async (
+  bucketId: number,
+  limit: number,
+  offset: number,
+) => {
   const queryString = new URLSearchParams({
     limit: `${limit}`,
     offset: `${offset}`,
@@ -15,7 +19,11 @@ export const getBucketTransactions = async (bucketId: number, limit: number, off
   );
 };
 
-const useGetBucketTransactions = (bucketId: number, limit: number, offset: number) => {
+const useGetBucketTransactions = (
+  bucketId: number,
+  limit: number,
+  offset: number,
+) => {
   const { data, isError, isLoading } = useQuery<Pagination<Transaction>>({
     queryKey: queryKeys.bucketList(bucketId, limit, offset),
     queryFn: () => getBucketTransactions(bucketId, limit, offset),

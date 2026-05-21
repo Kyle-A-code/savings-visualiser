@@ -40,9 +40,20 @@ html {
 
   --text-display-lg: 3.5rem;
   --text-headline-sm: 1.5rem;
+  --text-dialog-title: clamp(1.5rem, 0.65rem + 2.2vw, 1.875rem);
+  --text-dialog-body: 1.125rem;
+  --text-dialog-body-line: 1.625;
+  --text-dialog-action: 1.125rem;
   --text-body-sm: 0.875rem;
   --text-body-lg: 1rem;
   --text-label-md: 0.75rem;
+
+  --layout-max-width: 1920px;
+  --layout-overview-max: 72rem;
+  --layout-lede-max: 42rem;
+  --layout-detail-sidebar-max: 28rem;
+  --breakpoint-md: 768px;
+  --breakpoint-sm-max: 700px;
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -242,30 +253,30 @@ p {
 :where(.ui-btn-primary) {
   color: var(--on-primary);
   background: var(--primary);
-}
 
-:where(.ui-btn-primary):hover:not(:disabled) {
-  filter: brightness(1.06);
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
 }
 
 :where(.ui-btn-ghost) {
   color: var(--on-surface-variant);
   background: transparent;
-}
 
-:where(.ui-btn-ghost):hover:not(:disabled) {
-  color: var(--on-surface);
-  background: var(--surface-container-high);
+  &:hover:not(:disabled) {
+    color: var(--on-surface);
+    background: var(--surface-container-high);
+  }
 }
 
 :where(.ui-btn-surface) {
   color: var(--on-surface-variant);
   background: var(--surface-container-high);
-}
 
-:where(.ui-btn-surface):hover:not(:disabled) {
-  color: var(--on-surface);
-  background: var(--surface-container-highest);
+  &:hover:not(:disabled) {
+    color: var(--on-surface);
+    background: var(--surface-container-highest);
+  }
 }
 
 :where(.ui-btn-icon) {

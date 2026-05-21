@@ -46,28 +46,28 @@ const DeleteGoalDialog = ({ bucketId, goalTitle }: DeleteGoalDialogProps) => {
       <AlertDialog.Root open={open} onOpenChange={setOpen}>
         <AlertDialog.Portal>
           <AlertDialog.Overlay className="dialog-overlay" />
-          <AlertDialog.Content className="dialog-content ui-panel goal-delete-dialog-content">
-            <div className="goal-delete-dialog-body">
-              <AlertDialog.Title className="goal-delete-dialog-title">
+          <AlertDialog.Content className="dialog-content ui-panel confirm-delete-dialog">
+            <div className="confirm-delete-dialog-body">
+              <AlertDialog.Title className="confirm-delete-dialog-title">
                 Delete Goal?
               </AlertDialog.Title>
-              <AlertDialog.Description className="goal-delete-dialog-description">
+              <AlertDialog.Description className="confirm-delete-dialog-description">
                 Are you sure you want to delete this goal? This action is
                 permanent and progress for{" "}
-                <span className="goal-delete-dialog-emphasis">{goalTitle}</span>{" "}
+                <span className="confirm-delete-dialog-emphasis">{goalTitle}</span>{" "}
                 will be removed.
               </AlertDialog.Description>
               {isError && (
-                <p className="goal-delete-dialog-error" role="alert">
+                <p className="confirm-delete-dialog-error" role="alert">
                   Error deleting goal, please try again.
                 </p>
               )}
             </div>
-            <div className="goal-delete-dialog-actions">
+            <div className="confirm-delete-dialog-actions">
               <AlertDialog.Action asChild>
                 <button
                   type="button"
-                  className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary dialog-btn-danger goal-delete-dialog-confirm"
+                  className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary dialog-btn-danger confirm-delete-dialog-confirm goal-delete-dialog-confirm"
                   onClick={handleDelete}
                   disabled={isPending}
                 >
@@ -77,7 +77,7 @@ const DeleteGoalDialog = ({ bucketId, goalTitle }: DeleteGoalDialogProps) => {
               <AlertDialog.Cancel asChild>
                 <button
                   type="button"
-                  className="ui-btn ui-btn-surface ui-focus-ring goal-delete-dialog-cancel"
+                  className="ui-btn ui-btn-surface ui-focus-ring confirm-delete-dialog-cancel"
                 >
                   Cancel
                 </button>

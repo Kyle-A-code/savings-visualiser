@@ -28,6 +28,11 @@
     background-color 180ms ease,
     border-color 180ms ease,
     color 180ms ease;
+
+  &:not([data-state="active"]):hover {
+    color: var(--on-surface);
+    background: color-mix(in srgb, var(--on-surface) 6%, var(--surface-container-high));
+  }
 }
 
 .tx-type-btn svg {
@@ -44,9 +49,4 @@
   border-color: var(--secondary);
   color: var(--secondary);
   background: color-mix(in srgb, var(--secondary) 22%, transparent);
-}
-
-.tx-type-btn:not([data-state="active"]):hover {
-  color: var(--on-surface);
-  background: color-mix(in srgb, var(--on-surface) 6%, var(--surface-container-high));
 }
