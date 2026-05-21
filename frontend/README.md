@@ -1,75 +1,68 @@
-# React + TypeScript + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React SPA for the savings bucket UI. Vite dev server proxies `/api` to the Go backend.
 
-Currently, two official plugins are available:
+Structure is inspired by [Bulletproof React](https://github.com/alan2207/bulletproof-react) — feature-based folders, a thin API layer, and shared UI kept separate from feature code. Routing uses TanStack Router instead of the guide’s React Router setup.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Project structure
 
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── app/              # Router, route tree, file-based routes
+├── features/         # Domain features (buckets, transactions)
+│   └── <feature>/
+│       ├── api/      # Fetch functions, query options, mutation hooks
+│       ├── components/
+│       └── types.ts
+├── components/       # Shared UI (dialog, layout, icons, …)
+├── lib/              # apiClient and other cross-cutting utilities
+├── providers/        # App-wide providers (theme)
+└── index.css         # Design tokens and global utilities
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- [Node.js](https://nodejs.org/) 20+ (Docker image uses Node 24)
+- npm
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Run without Docker
+
+1. Start the [API](../server/README.md) on port `8080`.
+2. From this directory:
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). API requests go to `/api`, proxied to `http://localhost:8080` by default.
+
+To point the proxy elsewhere:
+
+```bash
+VITE_API_PROXY_TARGET=http://localhost:8080 npm run dev
+```
+
+## Run with Docker
+
+From the **repo root**:
+
+```bash
+docker compose up --build frontend
+```
+
+Requires the `server` service (Compose starts it automatically). UI: [http://localhost:5173](http://localhost:5173).
+
+For both services together:
+
+```bash
+docker compose up --build
+```
+
+## Other scripts
+
+```bash
+npm run build   # production build to dist/
+npm run lint    # ESLint
+npm run preview # preview production build
 ```
