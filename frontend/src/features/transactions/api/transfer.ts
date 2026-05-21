@@ -16,21 +16,25 @@ export const createTransfer = async (
 
 export const useTransfer = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    TransferResponse,
+    Error,
+    TransferRequest
+  >({
     mutationFn: createTransfer,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(variables.fromBucketId.toString()),
+        queryKey: queryKeys.bucketList(variables.fromBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(variables.fromBucketId.toString()),
+        queryKey: bucketQueryKeys.detail(variables.fromBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(variables.toBucketId.toString()),
+        queryKey: queryKeys.bucketList(variables.toBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(variables.toBucketId.toString()),
+        queryKey: bucketQueryKeys.detail(variables.toBucketId),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.list(),
@@ -45,5 +49,6 @@ export const useTransfer = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };

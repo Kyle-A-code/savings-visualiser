@@ -1,7 +1,7 @@
 .bucket-page {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1920px;
+  max-width: var(--layout-max-width);
   margin-inline: auto;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .bucket-page-intro {
-  max-width: 42rem;
+  max-width: var(--layout-lede-max);
   width: 100%;
 }
 

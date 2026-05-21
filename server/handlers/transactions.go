@@ -15,17 +15,17 @@ func GetTransactions(repo *repositories.TransactionRepository) gin.HandlerFunc {
 		ctx := c.Request.Context()
 		params, err := parsePaginationQuery(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		transactions, totalRecords, err := repo.GetAll(ctx, params)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(newTransactionResponseDTOs(transactions), totalRecords, params))
 	}
 }
 
@@ -34,21 +34,21 @@ func GetTransactionById(repo *repositories.TransactionRepository) gin.HandlerFun
 		ctx := c.Request.Context()
 		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		transaction, err := repo.GetById(ctx, id)
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, transaction)
+		c.IndentedJSON(http.StatusOK, newTransactionResponseDTO(transaction))
 	}
 }
 
@@ -57,22 +57,22 @@ func GetTransactionsForBucket(repo *repositories.TransactionRepository) gin.Hand
 		ctx := c.Request.Context()
 		bucketID, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 		params, err := parsePaginationQuery(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		transactions, totalRecords, err := repo.GetForBucket(ctx, bucketID, params)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(newTransactionResponseDTOs(transactions), totalRecords, params))
 	}
 }
 
@@ -87,15 +87,15 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 		if request.Title == "" {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "title cannot be blank"})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse("title cannot be blank"))
 			return
 		}
 		if request.BucketID <= 0 {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": "bucketId must be a positive integer"})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse("bucketId must be a positive integer"))
 			return
 		}
 
@@ -106,14 +106,14 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 		}
 		if err := repo.Create(ctx, &transaction); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
-		c.IndentedJSON(http.StatusCreated, transaction)
+		c.IndentedJSON(http.StatusCreated, newTransactionResponseDTO(transaction))
 	}
 }
 
@@ -128,16 +128,16 @@ func TransferTransaction(repo *repositories.TransactionRepository) gin.HandlerFu
 		}
 
 		if err := c.ShouldBindJSON(&request); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusBadRequest, newErrorResponse(err.Error()))
 			return
 		}
 
 		if err := repo.Transfer(ctx, request.FromBucketID, request.ToBucketID, request.Amount); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return
 			}
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
@@ -150,17 +150,17 @@ func DeleteTransactionByID(repo *repositories.TransactionRepository) gin.Handler
 		ctx := c.Request.Context()
 		id, err := parseIDParam(c)
 		if err != nil {
-			c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusUnprocessableEntity, newErrorResponse(err.Error()))
 			return
 		}
 
 		rows, err := repo.Delete(ctx, id)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.IndentedJSON(http.StatusInternalServerError, newErrorResponse(err.Error()))
 			return
 		}
 		if rows == 0 {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"error": "transaction not found"})
+			c.IndentedJSON(http.StatusNotFound, newErrorResponse("transaction not found"))
 			return
 		}
 

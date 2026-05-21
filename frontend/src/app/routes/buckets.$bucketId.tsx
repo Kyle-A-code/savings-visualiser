@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { BucketDetail } from "../../features/buckets";
 import {
   BUCKET_TRANSACTIONS_DEFAULT_LIMIT,
@@ -28,7 +28,23 @@ const toNonNegativeInt = (value: unknown) => {
   return undefined;
 };
 
+const parseBucketId = (value: string) => {
+  const bucketId = Number(value);
+  if (!Number.isInteger(bucketId) || bucketId <= 0) {
+    throw notFound();
+  }
+  return bucketId;
+};
+
 export const Route = createFileRoute("/buckets/$bucketId")({
+  params: {
+    parse: (params) => ({
+      bucketId: parseBucketId(params.bucketId),
+    }),
+    stringify: ({ bucketId }) => ({
+      bucketId: String(bucketId),
+    }),
+  },
   validateSearch: (search: Record<string, unknown>): BucketTransactionsSearch => ({
     limit: toPositiveInt(search.limit) ?? BUCKET_TRANSACTIONS_DEFAULT_LIMIT,
     offset: toNonNegativeInt(search.offset) ?? BUCKET_TRANSACTIONS_DEFAULT_OFFSET,

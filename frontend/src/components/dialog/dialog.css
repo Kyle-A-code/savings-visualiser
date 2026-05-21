@@ -4,20 +4,20 @@
   background: var(--gradient-primary-cta);
   --focus-ring-color: color-mix(in srgb, var(--primary) 65%, transparent);
   --focus-ring-offset: 3px;
-}
 
-.dialog-trigger:hover {
-  filter: brightness(1.05);
+  &:hover {
+    filter: brightness(1.05);
+  }
 }
 
 .dialog-trigger-success {
   border: 1px solid color-mix(in srgb, var(--secondary) 45%, var(--ghost-border));
   background: var(--secondary);
   color: var(--on-primary-container);
-}
 
-.dialog-trigger-success:hover {
-  filter: brightness(1.08);
+  &:hover {
+    filter: brightness(1.08);
+  }
 }
 
 .dialog-overlay {
@@ -208,4 +208,68 @@
 .dialog-btn-danger {
   background: var(--danger);
   --focus-ring-color: color-mix(in srgb, var(--danger) 70%, transparent);
+}
+
+.confirm-delete-dialog {
+  padding: var(--space-4);
+}
+
+.confirm-delete-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.confirm-delete-dialog-title {
+  margin: 0;
+  font-family: var(--font-headline);
+  font-size: var(--text-dialog-title);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--on-surface);
+}
+
+.confirm-delete-dialog-description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-dialog-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--text-dialog-body-line);
+  color: var(--on-surface-variant);
+}
+
+.confirm-delete-dialog-emphasis {
+  font-weight: var(--font-weight-bold);
+  color: var(--on-surface);
+}
+
+.confirm-delete-dialog-error {
+  margin: 0;
+  font-size: var(--text-body-lg);
+  color: var(--tertiary);
+}
+
+.confirm-delete-dialog-actions {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.confirm-delete-dialog-confirm {
+  width: 100%;
+  font-family: var(--font-headline);
+  font-size: var(--text-dialog-action);
+  line-height: 1.2;
+}
+
+.confirm-delete-dialog-cancel {
+  width: 100%;
+  font-family: var(--font-headline);
+  font-size: var(--text-dialog-action);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  --focus-ring-offset: 3px;
 }

@@ -25,7 +25,7 @@ const CreateDialog = ({
   const open = isControlled ? controlledOpen : internalOpen;
   const setOpen = isControlled ? controlledOnOpenChange : setInternalOpen;
   const [isCredit, setIsCredit] = useState(true);
-  const { createTransaction, isPending, isError } = useCreateTransaction();
+  const { createTransaction, isPending, isError, error } = useCreateTransaction();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +33,6 @@ const CreateDialog = ({
     const title = formData.get("title") as string;
     const amount = formData.get("amount") as string;
     const parsedAmount = parseFloat(amount);
-    // TODO: would be nice to render the error message in the form
     const isInvalidAmount = Number.isNaN(parsedAmount) || parsedAmount <= 0;
 
     const signedAmount = isCredit ? parsedAmount : -parsedAmount;
@@ -131,7 +130,7 @@ const CreateDialog = ({
         </div>
         {isError && (
           <p className="dialog-error" role="alert">
-            Error creating transaction, please try again.
+            {error?.message ?? "Error creating transaction, please try again."}
           </p>
         )}
         <div className="dialog-field">

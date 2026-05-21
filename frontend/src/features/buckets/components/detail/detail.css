@@ -2,7 +2,7 @@
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  max-width: 1920px;
+  max-width: var(--layout-max-width);
   margin-inline: auto;
   padding-block: var(--space-4) var(--space-5);
 }
@@ -82,7 +82,7 @@
 
 .bucket-detail-lede {
   margin: 0;
-  max-width: 28rem;
+  max-width: var(--layout-detail-sidebar-max);
   font-family: var(--font-body);
   font-size: var(--text-body-lg);
   line-height: 1.625;

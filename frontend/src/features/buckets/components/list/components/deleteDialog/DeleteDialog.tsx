@@ -7,7 +7,7 @@ import { useDeleteBucket } from "../../../../api/deleteBucket";
 import { RubbishIcon } from "../../../../../../components/icons";
 
 interface DeleteDialogProps {
-  id: string;
+  id: number;
   bucketTitle: string;
   trigger?: ReactNode | null;
   open?: boolean;
@@ -55,26 +55,26 @@ const DeleteDialog = ({
       )}
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="dialog-overlay" />
-        <AlertDialog.Content className="dialog-content ui-panel delete-dialog-content">
-          <div className="delete-dialog-body">
-            <AlertDialog.Title className="delete-dialog-title">
+        <AlertDialog.Content className="dialog-content ui-panel confirm-delete-dialog">
+          <div className="confirm-delete-dialog-body">
+            <AlertDialog.Title className="confirm-delete-dialog-title">
               Delete Bucket?
             </AlertDialog.Title>
-            <AlertDialog.Description className="delete-dialog-description">
+            <AlertDialog.Description className="confirm-delete-dialog-description">
               Are you sure you want to delete this bucket? This action is permanent and all progress
-              for <span className="delete-dialog-emphasis">{bucketTitle}</span> will be archived.
+              for <span className="confirm-delete-dialog-emphasis">{bucketTitle}</span> will be archived.
             </AlertDialog.Description>
             {isError && (
-              <p className="delete-dialog-error" role="alert">
+              <p className="confirm-delete-dialog-error" role="alert">
                 Error deleting bucket, please try again.
               </p>
             )}
           </div>
-          <div className="delete-dialog-actions">
+          <div className="confirm-delete-dialog-actions">
             <AlertDialog.Action asChild>
               <button
                 type="button"
-                className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary dialog-btn-danger delete-dialog-confirm"
+                className="ui-btn ui-btn-primary ui-focus-ring dialog-btn-primary dialog-btn-danger confirm-delete-dialog-confirm"
                 onClick={handleDelete}
                 disabled={isPending}
               >
@@ -84,7 +84,7 @@ const DeleteDialog = ({
             <AlertDialog.Cancel asChild>
               <button
                 type="button"
-                className="ui-btn ui-btn-surface ui-focus-ring delete-dialog-cancel"
+                className="ui-btn ui-btn-surface ui-focus-ring confirm-delete-dialog-cancel"
               >
                 Cancel
               </button>

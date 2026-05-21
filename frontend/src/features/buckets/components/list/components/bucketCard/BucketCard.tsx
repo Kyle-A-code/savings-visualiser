@@ -113,13 +113,13 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
         <CreateTransactionDialog
-          bucketId={Number(id)}
+          bucketId={id}
           open={createTransactionOpen}
           onOpenChange={setCreateTransactionOpen}
           trigger={null}
         />
         <TransferDialog
-          fromBucketId={Number(id)}
+          fromBucketId={id}
           fromBucketTitle={title}
           fromBucketBalance={balance}
           targets={transferTargets}
@@ -143,12 +143,7 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
       <div>
         <span className="bucket-balance-label ui-eyebrow">Current Balance</span>
         <p className="bucket-balance-value">{formattedBalance}</p>
-        {goal && (
-          <GoalProgress
-            goal={goal}
-            currentAmount={balance}
-          />
-        )}
+        {goal && <GoalProgress goal={goal} currentAmount={balance} />}
       </div>
       <Link
         to="/buckets/$bucketId"

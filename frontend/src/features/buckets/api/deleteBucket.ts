@@ -2,7 +2,7 @@ import { apiClient } from "../../../lib/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "./queryKeys";
 
-export const deleteBucket = async (id: string) => {
+export const deleteBucket = async (id: number) => {
   return await apiClient.delete(`/buckets/${id}`);
 };
 

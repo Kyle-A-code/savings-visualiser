@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/apiClient";
-import type { GoalData, UpsertBucketGoalRequest } from "../types";
+import type { Goal, UpsertBucketGoalRequest } from "../types";
 import queryKeys from "./queryKeys";
 
 export const createBucketGoal = async ({
@@ -8,7 +8,7 @@ export const createBucketGoal = async ({
   title,
   amount,
 }: UpsertBucketGoalRequest) => {
-  return await apiClient.post<GoalData>(`/buckets/${bucketId}/goal`, {
+  return await apiClient.post<Goal>(`/buckets/${bucketId}/goal`, {
     title,
     amount,
   });
@@ -16,7 +16,11 @@ export const createBucketGoal = async ({
 
 export const useCreateBucketGoal = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isPending, isError, isSuccess, error } = useMutation<
+    Goal,
+    Error,
+    UpsertBucketGoalRequest
+  >({
     mutationFn: createBucketGoal,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
@@ -34,5 +38,6 @@ export const useCreateBucketGoal = () => {
     isPending,
     isError,
     isSuccess,
+    error,
   };
 };
