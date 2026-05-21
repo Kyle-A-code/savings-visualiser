@@ -61,7 +61,7 @@ const RootLayout = () => {
         </time>
       </div>
     </footer>
-    <TanStackRouterDevtools />
+    {import.meta.env.DEV ? <TanStackRouterDevtools /> : null}
   </div>
   );
 };
