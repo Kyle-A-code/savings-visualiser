@@ -7,7 +7,7 @@ import { useDeleteBucket } from "../../../../api/deleteBucket";
 import { RubbishIcon } from "../../../../../../components/icons";
 
 interface DeleteDialogProps {
-  id: string;
+  id: number;
   bucketTitle: string;
   trigger?: ReactNode | null;
   open?: boolean;

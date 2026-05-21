@@ -6,7 +6,7 @@ import { PencilIcon } from "../../../../../components/icons";
 import { usePatchBucketGoal } from "../../../api/patchBucketGoal";
 
 interface UpdateGoalDialogProps {
-  bucketId: string;
+  bucketId: number;
   currentTitle: string;
   currentAmount: number;
 }

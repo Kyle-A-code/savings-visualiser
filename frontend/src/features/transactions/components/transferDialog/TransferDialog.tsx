@@ -4,7 +4,7 @@ import { DialogPrimitive } from "../../../../components/dialog";
 import { useTransfer } from "../../api/transfer";
 
 interface TransferTarget {
-  id: string;
+  id: number;
   title: string;
 }
 

@@ -1,10 +1,10 @@
 import { apiClient } from "../../../lib/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "./queryKeys";
-import { type BucketData, type CreateBucketRequest } from "../types";
+import { type Bucket, type CreateBucketRequest } from "../types";
 
 export const createBucket = async (bucket: CreateBucketRequest) => {
-  return await apiClient.post<BucketData>("/buckets", bucket);
+  return await apiClient.post<Bucket>("/buckets", bucket);
 };
 
 export const useCreateBucket = () => {

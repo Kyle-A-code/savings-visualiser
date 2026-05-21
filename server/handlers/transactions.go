@@ -25,7 +25,7 @@ func GetTransactions(repo *repositories.TransactionRepository) gin.HandlerFunc {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(newTransactionResponseDTOs(transactions), totalRecords, params))
 	}
 }
 
@@ -48,7 +48,7 @@ func GetTransactionById(repo *repositories.TransactionRepository) gin.HandlerFun
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, transaction)
+		c.IndentedJSON(http.StatusOK, newTransactionResponseDTO(transaction))
 	}
 }
 
@@ -72,7 +72,7 @@ func GetTransactionsForBucket(repo *repositories.TransactionRepository) gin.Hand
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(transactions, totalRecords, params))
+		c.IndentedJSON(http.StatusOK, NewPaginatedResponse(newTransactionResponseDTOs(transactions), totalRecords, params))
 	}
 }
 
@@ -113,7 +113,7 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 			return
 		}
 
-		c.IndentedJSON(http.StatusCreated, transaction)
+		c.IndentedJSON(http.StatusCreated, newTransactionResponseDTO(transaction))
 	}
 }
 

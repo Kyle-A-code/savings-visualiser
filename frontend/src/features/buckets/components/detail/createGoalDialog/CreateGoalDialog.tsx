@@ -5,7 +5,7 @@ import { PlusIcon } from "../../../../../components/icons";
 import { useCreateBucketGoal } from "../../../api/createBucketGoal";
 
 interface CreateGoalDialogProps {
-  bucketId: string;
+  bucketId: number;
 }
 
 const CreateGoalDialog = ({ bucketId }: CreateGoalDialogProps) => {

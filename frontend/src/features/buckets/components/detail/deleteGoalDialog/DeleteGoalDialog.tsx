@@ -7,7 +7,7 @@ import { RubbishIcon } from "../../../../../components/icons";
 import { useDeleteBucketGoal } from "../../../api/deleteBucketGoal";
 
 interface DeleteGoalDialogProps {
-  bucketId: string;
+  bucketId: number;
   goalTitle: string;
 }
 

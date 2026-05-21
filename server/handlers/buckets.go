@@ -29,7 +29,7 @@ func GetBucketById(repo *repositories.BucketRepository) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, bucket)
+		c.IndentedJSON(http.StatusOK, newBucketResponseDTO(bucket))
 	}
 }
 
@@ -42,7 +42,7 @@ func GetBuckets(repo *repositories.BucketRepository) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, buckets)
+		c.IndentedJSON(http.StatusOK, newBucketResponseDTOs(buckets))
 	}
 }
 
@@ -86,7 +86,13 @@ func CreateBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 			return
 		}
 
-		c.IndentedJSON(http.StatusCreated, bucket)
+		created, err := repo.GetById(ctx, int(bucket.ID))
+		if err != nil {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.IndentedJSON(http.StatusCreated, newBucketResponseDTO(created))
 	}
 }
 
@@ -133,7 +139,7 @@ func PatchBucket(repo *repositories.BucketRepository) gin.HandlerFunc {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, updated)
+		c.IndentedJSON(http.StatusOK, newBucketResponseDTO(updated))
 	}
 }
 

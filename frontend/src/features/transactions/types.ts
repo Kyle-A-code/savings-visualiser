@@ -1,19 +1,11 @@
 export interface Transaction {
-  id: string;
+  id: number;
   title: string;
   amount: number;
   bucketId: number;
+  date: Date;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface TransactionData {
-  ID: string;
-  Title: string;
-  Amount: number;
-  BucketID: number;
-  CreatedAt: Date;
-  UpdatedAt: Date;
 }
 
 export interface CreateTransactionRequest {

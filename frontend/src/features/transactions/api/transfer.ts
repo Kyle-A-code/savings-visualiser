@@ -21,16 +21,16 @@ export const useTransfer = () => {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(variables.fromBucketId.toString()),
+        queryKey: queryKeys.bucketList(variables.fromBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(variables.fromBucketId.toString()),
+        queryKey: bucketQueryKeys.detail(variables.fromBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(variables.toBucketId.toString()),
+        queryKey: queryKeys.bucketList(variables.toBucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(variables.toBucketId.toString()),
+        queryKey: bucketQueryKeys.detail(variables.toBucketId),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.list(),

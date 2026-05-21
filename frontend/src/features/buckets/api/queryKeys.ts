@@ -1,6 +1,6 @@
 const queryKeys = {
   list: () => ["buckets"],
-  detail: (id: string) => ["buckets", id],
+  detail: (id: number) => ["buckets", id],
 };
 
 export default queryKeys;

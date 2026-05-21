@@ -149,7 +149,7 @@ const Detail = () => {
             </p>
           </div>
           <CreateTransactionDialog
-            bucketId={Number(bucketId)}
+            bucketId={bucketId}
             trigger={
               <button
                 type="button"

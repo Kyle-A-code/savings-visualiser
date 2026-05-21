@@ -1,5 +1,5 @@
 export interface Bucket {
-  id: string;
+  id: number;
   title: string;
   balance: number;
   goal: Goal | null;
@@ -8,32 +8,13 @@ export interface Bucket {
 }
 
 export interface Goal {
-  id: string;
+  id: number;
   title: string;
   amount: number;
   completed: boolean;
-  bucketId: string;
+  bucketId: number;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface BucketData {
-  ID: string;
-  Title: string;
-  Balance: number;
-  Goal?: GoalData;
-  CreatedAt: Date;
-  UpdatedAt: Date;
-}
-
-export interface GoalData {
-  ID: string;
-  Title: string;
-  Amount: number;
-  Completed: boolean;
-  BucketID: string;
-  CreatedAt: Date;
-  UpdatedAt: Date;
 }
 
 export interface CreateBucketRequest {
@@ -42,12 +23,12 @@ export interface CreateBucketRequest {
 }
 
 export interface PatchBucketRequest {
-  id: string;
+  id: number;
   title: string;
 }
 
 export interface UpsertBucketGoalRequest {
-  bucketId: string;
+  bucketId: number;
   title: string;
   amount: number;
 }

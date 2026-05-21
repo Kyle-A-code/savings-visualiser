@@ -4,7 +4,7 @@ import { DialogPrimitive } from "../../../../../../components/dialog";
 import { usePatchBucket } from "../../../../api/patchBucket";
 
 interface RenameDialogProps {
-  id: string;
+  id: number;
   currentTitle: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;

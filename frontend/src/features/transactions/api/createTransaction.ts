@@ -2,12 +2,12 @@ import { apiClient } from "../../../lib/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../api/queryKeys";
 import bucketQueryKeys from "../../buckets/api/queryKeys";
-import { type TransactionData, type CreateTransactionRequest } from "../types";
+import { type Transaction, type CreateTransactionRequest } from "../types";
 
 export const createTransaction = async (
   transaction: CreateTransactionRequest,
 ) => {
-  return await apiClient.post<TransactionData>("/transactions", transaction);
+  return await apiClient.post<Transaction>("/transactions", transaction);
 };
 
 export const useCreateTransaction = () => {
@@ -17,10 +17,10 @@ export const useCreateTransaction = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.list() });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.bucketList(data.BucketID.toString()),
+        queryKey: queryKeys.bucketList(data.bucketId),
       });
       queryClient.invalidateQueries({
-        queryKey: bucketQueryKeys.detail(data.BucketID.toString()),
+        queryKey: bucketQueryKeys.detail(data.bucketId),
       });
       queryClient.invalidateQueries({
         queryKey: bucketQueryKeys.list(),

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../../lib/apiClient";
-import type { GoalData, UpsertBucketGoalRequest } from "../types";
+import type { Goal, UpsertBucketGoalRequest } from "../types";
 import queryKeys from "./queryKeys";
 
 export const createBucketGoal = async ({
@@ -8,7 +8,7 @@ export const createBucketGoal = async ({
   title,
   amount,
 }: UpsertBucketGoalRequest) => {
-  return await apiClient.post<GoalData>(`/buckets/${bucketId}/goal`, {
+  return await apiClient.post<Goal>(`/buckets/${bucketId}/goal`, {
     title,
     amount,
   });

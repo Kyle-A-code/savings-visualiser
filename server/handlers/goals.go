@@ -66,7 +66,7 @@ func CreateBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 			return
 		}
 
-		c.IndentedJSON(http.StatusCreated, goal)
+		c.IndentedJSON(http.StatusCreated, newGoalResponseDTO(goal))
 	}
 }
 
@@ -120,7 +120,7 @@ func PatchBucketGoal(repo *repositories.GoalRepository) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, updated)
+		c.IndentedJSON(http.StatusOK, newGoalResponseDTO(updated))
 	}
 }
 
