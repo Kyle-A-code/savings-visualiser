@@ -1,9 +1,5 @@
 .transaction-card {
   border-radius: var(--radius-max);
-
-  &:nth-child(even) {
-    background: var(--surface-container-highest);
-  }
 }
 
 .transaction-card-content {
