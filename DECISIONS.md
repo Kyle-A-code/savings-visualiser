@@ -46,21 +46,27 @@ I am not adding a CI pipeline.
 
 ---
 
-## 3) Keep orchestration logic in repositories
+## 3) Single use case for transfer
 
 ### Decision
 
-I am keeping selected orchestration logic in repository methods instead of adding a dedicated usecase/service layer.
-For this project, that mainly means transfer logic and goal-completion checks after transaction writes.
+Transfer between buckets is a cross-aggregate workflow: it reads buckets, writes transactions, and must run atomically. It did not fit cleanly in a handler or a repository.
+
+- A **transaction handler** would need bucket access (look up titles, confirm buckets exist). That either leaks `BucketRepository` into one transaction route or reaches through the transaction repo into bucket internals. Moving it to **bucket routes** has the same problem in reverse — a bucket endpoint whose job is to create transactions.
+- A **repository** method would mix transaction persistence with orchestration across buckets.
+
+For v1, that logic lives in `TransferUsecase` only. The handler calls `Execute` and maps errors to status codes. The route stays `POST /transactions/transfer`; the use case owns the bucket + transaction coordination internally. All other endpoints use repositories directly.
+
+This is not a general service layer — one use case for one workflow whose ownership was otherwise unclear.
 
 ### Trade-off I accept
 
-- Some repository methods mix persistence and workflow logic.
+- There is a single route that injects a usecase as opposed to all other routes having the repository injected. While minor it is still an inconsistency
 - Separation between data access and application orchestration is weaker than I would use in a larger system.
 
-### When I would implement this
+### When I would implement a full service layer
 
-- I would only split this into usecases if I reopened active development and the workflow complexity actually grew.
+- I would introduce a proper application/service layer if I reopened active development and more cross-aggregate workflows appeared (e.g. bulk transfers, scheduled moves, multi-step flows).
 - Under the current plan, that change is not expected.
 
 ---

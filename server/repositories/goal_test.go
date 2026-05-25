@@ -12,11 +12,11 @@ import (
 
 func TestGoalRepository_GetForBucket(t *testing.T) {
 	t.Run("returns goal for bucket", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
 			expectedTitle := "Vacation"
 			expectedAmount := 500.0
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 
 			goal := models.Goal{
 				Title:    expectedTitle,
@@ -40,11 +40,11 @@ func TestGoalRepository_GetForBucket(t *testing.T) {
 
 func TestGoalRepository_Create(t *testing.T) {
 	t.Run("creates goal when amount is above current balance", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
 			expectedUnpersistedGoalID := uint(0)
-			bucket := seedBucket(t, tx, "Goal bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 40.0)
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 40.0)
 
 			goal := models.Goal{
 				Title:    "Emergency",
@@ -72,10 +72,10 @@ func TestGoalRepository_Create(t *testing.T) {
 	})
 
 	t.Run("rejects goal when amount is not above current balance", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
-			bucket := seedBucket(t, tx, "Goal bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 75.0)
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 75.0)
 			goal := models.Goal{
 				Title:    "Too low",
 				Amount:   75.0,
@@ -107,13 +107,13 @@ func TestGoalRepository_Create(t *testing.T) {
 
 func TestGoalRepository_Patch(t *testing.T) {
 	t.Run("updates goal title and amount without changing completed state", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
 			expectedRowsAffected := 1
 			updatedTitle := "Updated title"
 			updatedAmount := 200.0
-			bucket := seedBucket(t, tx, "Goal bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 50.0)
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 50.0)
 			goal := models.Goal{
 				Title:     "Original",
 				Amount:    120.0,
@@ -153,10 +153,10 @@ func TestGoalRepository_Patch(t *testing.T) {
 	})
 
 	t.Run("rejects patch when amount is not above current balance", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
-			bucket := seedBucket(t, tx, "Goal bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 80.0)
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 80.0)
 			goal := models.Goal{
 				Title:    "Original",
 				Amount:   120.0,
@@ -187,11 +187,11 @@ func TestGoalRepository_Patch(t *testing.T) {
 
 func TestGoalRepository_MarkCompleted(t *testing.T) {
 	t.Run("marks goal completed and is idempotent", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
 			expectedRowsFirstCall := 1
 			expectedRowsSecondCall := 0
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 			goal := models.Goal{
 				Title:    "Emergency",
 				Amount:   200.0,
@@ -230,10 +230,10 @@ func TestGoalRepository_MarkCompleted(t *testing.T) {
 
 func TestGoalRepository_Delete(t *testing.T) {
 	t.Run("removes goal for bucket and future reads return not found", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewGoalRepository(tx)
 			expectedDeletedRows := 1
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 			goal := models.Goal{
 				Title:    "Emergency",
 				Amount:   100.0,

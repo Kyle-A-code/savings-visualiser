@@ -6,6 +6,7 @@ import (
 
 	"github.com/Kyle-A-code/savings-visualiser/models"
 	"github.com/Kyle-A-code/savings-visualiser/repositories"
+	"github.com/Kyle-A-code/savings-visualiser/usecases"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -117,7 +118,7 @@ func CreateTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc
 	}
 }
 
-func TransferTransaction(repo *repositories.TransactionRepository) gin.HandlerFunc {
+func TransferTransaction(transferUsecase *usecases.TransferUsecase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -132,7 +133,7 @@ func TransferTransaction(repo *repositories.TransactionRepository) gin.HandlerFu
 			return
 		}
 
-		if err := repo.Transfer(ctx, request.FromBucketID, request.ToBucketID, request.Amount); err != nil {
+		if err := transferUsecase.Execute(ctx, request.FromBucketID, request.ToBucketID, request.Amount); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				c.IndentedJSON(http.StatusNotFound, newErrorResponse(err.Error()))
 				return

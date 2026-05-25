@@ -8,16 +8,15 @@ import (
 
 	"github.com/Kyle-A-code/savings-visualiser/internal/testutil"
 	"github.com/Kyle-A-code/savings-visualiser/models"
-	"github.com/Kyle-A-code/savings-visualiser/query"
 	"gorm.io/gorm"
 )
 
 func TestTransactionRepository_Create(t *testing.T) {
 	t.Run("stores positive amount", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
 			expectedUnpersistedID := uint(0)
-			bucket := seedBucket(t, tx, "Cash")
+			bucket := testutil.SeedBucket(t, tx, "Cash")
 
 			transaction := models.Transaction{
 				Title:    "Credit",
@@ -36,11 +35,11 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("ignores zero amount", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
 			expectedUnpersistedID := uint(0)
 			expectedPersistedTransactionCount := int64(0)
-			bucket := seedBucket(t, tx, "Bucket")
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
 
 			transaction := models.Transaction{
 				Title:    "Transaction",
@@ -70,11 +69,11 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("rejects overdraw debit", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
 			expectedTransactionCountAfterFailure := int64(1)
-			bucket := seedBucket(t, tx, "Bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Transaction", 10.0)
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Transaction", 10.0)
 
 			transaction := models.Transaction{
 				Title:    "Too much",
@@ -101,12 +100,12 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("stores valid debit transaction", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
 			expectedUnpersistedID := uint(0)
 			expectedTransactionCount := int64(2)
-			bucket := seedBucket(t, tx, "Bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Transaction", 50.0)
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Transaction", 50.0)
 
 			transaction := models.Transaction{
 				Title:    "Test",
@@ -135,9 +134,9 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("keeps goal incomplete when transaction does not reach amount", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 			goal := models.Goal{
 				Title:    "Emergency fund",
 				Amount:   100.0,
@@ -146,7 +145,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
 				t.Fatalf("create goal: %v", err)
 			}
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 60.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 60.0)
 
 			transaction := models.Transaction{
 				Title:    "Small deposit",
@@ -169,9 +168,9 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("marks goal completed when transaction reaches amount", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 			goal := models.Goal{
 				Title:    "Emergency fund",
 				Amount:   100.0,
@@ -180,7 +179,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
 				t.Fatalf("create goal: %v", err)
 			}
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 90.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 90.0)
 
 			transaction := models.Transaction{
 				Title:    "Payday",
@@ -203,9 +202,9 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 
 	t.Run("keeps goal completed after later debit", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
-			bucket := seedBucket(t, tx, "Goal bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal bucket")
 			goal := models.Goal{
 				Title:    "Car",
 				Amount:   100.0,
@@ -214,7 +213,7 @@ func TestTransactionRepository_Create(t *testing.T) {
 			if err := gorm.G[models.Goal](tx).Create(context.Background(), &goal); err != nil {
 				t.Fatalf("create goal: %v", err)
 			}
-			seedTransaction(t, tx, int(bucket.ID), "Seed", 100.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Seed", 100.0)
 
 			credit := models.Transaction{
 				Title:    "Bonus",
@@ -247,142 +246,13 @@ func TestTransactionRepository_Create(t *testing.T) {
 	})
 }
 
-func TestTransactionRepository_Transfer(t *testing.T) {
-	t.Run("creates paired entries and updates balances", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
-			repo := NewTransactionRepository(tx)
-			bucketRepo := NewBucketRepository(tx)
-			expectedTransferAmount := 30.0
-			expectedFromTransferTitle := "Transfer to To"
-			expectedToTransferTitle := "Transfer from From"
-			fromBucket := seedBucket(t, tx, "From")
-			toBucket := seedBucket(t, tx, "To")
-			fromInitial := 100.00
-			toInitial := 5.0
-			seedTransaction(t, tx, int(fromBucket.ID), "From", fromInitial)
-			seedTransaction(t, tx, int(toBucket.ID), "To", toInitial)
-
-			if err := repo.Transfer(context.Background(), int(fromBucket.ID), int(toBucket.ID), expectedTransferAmount); err != nil {
-				t.Fatalf("transfer: %v", err)
-			}
-
-			fromTxs, _, err := repo.GetForBucket(context.Background(), int(fromBucket.ID), query.DefaultListParams())
-			if err != nil {
-				t.Fatalf("list from-bucket txs: %v", err)
-			}
-			toTxs, _, err := repo.GetForBucket(context.Background(), int(toBucket.ID), query.DefaultListParams())
-			if err != nil {
-				t.Fatalf("list to-bucket txs: %v", err)
-			}
-
-			var fromTransferFound bool
-			for _, txn := range fromTxs {
-				if txn.Title == expectedFromTransferTitle && txn.Amount == -expectedTransferAmount {
-					fromTransferFound = true
-					break
-				}
-			}
-			if !fromTransferFound {
-				t.Fatalf("expected transfer debit in source bucket")
-			}
-
-			var toTransferFound bool
-			for _, txn := range toTxs {
-				if txn.Title == expectedToTransferTitle && txn.Amount == expectedTransferAmount {
-					toTransferFound = true
-					break
-				}
-			}
-			if !toTransferFound {
-				t.Fatalf("expected transfer credit in destination bucket")
-			}
-
-			fromAfter, err := bucketRepo.GetById(context.Background(), int(fromBucket.ID))
-			if err != nil {
-				t.Fatalf("get source bucket: %v", err)
-			}
-			toAfter, err := bucketRepo.GetById(context.Background(), int(toBucket.ID))
-			if err != nil {
-				t.Fatalf("get destination bucket: %v", err)
-			}
-			if fromAfter.Balance != fromInitial-expectedTransferAmount {
-				t.Fatalf("expected source balance %f, got %f", fromInitial-expectedTransferAmount, fromAfter.Balance)
-			}
-			if toAfter.Balance != toInitial+expectedTransferAmount {
-				t.Fatalf("expected destination balance %f, got %f", toInitial+expectedTransferAmount, toAfter.Balance)
-			}
-		})
-	})
-
-	tests := []struct {
-		name         string
-		fromBucketID int
-		toBucketID   int
-		amount       float64
-	}{
-		{
-			name:         "amount must be positive",
-			fromBucketID: 1,
-			toBucketID:   2,
-			amount:       0,
-		},
-		{
-			name:         "cannot transfer to same bucket",
-			fromBucketID: 1,
-			toBucketID:   1,
-			amount:       10,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
-				repo := NewTransactionRepository(tx)
-				fromBucket := seedBucket(t, tx, "From")
-				toBucket := seedBucket(t, tx, "To")
-				seedTransaction(t, tx, int(fromBucket.ID), "Seed", 100)
-
-				fromID := tc.fromBucketID
-				toID := tc.toBucketID
-				if fromID == 1 {
-					fromID = int(fromBucket.ID)
-				}
-				if toID == 2 {
-					toID = int(toBucket.ID)
-				}
-				if toID == 1 {
-					toID = int(fromBucket.ID)
-				}
-
-				var beforeCount int64
-				if err := tx.Model(&models.Transaction{}).Count(&beforeCount).Error; err != nil {
-					t.Fatalf("count before transfer: %v", err)
-				}
-
-				err := repo.Transfer(context.Background(), fromID, toID, tc.amount)
-				if err == nil {
-					t.Fatalf("expected transfer to fail for case %q", tc.name)
-				}
-
-				var afterCount int64
-				if err := tx.Model(&models.Transaction{}).Count(&afterCount).Error; err != nil {
-					t.Fatalf("count after transfer: %v", err)
-				}
-				if afterCount != beforeCount {
-					t.Fatalf("expected no additional transactions on failed transfer")
-				}
-			})
-		})
-	}
-}
-
 func TestTransactionRepository_Delete(t *testing.T) {
 	t.Run("removes transaction", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewTransactionRepository(tx)
 			expectedDeletedRows := 1
-			bucket := seedBucket(t, tx, "Bucket")
-			existing := seedTransaction(t, tx, int(bucket.ID), "Transaction", 10.0)
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
+			existing := testutil.SeedTransaction(t, tx, int(bucket.ID), "Transaction", 10.0)
 
 			rows, err := repo.Delete(context.Background(), int(existing.ID))
 			if err != nil {

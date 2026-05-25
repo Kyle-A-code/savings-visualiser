@@ -103,46 +103,6 @@ func (repo *TransactionRepository) Create(ctx context.Context, transaction *mode
 	})
 }
 
-func (repo *TransactionRepository) Transfer(ctx context.Context, fromBucketID int, toBucketID int, amount float64) error {
-	if amount <= 0.0 {
-		return errors.New("amount must be positive")
-	}
-	if fromBucketID == toBucketID {
-		return errors.New("Cannot transfer to same bucket")
-	}
-
-	fromBucket, err := repo.bucketRepo.GetById(ctx, fromBucketID)
-	if err != nil {
-		return err
-	}
-
-	toBucket, err := repo.bucketRepo.GetById(ctx, toBucketID)
-	if err != nil {
-		return err
-	}
-
-	return repo.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		txRepo := NewTransactionRepository(tx)
-		debit := &models.Transaction{
-			Title:    "Transfer to " + toBucket.Title,
-			Amount:   -amount,
-			BucketID: fromBucketID,
-		}
-		if err := txRepo.Create(ctx, debit); err != nil {
-			return err
-		}
-		credit := &models.Transaction{
-			Title:    "Transfer from " + fromBucket.Title,
-			Amount:   amount,
-			BucketID: toBucketID,
-		}
-		if err := txRepo.Create(ctx, credit); err != nil {
-			return err
-		}
-		return nil
-	})
-}
-
 func (repo *TransactionRepository) Delete(ctx context.Context, id int) (int, error) {
 	rowsAffected, err := gorm.G[models.Transaction](repo.db).Where("id = ?", id).Delete(ctx)
 	return rowsAffected, err

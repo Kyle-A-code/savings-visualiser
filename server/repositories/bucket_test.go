@@ -12,7 +12,7 @@ import (
 
 func TestBucketRepository_Create(t *testing.T) {
 	t.Run("creates bucket and initial balance transaction", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedBucketTitle := "Emergency Fund"
 			expectedInitialTransactionTitle := "Initial balance"
@@ -58,13 +58,13 @@ func TestBucketRepository_Create(t *testing.T) {
 
 func TestBucketRepository_GetById(t *testing.T) {
 	t.Run("returns computed balance from bucket transactions", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedBalance := 85.0
-			bucket := seedBucket(t, tx, "Bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Deposit", 100)
-			seedTransaction(t, tx, int(bucket.ID), "Coffee", -25)
-			seedTransaction(t, tx, int(bucket.ID), "Refund", 10)
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Deposit", 100)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Coffee", -25)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Refund", 10)
 
 			got, err := repo.GetById(context.Background(), int(bucket.ID))
 			if err != nil {
@@ -77,11 +77,11 @@ func TestBucketRepository_GetById(t *testing.T) {
 	})
 
 	t.Run("preloads bucket goal when present", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedGoalTitle := "Trip"
 			expectedGoalAmount := 600.0
-			bucket := seedBucket(t, tx, "Goal Bucket")
+			bucket := testutil.SeedBucket(t, tx, "Goal Bucket")
 
 			goal := models.Goal{
 				Title:    expectedGoalTitle,
@@ -108,20 +108,20 @@ func TestBucketRepository_GetById(t *testing.T) {
 
 func TestBucketRepository_GetAll(t *testing.T) {
 	t.Run("returns all buckets with computed balances", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedTitleBucketA := "A"
 			expectedTitleBucketB := "B"
 			expectedBucketCount := 2
 			expectedBalanceBucketA := 35.0
 			expectedBalanceBucketB := 50.0
-			bucketA := seedBucket(t, tx, expectedTitleBucketA)
-			bucketB := seedBucket(t, tx, expectedTitleBucketB)
+			bucketA := testutil.SeedBucket(t, tx, expectedTitleBucketA)
+			bucketB := testutil.SeedBucket(t, tx, expectedTitleBucketB)
 
-			seedTransaction(t, tx, int(bucketA.ID), "A1", 40)
-			seedTransaction(t, tx, int(bucketA.ID), "A2", -5)
-			seedTransaction(t, tx, int(bucketB.ID), "B1", 20)
-			seedTransaction(t, tx, int(bucketB.ID), "B2", 30)
+			testutil.SeedTransaction(t, tx, int(bucketA.ID), "A1", 40)
+			testutil.SeedTransaction(t, tx, int(bucketA.ID), "A2", -5)
+			testutil.SeedTransaction(t, tx, int(bucketB.ID), "B1", 20)
+			testutil.SeedTransaction(t, tx, int(bucketB.ID), "B2", 30)
 
 			buckets, err := repo.GetAll(context.Background())
 			if err != nil {
@@ -146,10 +146,10 @@ func TestBucketRepository_GetAll(t *testing.T) {
 	})
 
 	t.Run("preloads goals for bucket list", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
-			bucketWithGoal := seedBucket(t, tx, "With goal")
-			bucketWithoutGoal := seedBucket(t, tx, "Without goal")
+			bucketWithGoal := testutil.SeedBucket(t, tx, "With goal")
+			bucketWithoutGoal := testutil.SeedBucket(t, tx, "Without goal")
 			expectedGoalTitle := "Emergency"
 			expectedGoalAmount := 1000.0
 
@@ -187,11 +187,11 @@ func TestBucketRepository_GetAll(t *testing.T) {
 
 func TestBucketRepository_UpdateTitle(t *testing.T) {
 	t.Run("updates title and returns affected row", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedUpdatedTitle := "New Title"
 			expectedRowsAffected := 1
-			bucket := seedBucket(t, tx, "Bucket")
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
 
 			rows, err := repo.UpdateTitle(context.Background(), int(bucket.ID), expectedUpdatedTitle)
 			if err != nil {
@@ -212,7 +212,7 @@ func TestBucketRepository_UpdateTitle(t *testing.T) {
 	})
 
 	t.Run("returns zero rows when bucket is missing", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			nonExistentBucketID := 999999
 			expectedUnusedTitle := "Missing"
@@ -231,14 +231,14 @@ func TestBucketRepository_UpdateTitle(t *testing.T) {
 
 func TestBucketRepository_Delete(t *testing.T) {
 	t.Run("deletes bucket, related transactions, and goal when present", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedDeletedRows := 1
 			expectedTransactionCountAfterDelete := int64(0)
 			expectedGoalCountAfterDelete := int64(0)
-			bucket := seedBucket(t, tx, "Bucket")
-			seedTransaction(t, tx, int(bucket.ID), "Txn A", 20)
-			seedTransaction(t, tx, int(bucket.ID), "Txn B", -5)
+			bucket := testutil.SeedBucket(t, tx, "Bucket")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Txn A", 20)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Txn B", -5)
 			goal := models.Goal{
 				Title:    "Emergency",
 				Amount:   100.0,
@@ -284,11 +284,11 @@ func TestBucketRepository_Delete(t *testing.T) {
 	})
 
 	t.Run("deletes bucket successfully when no goal exists", func(t *testing.T) {
-		testutil.WithRollbackTx(t, sharedTestDB, func(tx *gorm.DB) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
 			repo := NewBucketRepository(tx)
 			expectedDeletedRows := 1
-			bucket := seedBucket(t, tx, "Bucket without goal")
-			seedTransaction(t, tx, int(bucket.ID), "Txn A", 20)
+			bucket := testutil.SeedBucket(t, tx, "Bucket without goal")
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Txn A", 20)
 
 			rows, err := repo.Delete(context.Background(), int(bucket.ID))
 			if err != nil {
