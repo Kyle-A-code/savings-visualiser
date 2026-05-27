@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { DialogPrimitive } from "../../../../components/dialog";
 import { useTransfer } from "../../api/transfer";
+import "./transferDialog.css";
 
 interface TransferTarget {
   id: number;
   title: string;
+  balance: number;
 }
 
 interface TransferDialogProps {
@@ -25,15 +27,25 @@ const TransferDialog = ({
   open = false,
   onOpenChange,
 }: TransferDialogProps) => {
+  const [amount, setAmount] = useState(0);
+
+  const firstTargetId = useMemo(() => targets[0]?.id, [targets]);
+  const [toBucketId, setToBucketId] = useState(firstTargetId);
   const { transfer, isPending, isError, error } = useTransfer();
 
   const hasTargets = targets.length > 0;
-  const firstTargetId = useMemo(() => targets[0]?.id ?? "", [targets]);
   const maxAmount = useMemo(
     () => Math.max(0, Number(fromBucketBalance.toFixed(2))),
     [fromBucketBalance],
   );
-  const canSubmit = hasTargets && maxAmount > 0;
+  const canSubmit = useMemo(
+    () => toBucketId != null && amount > 0 && amount <= maxAmount,
+    [toBucketId, amount, maxAmount],
+  );
+  const toBucket = useMemo(
+    () => targets.find((target) => target.id === toBucketId),
+    [targets, toBucketId],
+  );
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,9 +53,6 @@ const TransferDialog = ({
       return;
     }
 
-    const formData = new FormData(event.currentTarget);
-    const toBucketId = Number(formData.get("toBucketId"));
-    const amount = Number(formData.get("amount"));
     const amountInvalid =
       Number.isNaN(amount) || amount <= 0 || amount > maxAmount;
 
@@ -60,6 +69,8 @@ const TransferDialog = ({
       {
         onSuccess: () => {
           onOpenChange?.(false);
+          setToBucketId(firstTargetId);
+          setAmount(0);
         },
       },
     );
@@ -101,8 +112,10 @@ const TransferDialog = ({
             <select
               id={`transfer-target-${fromBucketId}`}
               name="toBucketId"
+              data-variant="select"
               className="dialog-input"
               defaultValue={firstTargetId}
+              onChange={(event) => setToBucketId(Number(event.target.value))}
               required
               disabled={!hasTargets}
             >
@@ -122,17 +135,21 @@ const TransferDialog = ({
             Amount
           </label>
           <div className="dialog-input-group">
+            <span className="dialog-amount-prefix" aria-hidden>
+              $
+            </span>
             <input
               id={`transfer-amount-${fromBucketId}`}
               name="amount"
               className="dialog-input"
+              data-variant="amount"
               type="number"
-              min="0"
-              max={maxAmount.toString()}
+              min="0.00"
               step="0.01"
-              placeholder="0.00"
+              max={maxAmount.toFixed(2)}
+              value={amount.toFixed(2)}
+              onChange={(event) => setAmount(Number(event.target.value))}
               required
-              disabled={!canSubmit}
             />
           </div>
         </div>
@@ -150,6 +167,38 @@ const TransferDialog = ({
           <p className="dialog-error" role="alert">
             {error?.message ?? "Error completing transfer, please try again."}
           </p>
+        )}
+        {toBucket != null && (
+          <section
+            className="transfer-preview"
+            aria-label="Balance preview after transfer"
+          >
+            <p className="transfer-preview-label ui-eyebrow">After transfer</p>
+            <div className="transfer-preview-balances">
+              <div className="transfer-preview-balance-item">
+                <p className="transfer-preview-caption">
+                  <span className="transfer-preview-role">From</span>
+                  <span className="transfer-preview-bucket">
+                    {fromBucketTitle}
+                  </span>
+                </p>
+                <p className="transfer-preview-balance transfer-preview-balance--from">
+                  ${(fromBucketBalance - amount).toFixed(2)}
+                </p>
+              </div>
+              <div className="transfer-preview-balance-item">
+                <p className="transfer-preview-caption">
+                  <span className="transfer-preview-role">To</span>
+                  <span className="transfer-preview-bucket">
+                    {toBucket.title}
+                  </span>
+                </p>
+                <p className="transfer-preview-balance transfer-preview-balance--to">
+                  ${(toBucket.balance + amount).toFixed(2)}
+                </p>
+              </div>
+            </div>
+          </section>
         )}
         <div className="dialog-footer-actions">
           <Dialog.Close asChild>

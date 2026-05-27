@@ -1,0 +1,64 @@
+.transfer-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--surface-container-lowest);
+}
+
+.transfer-preview-label {
+  align-self: center;
+}
+
+.transfer-preview-balances {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: var(--space-3);
+}
+
+.transfer-preview-balance-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--label-field-gap);
+}
+
+.transfer-preview-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.transfer-preview-role {
+  font-family: var(--font-body);
+  font-size: var(--text-label-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--on-surface-variant);
+}
+
+.transfer-preview-bucket {
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  color: var(--on-surface);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transfer-preview-balance {
+  font-family: var(--font-headline);
+  font-size: var(--text-headline-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+}
+
+.transfer-preview-balance--from {
+  color: var(--tertiary);
+}
+
+.transfer-preview-balance--to {
+  color: var(--secondary);
+}

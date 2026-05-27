@@ -30,6 +30,7 @@ const BucketCard = ({ bucket, allBuckets }: BucketCardProps) => {
     .map((candidate) => ({
       id: candidate.id,
       title: candidate.title,
+      balance: candidate.balance,
     }));
 
   const formattedBalance = balance.toLocaleString("en-US", {

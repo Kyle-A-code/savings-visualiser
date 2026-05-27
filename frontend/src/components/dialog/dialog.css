@@ -161,6 +161,13 @@
   letter-spacing: -0.03em;
 }
 
+.dialog-input[data-variant="select"] {
+  cursor: pointer;
+  /* Below ensures correct position of the chevron on select elements */
+  /* Will want a more robust solution for this in the future if we add require more control */
+  border-right: var(--space-2) solid transparent
+}
+
 .dialog-amount-input-wrapper {
   position: relative;
 }
