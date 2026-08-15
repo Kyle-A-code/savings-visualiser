@@ -1,9 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
 import queryKeys from "./queryKeys";
-import { getBucketTransactions } from "./getBucketTransactions";
+import {
+  getBucketTransactions,
+  type GetBucketTransactionsParams,
+} from "./getBucketTransactions";
 
-export const bucketTransactionsQueryOptions = (bucketId: number, limit: number, offset: number) =>
+export const bucketTransactionsQueryOptions = (
+  bucketId: number,
+  params: GetBucketTransactionsParams,
+) =>
   queryOptions({
-    queryKey: queryKeys.bucketList(bucketId, limit, offset),
-    queryFn: () => getBucketTransactions(bucketId, limit, offset),
+    queryKey: queryKeys.bucketList(bucketId, params),
+    queryFn: () => getBucketTransactions(bucketId, params),
   });
