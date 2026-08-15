@@ -65,3 +65,9 @@
 .transaction-amount.debit {
   color: var(--danger);
 }
+
+.transaction-date {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--on-surface-variant);
+}
