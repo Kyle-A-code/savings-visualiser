@@ -6,6 +6,7 @@ type ListParams struct {
 	Limit  int
 	Offset int
 	Order  *string
+	Filter *map[string]string
 }
 
 func DefaultListParams() ListParams {

@@ -16,7 +16,7 @@ func parseIDParam(c *gin.Context) (int, error) {
 	return id, nil
 }
 
-func parsePaginationQuery(c *gin.Context) (query.ListParams, error) {
+func parseListQuery(c *gin.Context) (query.ListParams, error) {
 	params := query.DefaultListParams()
 
 	limitQuery := c.Query("limit")
@@ -35,6 +35,16 @@ func parsePaginationQuery(c *gin.Context) (query.ListParams, error) {
 			return params, fmt.Errorf("offset must be a non-negative integer")
 		}
 		params.Offset = offset
+	}
+
+	filterMap := c.QueryMap("filter")
+	if len(filterMap) > 0 {
+		params.Filter = &filterMap
+	}
+
+	order := c.Query("order")
+	if order != "" {
+		params.Order = &order
 	}
 
 	return params, nil
