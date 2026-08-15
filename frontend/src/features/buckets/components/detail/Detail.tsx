@@ -14,17 +14,19 @@ import CreateGoalDialog from "./createGoalDialog/CreateGoalDialog";
 import GoalProgress from "../shared/goalProgress/GoalProgress";
 import GoalCompleted from "./goalCompleted/goalCompleted";
 import { useDeleteBucketGoal } from "../../api/deleteBucketGoal";
+import { Filters } from "./filters/filters";
+import type { TransactionOrder, TransactionType } from "../../../transactions/api/getBucketTransactions";
 
 const routeApi = getRouteApi("/buckets/$bucketId");
 
 const Detail = () => {
   const navigate = routeApi.useNavigate();
   const { bucketId } = routeApi.useParams();
-  const { limit, offset } = routeApi.useSearch();
+  const { limit, offset, type, title, order } = routeApi.useSearch();
 
   const { data: bucket } = useSuspenseQuery(bucketQueryOptions(bucketId));
   const { data: paginatedResponse } = useSuspenseQuery(
-    bucketTransactionsQueryOptions(bucketId, limit, offset),
+    bucketTransactionsQueryOptions(bucketId, { limit, offset, type, title, order }),
   );
   const { deleteBucketGoal } = useDeleteBucketGoal();
   const transactions = paginatedResponse.items;
@@ -68,13 +70,65 @@ const Detail = () => {
     });
   };
 
+  const onTypeChange = (nextType: TransactionType | undefined) => {
+    navigate({
+      resetScroll: false,
+      search: (previousSearch) => ({
+        ...previousSearch,
+        type: nextType,
+        offset: 0,
+      }),
+    });
+  };
+
+  const onOrderChange = (nextOrder: TransactionOrder | undefined) => {
+    navigate({
+      resetScroll: false,
+      search: (previousSearch) => ({
+        ...previousSearch,
+        order: nextOrder,
+        offset: 0,
+      }),
+    });
+  };
+
+  const onTitleSearch = (nextTitle: string | undefined) => {
+    navigate({
+      resetScroll: false,
+      search: (previousSearch) => ({
+        ...previousSearch,
+        title: nextTitle,
+        offset: 0,
+      }),
+    });
+  };
+
+  const onClearFilters = () => {
+    navigate({
+      resetScroll: false,
+      search: (previousSearch) => ({
+        ...previousSearch,
+        type: undefined,
+        title: undefined,
+        order: "-createdAt",
+        offset: 0,
+      }),
+    });
+  };
+
   useEffect(() => {
     if (hasNextPage) {
       queryClient.prefetchQuery(
-        bucketTransactionsQueryOptions(bucketId, limit, offset + limit),
+        bucketTransactionsQueryOptions(bucketId, {
+          limit,
+          offset: offset + limit,
+          type,
+          title,
+          order,
+        }),
       );
     }
-  }, [hasNextPage, bucketId, limit, offset, queryClient]);
+  }, [hasNextPage, bucketId, limit, offset, type, title, order, queryClient]);
 
   useEffect(() => {
     if (transactions.length > 0 || totalRecords === 0) {
@@ -179,6 +233,15 @@ const Detail = () => {
           <h2 id="bucket-ledger-heading" className="bucket-detail-ledger-title">
             Ledger history
           </h2>
+          <Filters
+            type={type}
+            order={order}
+            title={title}
+            onTypeChange={onTypeChange}
+            onOrderChange={onOrderChange}
+            onTitleSearch={onTitleSearch}
+            onClear={onClearFilters}
+          />
           {bucket?.goal == null && <CreateGoalDialog bucketId={bucketId} />}
         </div>
         <Divider />

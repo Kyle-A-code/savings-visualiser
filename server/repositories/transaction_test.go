@@ -3,11 +3,13 @@ package repositories
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/Kyle-A-code/savings-visualiser/internal/testutil"
 	"github.com/Kyle-A-code/savings-visualiser/models"
+	"github.com/Kyle-A-code/savings-visualiser/query"
 	"gorm.io/gorm"
 )
 
@@ -241,6 +243,70 @@ func TestTransactionRepository_Create(t *testing.T) {
 			}
 			if !gotGoal.Completed {
 				t.Fatalf("expected goal to remain completed after debit")
+			}
+		})
+	})
+}
+
+func TestTransactionRepository_GetForBucket_Filter(t *testing.T) {
+	t.Run("filters by transaction type", func(t *testing.T) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
+			repo := NewTransactionRepository(tx)
+			bucket := testutil.SeedBucket(t, tx, "Type filter bucket")
+
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Salary", 100.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Coffee", -4.5)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Refund", 10.0)
+
+			params := query.DefaultListParams()
+			filter := map[string]string{"type": "credit"}
+			params.Filter = &filter
+
+			transactions, totalRecords, err := repo.GetForBucket(context.Background(), int(bucket.ID), params)
+			if err != nil {
+				t.Fatalf("get transactions with type filter: %v", err)
+			}
+			if totalRecords != 2 {
+				t.Fatalf("expected 2 credit transactions, got %d", totalRecords)
+			}
+			if len(transactions) != 2 {
+				t.Fatalf("expected 2 fetched credit transactions, got %d", len(transactions))
+			}
+			for _, tx := range transactions {
+				if tx.Amount <= 0 {
+					t.Fatalf("expected only credits, got amount %f", tx.Amount)
+				}
+			}
+		})
+	})
+
+	t.Run("filters by title like", func(t *testing.T) {
+		testutil.WithRollbackTx(t, testutil.TestDB(), func(tx *gorm.DB) {
+			repo := NewTransactionRepository(tx)
+			bucket := testutil.SeedBucket(t, tx, "Title filter bucket")
+
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Rent August", -1200.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Groceries", -120.0)
+			testutil.SeedTransaction(t, tx, int(bucket.ID), "Rent rebate", 50.0)
+
+			params := query.DefaultListParams()
+			filter := map[string]string{"title": "Rent"}
+			params.Filter = &filter
+
+			transactions, totalRecords, err := repo.GetForBucket(context.Background(), int(bucket.ID), params)
+			if err != nil {
+				t.Fatalf("get transactions with title filter: %v", err)
+			}
+			if totalRecords != 2 {
+				t.Fatalf("expected 2 title-matched transactions, got %d", totalRecords)
+			}
+			if len(transactions) != 2 {
+				t.Fatalf("expected 2 fetched title-matched transactions, got %d", len(transactions))
+			}
+			for _, tx := range transactions {
+				if !strings.Contains(strings.ToLower(tx.Title), "rent") {
+					t.Fatalf("expected title containing rent, got %q", tx.Title)
+				}
 			}
 		})
 	})

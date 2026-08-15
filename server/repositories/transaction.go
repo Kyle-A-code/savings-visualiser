@@ -4,11 +4,15 @@ import (
 	"context"
 	"errors"
 	"math"
+	"strings"
 
 	"github.com/Kyle-A-code/savings-visualiser/models"
 	"github.com/Kyle-A-code/savings-visualiser/query"
 	"gorm.io/gorm"
 )
+
+const createdAtAscendingOrder = "created_at ASC, id ASC"
+const createdAtDescendingOrder = "created_at DESC, id DESC"
 
 type TransactionRepository struct {
 	db         *gorm.DB
@@ -30,14 +34,17 @@ func (repo *TransactionRepository) GetAll(ctx context.Context, params query.List
 
 	err := repo.db.WithContext(ctx).
 		Model(&models.Transaction{}).
+		Scopes(transactionFilters(params.Filter)).
 		Count(&totalRecords).Error
 	if err != nil {
 		return transactions, 0, err
 	}
 
 	err = repo.db.WithContext(ctx).
+		Model(&models.Transaction{}).
+		Scopes(transactionFilters(params.Filter)).
 		Scopes(paginate(params)).
-		Order("id DESC").
+		Order(getOrderBy(params.Order)).
 		Find(&transactions).Error
 	return transactions, totalRecords, err
 }
@@ -54,15 +61,18 @@ func (repo *TransactionRepository) GetForBucket(ctx context.Context, bucketID in
 	err := repo.db.WithContext(ctx).
 		Model(&models.Transaction{}).
 		Where("bucket_id = ?", bucketID).
+		Scopes(transactionFilters(params.Filter)).
 		Count(&totalRecords).Error
 	if err != nil {
 		return transactions, 0, err
 	}
 
 	err = repo.db.WithContext(ctx).
+		Model(&models.Transaction{}).
 		Where("bucket_id = ?", bucketID).
+		Scopes(transactionFilters(params.Filter)).
 		Scopes(paginate(params)).
-		Order("id DESC").
+		Order(getOrderBy(params.Order)).
 		Find(&transactions).Error
 	return transactions, totalRecords, err
 }
@@ -133,4 +143,46 @@ func (repo *TransactionRepository) goalCompleted(ctx context.Context, bucketID i
 
 	shouldComplete := bucket.Balance >= bucket.Goal.Amount
 	return bucket.Goal.ID, shouldComplete, nil
+}
+
+func getOrderBy(order *string) string {
+	if order == nil {
+		return createdAtDescendingOrder
+	}
+
+	switch *order {
+	case "createdAt":
+		return createdAtAscendingOrder
+	case "-createdAt":
+		return createdAtDescendingOrder
+	default:
+		return createdAtDescendingOrder
+	}
+}
+
+func transactionFilters(filter *map[string]string) func(*gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if filter == nil {
+			return db
+		}
+
+		filters := *filter
+		if len(filters) == 0 {
+			return db
+		}
+
+		if title, ok := filters["title"]; ok && title != "" {
+			db = db.Where("title LIKE ?", "%"+title+"%")
+		}
+
+		txType := strings.ToLower(strings.TrimSpace(filters["type"]))
+		switch txType {
+		case "credit":
+			db = db.Where("amount > ?", 0)
+		case "debit":
+			db = db.Where("amount < ?", 0)
+		}
+
+		return db
+	}
 }

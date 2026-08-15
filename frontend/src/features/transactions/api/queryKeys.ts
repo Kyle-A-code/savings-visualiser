@@ -1,9 +1,9 @@
+import type { GetBucketTransactionsParams } from "./getBucketTransactions";
+
 const queryKeys = {
   list: () => ["transactions"],
-  bucketList: (bucketId: number, limit?: number, offset?: number) =>
-    limit === undefined || offset === undefined
-      ? ["transactions", "bucket", bucketId]
-      : ["transactions", "bucket", bucketId, limit, offset],
+  bucketList: (bucketId: number, params?: GetBucketTransactionsParams) =>
+    ["transactions", "bucket", bucketId, params],
   detail: (id: number) => ["transactions", id],
 };
 
