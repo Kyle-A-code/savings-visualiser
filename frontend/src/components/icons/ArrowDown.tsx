@@ -1,0 +1,20 @@
+import type { IconProps } from "./types";
+
+const ArrowDown = ({ width = 24, height = 24 }: IconProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 384 512"
+      width={width}
+      height={height}
+    >
+      {/* <!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--> */}
+      <path
+        fill="currentColor"
+        d="M169.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 306.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+      />
+    </svg>
+  );
+};
+
+export default ArrowDown;
